@@ -373,7 +373,11 @@ export default function AdminUsers() {
                       </span>
                     </td>
                     <td>
-                      <b>{u.totalSessions ?? 0}</b>
+                      {userRole === 'INSTRUCTOR' ? (
+                        <span style={{ color: 'var(--muted)', fontWeight: 600 }}>—</span>
+                      ) : (
+                        <b>{u.totalSessions ?? 0}</b>
+                      )}
                     </td>
                     <td style={{ color: 'var(--muted)', fontSize: 13.5 }}>
                       {u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : '—'}
@@ -803,23 +807,47 @@ export default function AdminUsers() {
                     </div>
                   </div>
 
-                  <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
-                    <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      TỪ ĐÃ HỌC
-                    </span>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--green-dark)', marginTop: 4 }}>
-                      {selectedUser.wordsLearned ?? 0} từ
-                    </div>
-                  </div>
+                  {selectedUser.role === 'INSTRUCTOR' ? (
+                    <>
+                      <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
+                        <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          NGÀY THAM GIA
+                        </span>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginTop: 4 }}>
+                          {selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString('vi-VN') : '—'}
+                        </div>
+                      </div>
 
-                  <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
-                    <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      TỔNG BUỔI HỌC
-                    </span>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--primary)', marginTop: 4 }}>
-                      {selectedUser.totalSessions ?? 0} buổi
-                    </div>
-                  </div>
+                      <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
+                        <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          PHÂN QUYỀN
+                        </span>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: '#7C3AED', marginTop: 4 }}>
+                          Quản trị & Giảng dạy
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
+                        <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          TỪ ĐÃ HỌC
+                        </span>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--green-dark)', marginTop: 4 }}>
+                          {selectedUser.wordsLearned ?? 0} từ
+                        </div>
+                      </div>
+
+                      <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
+                        <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          TỔNG BUỔI HỌC
+                        </span>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--primary)', marginTop: 4 }}>
+                          {selectedUser.totalSessions ?? 0} buổi
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
