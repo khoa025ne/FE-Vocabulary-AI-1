@@ -1,0 +1,95 @@
+export type ViPoseId =
+  | 'happy-wave'
+  | 'thinking'
+  | 'celebrate'
+  | 'encourage'
+  | 'listen'
+  | 'explain'
+  | 'surprised'
+  | 'sleep';
+
+export interface ViPoseAsset {
+  id: ViPoseId;
+  file: string;
+  animatedFile?: string;
+  alt: string;
+  width: number;
+  height: number;
+  usage: string;
+}
+
+export const VI_APP_ICON = {
+  file: '/vi_C.png',
+  alt: 'Biểu tượng Vi — Trợ lý AI VocabularyAI',
+  width: 256,
+  height: 256,
+} as const;
+
+export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
+  'happy-wave': {
+    id: 'happy-wave',
+    file: '/mascot/vi-happy-wave.webp',
+    alt: 'Vi mascot — vẫy tay chào thân thiện',
+    width: 384,
+    height: 512,
+    usage: 'Landing hero, lời chào Tổng quan, trạng thái chào mừng',
+  },
+  explain: {
+    id: 'explain',
+    file: '/mascot/vi-explain.webp',
+    alt: 'Vi mascot — giải thích từ vựng và hội thoại',
+    width: 384,
+    height: 512,
+    usage: 'AI giải thích chi tiết từ vựng và avatar Chat với Vi',
+  },
+  listen: {
+    id: 'listen',
+    file: '/mascot/vi-listen.webp',
+    animatedFile: '/mascot/vi-listen-pulse.webp',
+    alt: 'Vi mascot — đang lắng nghe phát âm',
+    width: 384,
+    height: 512,
+    usage: 'Khu vực ghi âm và kết quả Luyện nói / Luyện nghe',
+  },
+  celebrate: {
+    id: 'celebrate',
+    file: '/mascot/vi-celebrate.webp',
+    animatedFile: '/mascot/vi-celebrate-loop.webp',
+    alt: 'Vi mascot — ăn mừng thành tích học tập',
+    width: 384,
+    height: 512,
+    usage: 'Kết quả Quiz, Kết quả nói và cột mốc streak',
+  },
+  encourage: {
+    id: 'encourage',
+    file: '/mascot/vi-encourage.webp',
+    alt: 'Vi mascot — giơ tay khích lệ bạn tiếp tục',
+    width: 384,
+    height: 512,
+    usage: 'Đầu trang Làm Quiz và khích lệ khi ôn tập SRS',
+  },
+  thinking: {
+    id: 'thinking',
+    file: '/mascot/vi-thinking.webp',
+    alt: 'Vi mascot — đang suy nghĩ và phân tích',
+    width: 384,
+    height: 512,
+    usage: 'Trợ lý Ngữ pháp và trạng thái AI đang phân tích',
+  },
+  surprised: {
+    id: 'surprised',
+    file: '/mascot/vi-surprised.webp',
+    alt: 'Vi mascot — ngạc nhiên khi gặp lỗi hoặc đáp án chưa đúng',
+    width: 384,
+    height: 512,
+    usage: 'Trạng thái lỗi và phản hồi câu trả lời sai',
+  },
+  sleep: {
+    id: 'sleep',
+    file: '/mascot/vi-sleep.webp',
+    alt: 'Vi mascot — nghỉ ngơi sau khi hoàn thành mục tiêu',
+    width: 384,
+    height: 512,
+    usage: 'Trạng thái đã xong hết bài hôm nay và thẻ nghỉ ngơi Hồ sơ',
+  },
+};
