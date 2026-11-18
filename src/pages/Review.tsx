@@ -1166,7 +1166,7 @@ export default function Review() {
                                   )}
 
                                   {cur.definition && (
-                                    <div style={{ fontSize: 13, color: 'var(--ink-soft)', maxWidth: 500, lineHeight: 1.4 }}>
+                                    <div style={{ fontSize: 13, color: 'var(--muted)', maxWidth: 500, lineHeight: 1.4 }}>
                                       <b>English:</b> {cleanDefinitionText(cur.definition)}
                                     </div>
                                   )}

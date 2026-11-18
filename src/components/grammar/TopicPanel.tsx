@@ -355,7 +355,7 @@ export default function TopicPanel() {
                         transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease)',
                         border: isSelected ? `2px solid ${cfg.color}` : '1.5px solid var(--line)',
                         background: isSelected ? cfg.bg : 'rgba(255, 255, 255, 0.72)',
-                        color: isSelected ? cfg.color : 'var(--ink-soft)',
+                        color: isSelected ? cfg.color : 'var(--muted)',
                         boxShadow: isSelected ? `0 2px 8px ${cfg.color}25` : 'none',
                         transform: isSelected ? 'scale(1.04)' : 'none',
                       }}

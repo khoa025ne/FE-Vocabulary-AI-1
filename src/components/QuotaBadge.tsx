@@ -104,7 +104,7 @@ export const QuotaBadge: React.FC<QuotaBadgeProps> = ({
         whiteSpace: 'nowrap',
         boxShadow: '0 1px 3px rgba(10, 37, 64, 0.05)',
         verticalAlign: 'middle',
-        transition: 'all 0.15s ease',
+        transition: 'transform var(--dur-micro) var(--ease), opacity var(--dur-micro) var(--ease)',
         ...style,
       }}
       title={isExhausted ? 'Đã hết lượt - Nhấn để nâng cấp Premium' : `Còn ${remaining}/${limit} ${labelSuffix}`}

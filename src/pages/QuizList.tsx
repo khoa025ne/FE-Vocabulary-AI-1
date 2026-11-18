@@ -1005,7 +1005,7 @@ export default function QuizList() {
                     ? 'var(--sage-dark)'
                     : actionModal.type === 'withdraw'
                     ? 'var(--amber-dark)'
-                    : 'var(--ink-soft)',
+                    : 'var(--muted)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -1023,7 +1023,7 @@ export default function QuizList() {
               {actionModal.type === 'hide' && 'Chuyển bài tập về riêng tư'}
             </h3>
 
-            <div style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.55, margin: '0 0 16px' }}>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.55, margin: '0 0 16px' }}>
               {actionModal.type === 'publish' && (
                 <p style={{ margin: 0 }}>
                   Bạn có chắc muốn gửi đề thi <b>"{actionModal.quizTitle}"</b> cho Giảng viên duyệt để công khai cho cộng đồng?

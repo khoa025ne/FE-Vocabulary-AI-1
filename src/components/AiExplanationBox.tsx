@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Mascot, Icon } from './icons';
+import { Icon } from './icons';
+import { ViMascotImage } from './ViMascotImage';
 
 export interface AiExplanationBoxProps {
   explanation: string;
@@ -261,16 +262,16 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
           justifyContent: 'space-between',
           marginBottom: 14,
           paddingBottom: 10,
-          borderBottom: '1px solid #e2e8f0',
+          borderBottom: '1px solid var(--line)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Mascot s={compact ? 28 : 34} />
+          <ViMascotImage pose="explain" size={compact ? 32 : 40} />
           <div>
             <div
               style={{
-                fontWeight: 800,
-                color: '#0369a1',
+                fontWeight: 700,
+                color: 'var(--sage-dark)',
                 fontSize: compact ? 13 : 15,
                 display: 'flex',
                 alignItems: 'center',
@@ -282,8 +283,8 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                 style={{
                   fontSize: 10,
                   fontWeight: 700,
-                  background: '#e0f2fe',
-                  color: '#0284c7',
+                  background: 'var(--sage-soft)',
+                  color: 'var(--sage-dark)',
                   padding: '2px 8px',
                   borderRadius: 99,
                   textTransform: 'uppercase',
@@ -293,7 +294,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                 AI Pro
               </span>
             </div>
-            <div style={{ fontSize: 11, color: '#64748b', marginTop: 1 }}>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>
               5 phần: Ví dụ · Bảng Đồng/Trái nghĩa · Ngữ cảnh · Lỗi sai · Mẹo nhớ
             </div>
           </div>

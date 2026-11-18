@@ -559,7 +559,7 @@ export default function TranslationPanel() {
                         alignItems: 'center',
                         gap: 4,
                         fontSize: 12,
-                        color: isPlayingAudio ? 'var(--sage-dark)' : 'var(--ink-soft)',
+                        color: isPlayingAudio ? 'var(--sage-dark)' : 'var(--muted)',
                         background: isPlayingAudio ? 'rgba(71, 96, 63, 0.14)' : 'rgba(250, 248, 241, 0.72)',
                       }}
                     >

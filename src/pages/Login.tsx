@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { authApi, placementApi, errMsg } from '../api';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../auth/AuthContext';
-import { Mascot, Icon } from '../components/icons';
+import { Icon } from '../components/icons';
 import { motion, AnimatePresence } from 'motion/react';
 import { motionTokens } from '../motion';
-import viHeroImg from '../assets/vi-hero.png';
+import { ViMascotImage } from '../components/ViMascotImage';
+import { SageScene } from '../components/SageEffects';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
@@ -216,6 +217,7 @@ export default function Login() {
         }}
         style={{ position: 'relative' }}
       >
+        <SageScene />
         <button
           type="button"
           className="topbar-home-btn"
@@ -226,8 +228,10 @@ export default function Login() {
             top: 22,
             left: 22,
             zIndex: 50,
-            background: 'rgba(255, 255, 255, 0.92)',
-            backdropFilter: 'blur(8px)',
+            background: 'var(--glass-strong)',
+            color: 'var(--ink)',
+            border: '1px solid var(--rim)',
+            backdropFilter: 'blur(12px)',
           }}
         >
           <Icon n="home" s={16} />
@@ -236,11 +240,19 @@ export default function Login() {
 
         <div className="auth-sheet">
           <div className="auth-left">
-            <div className="brand" onClick={handleGoHome} style={{ cursor: 'pointer' }}>
-              <Mascot s={36} />
+            <div className="brand" onClick={handleGoHome} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+              <img
+                src="/vi_C.png"
+                width={36}
+                height={36}
+                alt="VocabularyAI"
+                style={{ borderRadius: '10px', objectFit: 'cover', display: 'block', border: '1px solid rgba(250, 248, 241, 0.35)' }}
+              />
               VocabularyAI
             </div>
-            <img className="hero" src={viHeroImg} alt="Vi — trợ lý học tiếng Anh" />
+            <div style={{ display: 'inline-flex', width: 'fit-content', padding: '6px', borderRadius: '28px', background: 'rgba(250, 248, 241, 0.12)', border: '1px solid rgba(250, 248, 241, 0.25)', backdropFilter: 'blur(10px)' }}>
+              <ViMascotImage pose="happy-wave" size={112} priority />
+            </div>
             <h1>Học vui mỗi ngày cùng Vi</h1>
             <p>Từ vựng, quiz và luyện nói cùng AI — dành cho mọi lứa tuổi, từ 5 đến 70!</p>
             <div className="auth-pills">
@@ -401,11 +413,11 @@ export default function Login() {
                     {googleClientId && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '4px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{ flex: 1, height: '1px', background: 'var(--line, #E2E8F0)' }} />
-                          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--muted, #64748B)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          <div style={{ flex: 1, height: '1px', background: 'var(--line)' }} />
+                          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                             hoặc
                           </span>
-                          <div style={{ flex: 1, height: '1px', background: 'var(--line, #E2E8F0)' }} />
+                          <div style={{ flex: 1, height: '1px', background: 'var(--line)' }} />
                         </div>
 
                         <div
@@ -414,7 +426,7 @@ export default function Login() {
                             display: 'flex',
                             justifyContent: 'center',
                             borderRadius: '999px',
-                            transition: 'all 0.2s ease',
+                            transition: 'transform var(--dur-micro) var(--ease)',
                           }}
                         >
                           <GoogleLogin
@@ -437,13 +449,13 @@ export default function Login() {
                             gap: '7px',
                             padding: '8px 14px',
                             borderRadius: '12px',
-                            background: 'var(--tint, #EAF3FC)',
-                            color: 'var(--primary-dark, #0D47A1)',
+                            background: 'var(--sage-soft)',
+                            color: 'var(--sage-dark)',
                             fontSize: '12.5px',
                             fontWeight: 700,
                             lineHeight: 1.45,
                             textAlign: 'center',
-                            border: '1px solid rgba(21, 101, 192, 0.12)',
+                            border: '1px solid var(--line)',
                           }}
                         >
                           <span style={{ fontSize: '13px' }}>✨</span>

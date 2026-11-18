@@ -530,7 +530,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                       fontWeight: 600,
                       color: '#0F172A',
                       outline: 'none',
-                      transition: 'all 0.2s ease',
+                      transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease), box-shadow var(--dur-micro) var(--ease)',
                       boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                     }}
                     onFocus={(e) => {
@@ -567,7 +567,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                         color: '#0F172A',
                         outline: 'none',
                         cursor: isReadOnly ? 'default' : 'pointer',
-                        transition: 'all 0.2s ease',
+                        transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease), box-shadow var(--dur-micro) var(--ease)',
                         boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                       }}
                       onFocus={(e) => {
@@ -611,7 +611,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                         fontWeight: 600,
                         color: '#0F172A',
                         outline: 'none',
-                        transition: 'all 0.2s ease',
+                        transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease), box-shadow var(--dur-micro) var(--ease)',
                         boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                       }}
                       onFocus={(e) => {
@@ -652,7 +652,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                       fontSize: 13.5,
                       color: '#0F172A',
                       outline: 'none',
-                      transition: 'all 0.2s ease',
+                      transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease), box-shadow var(--dur-micro) var(--ease)',
                       boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                     }}
                     onFocus={(e) => {
@@ -751,7 +751,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                           outline: 'none',
                           resize: 'vertical',
                           minHeight: 64,
-                          transition: 'all 0.2s ease',
+                          transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease), box-shadow var(--dur-micro) var(--ease)',
                           boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                           fontFamily: 'inherit',
                         }}
@@ -787,7 +787,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                               border: `1.5px solid ${isCorrect ? '#86EFAC' : '#E2E8F0'}`,
                               borderRadius: 12,
                               padding: '8px 14px',
-                              transition: 'all 0.15s ease',
+                              transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), color var(--dur-micro) var(--ease)',
                             }}
                           >
                             <input
@@ -865,7 +865,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                           fontSize: 13,
                           color: '#0F172A',
                           outline: 'none',
-                          transition: 'all 0.2s ease',
+                          transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease), box-shadow var(--dur-micro) var(--ease)',
                           boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                         }}
                         onFocus={(e) => {
@@ -952,7 +952,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                       disabled={actionLoading || saving}
                       style={{
                         borderColor: '#A5B4FC',
-                        color: '#4F46E5',
+                        color: 'var(--sage-dark)',
                         background: '#EEF2FF',
                         fontWeight: 700,
                       }}
@@ -1051,7 +1051,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                   confirmModal.type === 'delete'
                     ? '#DC2626'
                     : confirmModal.type === 'publish'
-                    ? '#4F46E5'
+                    ? 'var(--sage-dark)'
                     : confirmModal.type === 'withdraw'
                     ? '#D97706'
                     : '#475569',
@@ -1135,7 +1135,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                     ? 'var(--sage-dark)'
                     : confirmModal.type === 'withdraw'
                     ? 'var(--amber-dark)'
-                    : 'var(--ink-soft)',
+                    : 'var(--muted)',
               }}
             >
               <div style={{ flexShrink: 0, marginTop: 1 }}>
@@ -1201,7 +1201,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                     confirmModal.type === 'delete'
                       ? '#DC2626'
                       : confirmModal.type === 'publish'
-                      ? 'linear-gradient(135deg, #4F46E5 0%, #6366F1 100%)'
+                      ? 'linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%)'
                       : confirmModal.type === 'withdraw'
                       ? '#D97706'
                       : '#475569',
