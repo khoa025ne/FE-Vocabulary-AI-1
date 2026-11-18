@@ -298,7 +298,7 @@ export default function AdminUsers() {
               <th>Mã ID</th>
               <th>Vai trò</th>
               <th>Trạng thái</th>
-              <th>{roleTab === 'STUDENT' ? 'Số buổi học' : 'Phiên hoạt động'}</th>
+              <th>{roleTab === 'STUDENT' ? 'Lượt ôn tập' : 'Phiên hoạt động'}</th>
               <th>Ngày tham gia</th>
               <th style={{ textAlign: 'right' }}>Thao tác</th>
             </tr>
@@ -840,10 +840,10 @@ export default function AdminUsers() {
 
                       <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: 14, border: '1px solid #E2E8F0' }}>
                         <span className="sub" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          TỔNG BUỔI HỌC
+                          TỔNG LƯỢT ÔN TẬP
                         </span>
                         <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--primary)', marginTop: 4 }}>
-                          {selectedUser.totalSessions ?? 0} buổi
+                          {selectedUser.totalSessions ?? 0} lượt
                         </div>
                       </div>
                     </>

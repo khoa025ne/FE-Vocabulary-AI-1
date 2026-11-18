@@ -273,7 +273,7 @@ export default function AdminDashboard() {
           <thead>
             <tr>
               <th>Học viên</th>
-              <th>Số buổi học</th>
+              <th>Lượt ôn tập</th>
               <th>Từ đã học</th>
               <th>Độ chính xác</th>
             </tr>
@@ -309,7 +309,7 @@ export default function AdminDashboard() {
                   </div>
                 </td>
                 <td>
-                  <b>{s.totalSessions || 0} buổi</b>
+                  <b>{s.totalSessions || 0} lượt</b>
                 </td>
                 <td>
                   <b>{s.wordsLearned || 0} từ</b>
