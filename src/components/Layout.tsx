@@ -284,6 +284,7 @@ export function Layout() {
             <ViMascotImage
               pose="happy-wave"
               size={38}
+              priority
               alt="Vi mascot đồng hành bên thanh điều hướng"
             />
             {!isSidebarCollapsed && (

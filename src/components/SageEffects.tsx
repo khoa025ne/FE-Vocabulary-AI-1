@@ -75,12 +75,14 @@ export function ScoreRing({
   label,
   size = 76,
   accentColor,
+  onDark = false,
 }: {
   value: number;
   max?: number;
   label?: string;
   size?: number;
   accentColor?: string;
+  onDark?: boolean;
 }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -94,9 +96,18 @@ export function ScoreRing({
   const offset = mounted ? circumference * (1 - pct / 100) : circumference;
 
   return (
-    <span className="score-ring-wrap" style={{ width: size, height: size }}>
+    <span
+      className="score-ring-wrap"
+      style={{ width: size, height: size, color: onDark ? 'var(--cream)' : 'var(--ink)' }}
+    >
       <svg className="score-ring" viewBox="0 0 88 88" width={size} height={size} aria-hidden="true">
-        <circle cx="44" cy="44" r={r} className="ring-track" />
+        <circle
+          cx="44"
+          cy="44"
+          r={r}
+          className="ring-track"
+          style={onDark ? { stroke: 'rgba(250, 248, 241, 0.22)' } : undefined}
+        />
         <circle
           cx="44"
           cy="44"

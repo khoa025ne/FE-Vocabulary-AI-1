@@ -316,10 +316,13 @@ export default function TopicPanel() {
       <MotionCard
         className="card"
         style={{
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)',
-          border: '1.5px solid var(--line)',
+          background: 'var(--glass-strong)',
+          border: '1px solid var(--rim)',
           boxShadow: 'var(--shadow-sm)',
-          padding: '20px 24px',
+          padding: '16px 20px',
+          flex: 'none',
+          flexShrink: 0,
+          marginBottom: 14,
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

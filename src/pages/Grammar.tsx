@@ -100,7 +100,7 @@ export default function Grammar() {
       </div>
 
       {/* Tab Panels inside viewport-locked inner scroll */}
-      <div className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4, display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4, display: 'block' }}>
         {activeTab === 'topics' && <TopicPanel />}
         {activeTab === 'translate' && <TranslationPanel />}
         {activeTab === 'free' && <FreeCheckPanel />}

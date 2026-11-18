@@ -805,6 +805,10 @@ pre {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.cols2.review-cols {
+  grid-template-columns: minmax(0, 1fr) 290px;
+}
+
 .g3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -1012,9 +1016,10 @@ pre {
 }
 
 .pill.greensoft {
-  background: var(--success-bg);
+  background: rgba(250, 248, 241, 0.92);
+  backdrop-filter: blur(10px);
   color: var(--green-dark);
-  border-color: rgba(66, 119, 77, 0.3);
+  border-color: rgba(66, 119, 77, 0.38);
 }
 
 .pill.warn {
@@ -1024,9 +1029,10 @@ pre {
 }
 
 .pill.redsoft {
-  background: var(--danger-bg);
+  background: rgba(250, 248, 241, 0.92);
+  backdrop-filter: blur(10px);
   color: var(--red-dark);
-  border-color: rgba(154, 75, 67, 0.3);
+  border-color: rgba(154, 75, 67, 0.38);
 }
 
 /* Filter Chips */
@@ -1113,7 +1119,7 @@ pre {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 16px;
-  color: var(--ink);
+  color: currentColor;
 }
 
 /* Pointer Tilt Targets */
@@ -1698,7 +1704,7 @@ pre {
   border: 1px solid rgba(66, 119, 77, 0.28);
 }
 
-.loading {
+.loading:not(.btn) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2019,19 +2025,39 @@ pre {
     color: var(--white);
   }
   .cols2,
+  .cols2.review-cols,
   .g2,
   .g3,
-  .dash-grid,
   .auth-sheet {
     grid-template-columns: 1fr;
   }
-  .dash-grid {
-    grid-template-rows: auto minmax(0, 1fr) auto minmax(0, 0.72fr);
+  .content {
     overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 14px;
+  }
+  .content > * {
+    flex-shrink: 0;
+  }
+  .cols2,
+  .cols2.review-cols {
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .dash-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+    overflow: visible;
+    flex: 0 0 auto;
+  }
+  .dash-grid > * {
+    flex-shrink: 0;
+    min-width: 0;
   }
   .dash-hero {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: auto;
   }
   .dash-queue-head,
   .dash-queue-card,
@@ -2042,11 +2068,17 @@ pre {
     grid-column: 1;
     grid-row: auto;
   }
+  .dash-explore-grid {
+    grid-template-columns: 1fr;
+  }
   .dash-kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .hero-inner {
     grid-template-columns: 1fr;
+  }
+  .hero-inner > * {
+    min-width: 0;
   }
   .pagehead h1,
   .intro h1 {

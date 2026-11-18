@@ -693,6 +693,7 @@ export default function Roadmap() {
                     label={`${overallScore}`}
                     size={76}
                     accentColor="var(--amber)"
+                    onDark
                   />
                   <ViMascotImage
                     pose="explain"

@@ -121,11 +121,17 @@ export default function SpeakingResult() {
 
   if (!state?.sessionId) {
     return (
-      <div className="content narrow center" style={{ paddingTop: 80 }}>
-        <div className="sub">Chưa có phiên luyện nói nào.</div>
-        <button type="button" className="btn mt16" onClick={() => nav('/speaking')}>
-          Luyện nói ngay
-        </button>
+      <div className="content" style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <div className="card stack center" style={{ maxWidth: 440, padding: '28px 32px', gap: 12 }}>
+          <ViMascotImage pose="listen" size={84} alt="Vi đang chờ bản ghi âm luyện nói của bạn" />
+          <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: 'var(--ink)' }}>
+            Chưa có phiên luyện nói nào
+          </div>
+          <div className="sub">Chọn một chủ đề và thu âm 1–2 phút để Vi AI chấm 5 tiêu chí nhé.</div>
+          <button type="button" className="btn" onClick={() => nav('/speaking')}>
+            Luyện nói ngay
+          </button>
+        </div>
       </div>
     );
   }

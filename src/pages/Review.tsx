@@ -882,9 +882,8 @@ export default function Review() {
 
       {/* Main Viewport-Locked 2-Column Layout: Flashcard/Topic Stage + Controls Rail */}
       <div
-        className="cols2"
+        className="cols2 review-cols"
         style={{
-          gridTemplateColumns: 'minmax(0, 1fr) 290px',
           flex: 1,
           minHeight: 0,
           alignItems: 'stretch',
