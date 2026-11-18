@@ -1113,29 +1113,29 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                 alignItems: 'flex-start',
                 background:
                   confirmModal.type === 'delete'
-                    ? '#FEF2F2'
+                    ? 'var(--danger-bg)'
                     : confirmModal.type === 'publish'
-                    ? '#F5F3FF'
+                    ? 'rgba(71, 96, 63, 0.12)'
                     : confirmModal.type === 'withdraw'
-                    ? '#FFFBEB'
-                    : '#F8FAFC',
+                    ? 'var(--amber-bg)'
+                    : 'rgba(250, 248, 241, 0.72)',
                 border: `1px solid ${
                   confirmModal.type === 'delete'
-                    ? '#FCA5A5'
+                    ? 'rgba(154, 75, 67, 0.35)'
                     : confirmModal.type === 'publish'
-                    ? '#DDD6FE'
+                    ? 'rgba(71, 96, 63, 0.28)'
                     : confirmModal.type === 'withdraw'
-                    ? '#FDE68A'
-                    : '#E2E8F0'
+                    ? 'rgba(201, 134, 47, 0.35)'
+                    : 'var(--line)'
                 }`,
                 color:
                   confirmModal.type === 'delete'
-                    ? '#991B1B'
+                    ? 'var(--red-dark)'
                     : confirmModal.type === 'publish'
-                    ? '#6D28D9'
+                    ? 'var(--sage-dark)'
                     : confirmModal.type === 'withdraw'
-                    ? '#B45309'
-                    : '#475569',
+                    ? 'var(--amber-dark)'
+                    : 'var(--ink-soft)',
               }}
             >
               <div style={{ flexShrink: 0, marginTop: 1 }}>

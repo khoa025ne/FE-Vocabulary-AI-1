@@ -443,7 +443,7 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: 'linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%)',
+            background: 'rgba(71, 96, 63, 0.08)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -452,8 +452,8 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                 width: 40,
                 height: 40,
                 borderRadius: 12,
-                background: 'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)',
-                color: '#fff',
+                background: 'var(--sage)',
+                color: 'var(--cream)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -896,14 +896,14 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                                     ? 'var(--primary)'
                                     : '#E2E8F0'
                                 }`,
-                                background: isSelectMode && isSelected ? '#F5F3FF' : '#FFFFFF',
+                                background: isSelectMode && isSelected ? 'rgba(71, 96, 63, 0.14)' : '#FFFFFF',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 gap: 12,
                                 cursor: 'pointer',
-                                transition: 'all 0.15s ease',
-                                boxShadow: isSelectMode && isSelected ? '0 2px 8px rgba(99, 102, 241, 0.12)' : 'none',
+                                transition: 'border-color var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease)',
+                                boxShadow: isSelectMode && isSelected ? 'var(--shadow-sm)' : 'none',
                               }}
                               onMouseEnter={(e) => {
                                 if (!isSelectMode || !isSelected) {
@@ -939,8 +939,8 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                                     width: 38,
                                     height: 38,
                                     borderRadius: 10,
-                                    background: '#EDE9FE',
-                                    color: '#7C3AED',
+                                    background: 'rgba(71, 96, 63, 0.14)',
+                                    color: 'var(--sage-dark)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -1064,15 +1064,15 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                       {/* Summary Box */}
                       <div
                         style={{
-                          background: 'linear-gradient(135deg, #FAF5FF 0%, #EEF2FF 100%)',
-                          border: '1px solid #DDD6FE',
+                          background: 'rgba(71, 96, 63, 0.09)',
+                          border: '1px solid rgba(71, 96, 63, 0.24)',
                           borderRadius: 14,
                           padding: '16px 18px',
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                           <Icon n="spark" s={18} />
-                          <b style={{ color: '#6D28D9', fontSize: 14 }}>Tóm tắt nội dung tài liệu</b>
+                          <b style={{ color: 'var(--sage-dark)', fontSize: 14 }}>Tóm tắt nội dung tài liệu</b>
                         </div>
                         <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: '#334155' }}>
                           {analysisData.summary}
@@ -1745,7 +1745,7 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                         padding: '10px 24px',
                         fontWeight: 800,
                         fontSize: 14,
-                        background: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)',
+                        background: 'var(--sage)',
                         border: 'none',
                       }}
                     >

@@ -138,11 +138,11 @@ export default function HistoryPanel({ onReplay, onGoToTopics }: HistoryPanelPro
   const getModeBadge = (mode: string) => {
     switch (mode) {
       case 'TOPIC':
-        return <span className="pill level" style={{ background: '#EFF6FF', color: '#1D4ED8', borderColor: '#BFDBFE', fontWeight: 800 }}>Chủ đề</span>;
+        return <span className="pill level" style={{ background: 'rgba(71, 96, 63, 0.14)', color: 'var(--sage-dark)', borderColor: 'rgba(71, 96, 63, 0.28)', fontWeight: 800 }}>Chủ đề</span>;
       case 'TRANSLATION':
-        return <span className="pill level" style={{ background: '#F5F3FF', color: '#6D28D9', borderColor: '#DDD6FE', fontWeight: 800 }}>Luyện dịch</span>;
+        return <span className="pill level" style={{ background: 'rgba(201, 134, 47, 0.14)', color: 'var(--amber-dark)', borderColor: 'rgba(201, 134, 47, 0.32)', fontWeight: 800 }}>Luyện dịch</span>;
       default:
-        return <span className="pill level" style={{ background: '#ECFDF5', color: '#047857', borderColor: '#A7F3D0', fontWeight: 800 }}>Viết tự do</span>;
+        return <span className="pill greensoft" style={{ fontWeight: 800 }}>Viết tự do</span>;
     }
   };
 
@@ -364,7 +364,7 @@ export default function HistoryPanel({ onReplay, onGoToTopics }: HistoryPanelPro
                 alignItems: 'center',
                 gap: 16,
                 cursor: 'pointer',
-                transition: 'all 0.18s ease',
+                transition: 'transform var(--dur-micro) var(--ease), border-color var(--dur-micro) var(--ease)',
               }}
               onClick={() => handleViewDetail(item.id)}
             >

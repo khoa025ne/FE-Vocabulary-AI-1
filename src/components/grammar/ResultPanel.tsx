@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import type { GrammarResp, GrammarErr } from '../../api';
 import { MotionCard, AnimatedCounter, staggerContainer, staggerItem } from '../../motion';
-import viAvatar from '../../assets/vi-3d.webp';
+import { ViMascotImage } from '../ViMascotImage';
 
 export interface OutlineReport {
   targetWordCount?: number;
@@ -338,9 +338,9 @@ export default function ResultPanel({ res, outlineReport, translationVerdict, ex
                 style={{
                   cursor: 'pointer',
                   borderRadius: 10,
-                  transition: 'all 0.15s ease',
-                  border: idx === activeErrorIdx ? '1.5px solid #EF4444' : undefined,
-                  background: idx === activeErrorIdx ? '#FEF2F2' : undefined,
+                  transition: 'border-color var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease)',
+                  border: idx === activeErrorIdx ? '1.5px solid var(--danger)' : undefined,
+                  background: idx === activeErrorIdx ? 'var(--danger-bg)' : undefined,
                 }}
               >
                 <span className="tk" style={{ color: 'var(--primary)', fontWeight: 800 }}>
@@ -368,7 +368,11 @@ export default function ResultPanel({ res, outlineReport, translationVerdict, ex
       {/* 2. Coach Vi's Advice */}
       <MotionCard className="card">
         <div className="coach">
-          <img src={viAvatar} alt="Vi" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+          <ViMascotImage
+            pose={hasErrors ? 'surprised' : 'explain'}
+            size={52}
+            alt={hasErrors ? 'Vi bất ngờ trước lỗi cần sửa trong bài viết' : 'Vi giải thích nhận xét ngữ pháp'}
+          />
           <div className="bubble" style={{ fontSize: 13.5, lineHeight: 1.5 }}>
             <b>Gợi ý của Vi:</b> {coachFeedback}
           </div>

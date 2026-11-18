@@ -44,11 +44,11 @@ interface TranslationResult extends GrammarResp {
 }
 
 const LEVEL_CONFIG: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  A1: { label: 'A1', color: '#047857', bg: '#ECFDF5', border: '#A7F3D0' },
-  A2: { label: 'A2', color: '#1D4ED8', bg: '#EFF6FF', border: '#BFDBFE' },
-  B1: { label: 'B1', color: '#6D28D9', bg: '#F5F3FF', border: '#DDD6FE' },
-  B2: { label: 'B2', color: '#B45309', bg: '#FFFBEB', border: '#FDE68A' },
-  C1: { label: 'C1', color: '#BE123C', bg: '#FFF1F2', border: '#FECDD3' },
+  A1: { label: 'A1', color: '#34482e', bg: 'rgba(71, 96, 63, 0.12)', border: 'rgba(71, 96, 63, 0.28)' },
+  A2: { label: 'A2', color: '#42774d', bg: 'rgba(66, 119, 77, 0.12)', border: 'rgba(66, 119, 77, 0.28)' },
+  B1: { label: 'B1', color: '#47603f', bg: 'rgba(71, 96, 63, 0.18)', border: 'rgba(71, 96, 63, 0.34)' },
+  B2: { label: 'B2', color: '#8f5a14', bg: 'rgba(201, 134, 47, 0.14)', border: 'rgba(201, 134, 47, 0.35)' },
+  C1: { label: 'C1', color: '#9a4b43', bg: 'rgba(154, 75, 67, 0.12)', border: 'rgba(154, 75, 67, 0.30)' },
 };
 
 export default function TranslationPanel() {
@@ -455,11 +455,11 @@ export default function TranslationPanel() {
                     fontWeight: 800,
                     fontSize: 13.5,
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), color var(--dur-micro) var(--ease)',
                     border: 'none',
                     background: mode === 'SENTENCE' ? '#FFFFFF' : 'transparent',
-                    color: mode === 'SENTENCE' ? 'var(--primary)' : '#64748B',
-                    boxShadow: mode === 'SENTENCE' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                    color: mode === 'SENTENCE' ? 'var(--sage-dark)' : 'var(--muted)',
+                    boxShadow: mode === 'SENTENCE' ? 'var(--shadow-sm)' : 'none',
                   }}
                 >
                   📝 Luyện câu (1 câu)
@@ -477,11 +477,11 @@ export default function TranslationPanel() {
                     fontWeight: 800,
                     fontSize: 13.5,
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    transition: 'transform var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease), color var(--dur-micro) var(--ease)',
                     border: 'none',
                     background: mode === 'PARAGRAPH' ? '#FFFFFF' : 'transparent',
-                    color: mode === 'PARAGRAPH' ? 'var(--primary)' : '#64748B',
-                    boxShadow: mode === 'PARAGRAPH' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                    color: mode === 'PARAGRAPH' ? 'var(--sage-dark)' : 'var(--muted)',
+                    boxShadow: mode === 'PARAGRAPH' ? 'var(--shadow-sm)' : 'none',
                   }}
                 >
                   📄 Luyện đoạn văn (2-3 câu)
@@ -508,10 +508,10 @@ export default function TranslationPanel() {
             <MotionCard
               className="card"
               style={{
-                background: '#FFFFFF',
-                border: isWordUsedInText ? '2px solid #86EFAC' : '1.5px solid #E2E8F0',
-                boxShadow: isWordUsedInText ? '0 4px 14px rgba(22, 163, 74, 0.12)' : 'var(--shadow-sm)',
-                transition: 'all 0.3s ease',
+                background: 'var(--glass-strong)',
+                border: isWordUsedInText ? '2px solid rgba(66, 119, 77, 0.48)' : '1px solid var(--rim)',
+                boxShadow: isWordUsedInText ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+                transition: 'border-color 0.3s var(--ease)',
                 position: 'relative',
                 overflow: 'hidden',
               }}
@@ -523,7 +523,7 @@ export default function TranslationPanel() {
                     position: 'absolute',
                     top: 0,
                     right: 0,
-                    background: '#16A34A',
+                    background: 'var(--success)',
                     color: '#FFFFFF',
                     fontSize: 11,
                     fontWeight: 800,
@@ -539,11 +539,11 @@ export default function TranslationPanel() {
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--primary)', letterSpacing: -0.3 }}>
+                    <span style={{ fontSize: 22, fontWeight: 900, color: 'var(--sage-dark)', letterSpacing: -0.3 }}>
                       {selectedWord.word}
                     </span>
                     {selectedWord.pronunciation && (
-                      <span style={{ color: '#64748B', fontSize: 14, fontWeight: 700, fontFamily: 'monospace' }}>
+                      <span style={{ color: 'var(--muted)', fontSize: 14, fontWeight: 700, fontFamily: 'monospace' }}>
                         [{selectedWord.pronunciation}]
                       </span>
                     )}
@@ -559,8 +559,8 @@ export default function TranslationPanel() {
                         alignItems: 'center',
                         gap: 4,
                         fontSize: 12,
-                        color: isPlayingAudio ? 'var(--primary)' : '#475569',
-                        background: isPlayingAudio ? '#EFF6FF' : '#F1F5F9',
+                        color: isPlayingAudio ? 'var(--sage-dark)' : 'var(--ink-soft)',
+                        background: isPlayingAudio ? 'rgba(71, 96, 63, 0.14)' : 'rgba(250, 248, 241, 0.72)',
                       }}
                     >
                       🔊 {isPlayingAudio ? 'Đang phát...' : 'Phát âm'}
@@ -719,9 +719,9 @@ export default function TranslationPanel() {
                       <span
                         className="pill"
                         style={{
-                          background: isWordUsedInText ? '#DCFCE7' : '#EFF6FF',
-                          color: isWordUsedInText ? '#15803D' : '#1D4ED8',
-                          border: '1px solid ' + (isWordUsedInText ? '#86EFAC' : '#BFDBFE'),
+                          background: isWordUsedInText ? 'var(--success-bg)' : 'rgba(71, 96, 63, 0.12)',
+                          color: isWordUsedInText ? 'var(--green-dark)' : 'var(--sage-dark)',
+                          border: '1px solid ' + (isWordUsedInText ? 'rgba(66, 119, 77, 0.35)' : 'rgba(71, 96, 63, 0.25)'),
                           fontWeight: 800,
                           fontSize: 12,
                         }}
@@ -961,7 +961,7 @@ export default function TranslationPanel() {
                 fontWeight: 800,
                 fontSize: 14.5,
                 borderRadius: 10,
-                boxShadow: '0 4px 12px rgba(21, 101, 192, 0.25)',
+                boxShadow: 'var(--shadow-sm)',
               }}
             >
               {busy ? (
