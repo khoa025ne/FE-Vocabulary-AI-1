@@ -171,6 +171,30 @@ export default function Review() {
     }
   }, [searchParams]);
 
+  // Đồng bộ selectedTopic lên URL để nút Back trình duyệt quay về được danh sách
+  // (Effect 1: state -> URL, chỉ chạy khi selectedTopic đổi; KHÔNG thêm searchParams
+  // vào deps của effect này, nếu không nó sẽ đẩy topic trở lại URL khi anh bấm Back)
+  useEffect(() => {
+    const urlTopic = searchParams.get('topic');
+    if (selectedTopic && urlTopic !== selectedTopic) {
+      const next = new URLSearchParams(searchParams);
+      next.set('topic', selectedTopic);
+      setSearchParams(next);
+    } else if (!selectedTopic && urlTopic) {
+      const next = new URLSearchParams(searchParams);
+      next.delete('topic');
+      setSearchParams(next, { replace: true });
+    }
+  }, [selectedTopic]);
+
+  // Đồng bộ URL -> state khi anh bấm Back/Forward của trình duyệt
+  useEffect(() => {
+    const urlTopic = searchParams.get('topic');
+    if (urlTopic !== selectedTopic) {
+      setSelectedTopic(urlTopic);
+    }
+  }, [searchParams]);
+
   const [cards, setCards] = useState<FlashcardWord[]>([]);
   const [i, setI] = useState(0);
   const [flip, setFlip] = useState(false);

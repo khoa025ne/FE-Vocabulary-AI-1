@@ -241,39 +241,512 @@
   50% { height: 18px; }
 }
 
-/* Modal Scorecard */
-.score-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.score-modal-content {
-  background: #ffffff;
-  border-radius: 24px;
-  max-width: 680px;
+/* =========================================================
+   Voice Chat Result Board (Clean, Dedicated Result Card)
+   ========================================================= */
+.voice-result-board {
+  max-width: 900px;
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  margin: 12px auto 40px auto;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 24px;
+  box-shadow: 0 16px 40px -8px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
   padding: 32px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeInBoard 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes modalScaleUp {
+@keyframes fadeInBoard {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(12px) scale(0.99);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
+  }
+}
+
+.voice-result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border, #edf2f7);
+  flex-wrap: wrap;
+}
+
+.voice-result-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 4px 10px;
+  border-radius: 99px;
+  margin-bottom: 8px;
+}
+
+.voice-result-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+
+.voice-result-sub {
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.voice-result-tier-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 99px;
+  font-size: 14px;
+  border: 1px solid;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Hero Scorecard & Vi Feedback */
+.voice-result-hero {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 20px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+
+.voice-result-dial-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  min-width: 120px;
+  min-height: 120px;
+  max-width: 120px;
+  max-height: 120px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voice-result-dial-svg {
+  width: 120px;
+  height: 120px;
+  display: block;
+}
+
+.voice-dial-track {
+  fill: none;
+  stroke: #e2e8f0;
+  stroke-width: 9;
+}
+
+.voice-dial-progress {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.voice-result-dial-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.voice-result-dial-num {
+  font-size: 34px;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.voice-result-dial-max {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+
+.voice-result-dial-lbl {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 3px;
+}
+
+.voice-result-summary-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.voice-result-summary-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.voice-result-summary-avatar {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  max-width: 34px;
+  max-height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: block;
+}
+
+.voice-result-summary-content {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #334155;
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* Sections */
+.voice-result-section {
+  margin-bottom: 24px;
+}
+
+.voice-result-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Criteria Grid */
+.voice-criteria-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.voice-crit-card {
+  background: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 14px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.voice-crit-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.voice-crit-card.full-span {
+  grid-column: 1 / -1;
+}
+
+.voice-crit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.voice-crit-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #0f172a;
+  flex-wrap: wrap;
+}
+
+.voice-crit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.voice-crit-score {
+  font-weight: 900;
+  font-size: 15px;
+}
+
+.voice-crit-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.voice-crit-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.voice-crit-comment {
+  font-size: 12.5px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.voice-crit-pill-warn {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+  border: 1px solid #fde68a;
+  display: inline-block;
+}
+
+/* Vocabulary Grid */
+.voice-vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.voice-vocab-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.voice-vocab-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.voice-vocab-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.voice-vocab-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.voice-vocab-word {
+  font-weight: 800;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.voice-vocab-dot {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.voice-vocab-meaning {
+  font-size: 13px;
+  color: #475569;
+}
+
+.voice-vocab-example {
+  font-size: 11.5px;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 3px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.voice-save-btn {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.voice-save-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.voice-save-btn.saved {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+  cursor: default;
+}
+
+.voice-vocab-empty-tag {
+  font-size: 11px;
+  color: #94a3b8;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Transcript Toggle */
+.voice-result-transcript-toggle {
+  margin: 18px 0 10px 0;
+  text-align: center;
+}
+
+.voice-transcript-btn {
+  background: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 99px;
+  padding: 7px 18px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.voice-transcript-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.voice-result-transcript-body {
+  max-height: 260px;
+  overflow-y: auto;
+  background: #f8fafc;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.voice-transcript-row {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.voice-transcript-row.assistant .voice-transcript-author {
+  color: #2563eb;
+  font-weight: 800;
+  margin-right: 6px;
+}
+
+.voice-transcript-row.user .voice-transcript-author {
+  color: #10b981;
+  font-weight: 800;
+  margin-right: 6px;
+}
+
+.voice-transcript-text {
+  color: #334155;
+}
+
+/* Footer Action Buttons */
+.voice-result-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border, #edf2f7);
+  flex-wrap: wrap;
+}
+
+.voice-btn-replay {
+  padding: 9px 20px;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+.voice-btn-done {
+  padding: 9px 24px;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .voice-result-board {
+    padding: 20px;
+  }
+  .voice-result-hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+    padding: 20px;
+  }
+  .voice-criteria-grid {
+    grid-template-columns: 1fr;
+  }
+  .voice-vocab-grid {
+    grid-template-columns: 1fr;
+  }
+  .voice-result-footer {
+    justify-content: stretch;
+  }
+  .voice-result-footer button {
+    flex: 1;
   }
 }
 

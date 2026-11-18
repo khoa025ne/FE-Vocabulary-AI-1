@@ -21,6 +21,48 @@ interface VoiceChatPanelProps {
   customTopic?: string;
   onBackToPractice?: () => void;
   onLevelChange?: (lvl: string) => void;
+  onScoreStateChange?: (hasScore: boolean) => void;
+}
+
+function getScoreTier(score: number) {
+  if (score >= 90) {
+    return {
+      label: 'Xuất sắc',
+      color: '#059669',
+      bg: '#ecfdf5',
+      border: '#a7f3d0',
+      strokeColor: '#10b981',
+      icon: '🏆',
+    };
+  }
+  if (score >= 80) {
+    return {
+      label: 'Rất tốt',
+      color: '#1d4ed8',
+      bg: '#eff6ff',
+      border: '#bfdbfe',
+      strokeColor: '#2563eb',
+      icon: '🌟',
+    };
+  }
+  if (score >= 65) {
+    return {
+      label: 'Khá tốt',
+      color: '#d97706',
+      bg: '#fffbeb',
+      border: '#fde68a',
+      strokeColor: '#f59e0b',
+      icon: '👍',
+    };
+  }
+  return {
+    label: 'Cần cố gắng',
+    color: '#7c3aed',
+    bg: '#f5f3ff',
+    border: '#ddd6fe',
+    strokeColor: '#8b5cf6',
+    icon: '💪',
+  };
 }
 
 export const VOICES = [
@@ -157,6 +199,7 @@ export const VoiceChatPanel: React.FC<VoiceChatPanelProps> = ({
   customTopic,
   onBackToPractice,
   onLevelChange,
+  onScoreStateChange,
 }) => {
   const effectiveTopic = customTopic?.trim() || topic;
   const { decrementQuota } = useUsage();
@@ -167,6 +210,7 @@ export const VoiceChatPanel: React.FC<VoiceChatPanelProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [activeSentence, setActiveSentence] = useState<{ msgId: string; sentenceIdx: number } | null>(null);
   const [activeWordIdx, setActiveWordIdx] = useState<number>(-1);
+  const [showTranscript, setShowTranscript] = useState(false);
 
   // Settings
   const [voice, setVoice] = useState<string>(() => localStorage.getItem('vocab_ai_voice') || 'alloy');
@@ -832,10 +876,27 @@ export const VoiceChatPanel: React.FC<VoiceChatPanelProps> = ({
       });
 
       setScoreReport(scoreRes);
+      onScoreStateChange?.(true);
     } catch (err: any) {
       setErrorMsg(errMsg(err, 'Không thể chấm điểm phiên nói. Vui lòng bấm thử lại.'));
     } finally {
       setIsScoring(false);
+    }
+  };
+
+  const handleResetSession = () => {
+    setScoreReport(null);
+    setMessages([]);
+    setHasStarted(false);
+    setShowTranscript(false);
+    onScoreStateChange?.(false);
+  };
+
+  const handleFinishSession = () => {
+    setScoreReport(null);
+    onScoreStateChange?.(false);
+    if (onBackToPractice) {
+      onBackToPractice();
     }
   };
 
@@ -849,6 +910,240 @@ export const VoiceChatPanel: React.FC<VoiceChatPanelProps> = ({
       // ignore
     }
   };
+
+  if (scoreReport) {
+    const tier = getScoreTier(scoreReport.overall);
+    const userTurnsCount = messages.filter((m: Message) => m.role === 'user').length;
+    const criteriaList = [
+      { key: 'grammar', name: 'Ngữ pháp (Grammar)', icon: <Icon n="book" s={15} />, data: scoreReport.grammar },
+      { key: 'vocabulary', name: 'Từ vựng (Vocabulary)', icon: <Icon n="spark" s={15} />, data: scoreReport.vocabulary },
+      { key: 'fluency', name: 'Trôi chảy (Fluency)', icon: <Icon n="zap" s={15} />, data: scoreReport.fluency },
+      { key: 'content', name: 'Nội dung (Content)', icon: <Icon n="target" s={15} />, data: scoreReport.content },
+      { key: 'pronunciation', name: 'Phát âm (Pronunciation)', icon: <Icon n="vol" s={15} />, data: scoreReport.pronunciation },
+    ];
+
+    return (
+      <div className="voice-result-board">
+        {/* Header */}
+        <div className="voice-result-header">
+          <div>
+            <div className="voice-result-tag">
+              <Icon n="spark" s={14} />
+              <span>ĐÁNH GIÁ PHẢN XẠ NÓI CÙNG VI</span>
+            </div>
+            <h2 className="voice-result-title">Kết quả trò chuyện cùng Vi</h2>
+            <div className="voice-result-sub">
+              Chủ đề: <b>{effectiveTopic}</b> · Trình độ: <b>{level}</b> · <b>{userTurnsCount} lượt đối thoại</b>
+            </div>
+          </div>
+          <div
+            className="voice-result-tier-pill"
+            style={{ background: tier.bg, color: tier.color, borderColor: tier.border }}
+          >
+            <span style={{ fontSize: '16px' }}>{tier.icon}</span>
+            <span style={{ fontWeight: 800 }}>{tier.label}</span>
+          </div>
+        </div>
+
+        {/* Hero Score & Vi Summary */}
+        <div className="voice-result-hero">
+          <div className="voice-result-dial-wrap">
+            <svg
+              className="voice-result-dial-svg"
+              width={120}
+              height={120}
+              viewBox="0 0 120 120"
+              style={{ width: 120, height: 120, display: 'block' }}
+            >
+              <circle
+                cx="60"
+                cy="60"
+                r="48"
+                fill="none"
+                stroke="#e2e8f0"
+                strokeWidth="9"
+                className="voice-dial-track"
+              />
+              <circle
+                cx="60"
+                cy="60"
+                r="48"
+                fill="none"
+                stroke={tier.strokeColor}
+                strokeWidth="9"
+                strokeLinecap="round"
+                className="voice-dial-progress"
+                strokeDasharray={301.6}
+                strokeDashoffset={301.6 - (301.6 * Math.min(scoreReport.overall, 100)) / 100}
+                transform="rotate(-90 60 60)"
+              />
+            </svg>
+            <div className="voice-result-dial-text">
+              <div className="voice-result-dial-num">{scoreReport.overall}</div>
+              <div className="voice-result-dial-max">/ 100</div>
+              <div className="voice-result-dial-lbl">Tổng điểm</div>
+            </div>
+          </div>
+
+          <div className="voice-result-summary-box">
+            <div className="voice-result-summary-head">
+              <img
+                src={viAvatar}
+                alt="Vi"
+                className="voice-result-summary-avatar"
+                style={{ width: 34, height: 34, minWidth: 34, minHeight: 34, maxWidth: 34, maxHeight: 34, borderRadius: '50%', objectFit: 'cover' }}
+              />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '14.5px', color: '#1e293b' }}>Nhận xét từ trợ lý Vi</div>
+                <div style={{ fontSize: '12px', color: '#64748b' }}>Đánh giá phản xạ &amp; độ tự nhiên theo khung CEFR</div>
+              </div>
+            </div>
+            <div className="voice-result-summary-content">
+              {scoreReport.summary}
+            </div>
+          </div>
+        </div>
+
+        {/* 5 Criteria */}
+        <div className="voice-result-section">
+          <div className="voice-result-section-title">
+            <Icon n="check" s={18} />
+            <span>Chi tiết 5 tiêu chí đánh giá phản xạ</span>
+          </div>
+
+          <div className="voice-criteria-grid">
+            {criteriaList.map((crit, idx) => {
+              const isLast = idx === 4; // Pronunciation
+              const score = Math.round(crit.data?.score ?? 0);
+              const color = score >= 85 ? '#10b981' : score >= 70 ? '#2563eb' : '#f59e0b';
+              return (
+                <div key={crit.key} className={`voice-crit-card ${isLast ? 'full-span' : ''}`}>
+                  <div className="voice-crit-top">
+                    <div className="voice-crit-label">
+                      <span className="voice-crit-icon">{crit.icon}</span>
+                      <span className="voice-crit-name">{crit.name}</span>
+                      {crit.data?.estimatedFromTranscript && (
+                        <span className="voice-crit-pill-warn" title="Được ước lượng dựa trên bản ghi chuyển hóa văn bản">
+                          Ước lượng từ văn bản
+                        </span>
+                      )}
+                    </div>
+                    <div className="voice-crit-score" style={{ color }}>
+                      {score} <span style={{ fontSize: '12px', color: '#94a3b8' }}>/ 100</span>
+                    </div>
+                  </div>
+
+                  <div className="voice-crit-bar-track">
+                    <div
+                      className="voice-crit-bar-fill"
+                      style={{ width: `${Math.min(score, 100)}%`, backgroundColor: color }}
+                    />
+                  </div>
+
+                  <div className="voice-crit-comment">
+                    {crit.data?.comment || 'Chưa có nhận xét cho tiêu chí này.'}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* New Words */}
+        {scoreReport.newWords && scoreReport.newWords.length > 0 && (
+          <div className="voice-result-section">
+            <div className="voice-result-section-title">
+              <Icon n="spark" s={18} />
+              <span>Từ vựng gợi ý thêm từ hội thoại ({scoreReport.newWords.length} từ)</span>
+            </div>
+            <div className="voice-vocab-grid">
+              {scoreReport.newWords.map((w: VoiceChatNewWord, idx: number) => {
+                const isSaved = w.wordId ? savedWords.has(w.wordId) : false;
+                return (
+                  <div key={idx} className="voice-vocab-card">
+                    <div className="voice-vocab-info">
+                      <div className="voice-vocab-main">
+                        <span className="voice-vocab-word">{w.word}</span>
+                        <span className="voice-vocab-dot">·</span>
+                        <span className="voice-vocab-meaning">{w.meaning}</span>
+                      </div>
+                      {w.example && (
+                        <div className="voice-vocab-example" title={w.example}>
+                          &ldquo;{w.example}&rdquo;
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="voice-vocab-action">
+                      {w.inDictionary && w.wordId ? (
+                        <button
+                          type="button"
+                          onClick={() => handleSaveWord(w)}
+                          disabled={isSaved}
+                          className={`voice-save-btn ${isSaved ? 'saved' : ''}`}
+                        >
+                          {isSaved ? '✓ Đã lưu' : '+ Lưu từ'}
+                        </button>
+                      ) : (
+                        <span className="voice-vocab-empty-tag" title="Từ này chưa có trong kho từ điển hệ thống">
+                          Chưa có trong kho
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Transcript toggle */}
+        {messages.length > 0 && (
+          <div className="voice-result-transcript-toggle">
+            <button
+              type="button"
+              onClick={() => setShowTranscript((prev) => !prev)}
+              className="voice-transcript-btn"
+            >
+              <Icon n={showTranscript ? 'x' : 'msg'} s={16} />
+              <span>{showTranscript ? 'Thu gọn lịch sử đối thoại' : `Xem lại lịch sử đối thoại (${messages.length} tin nhắn)`}</span>
+            </button>
+          </div>
+        )}
+
+        {showTranscript && messages.length > 0 && (
+          <div className="voice-result-transcript-body">
+            {messages.map((m: Message) => (
+              <div key={m.id} className={`voice-transcript-row ${m.role}`}>
+                <span className="voice-transcript-author">{m.role === 'assistant' ? 'Vi' : 'Bạn'}:</span>
+                <span className="voice-transcript-text">{m.text}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Action Footer */}
+        <div className="voice-result-footer">
+          <button
+            type="button"
+            onClick={handleResetSession}
+            className="btn btn-outline voice-btn-replay"
+          >
+            🔄 Luyện tập lại phiên mới
+          </button>
+          {onBackToPractice && (
+            <button
+              type="button"
+              onClick={handleFinishSession}
+              className="btn btn-primary voice-btn-done"
+            >
+              ✓ Hoàn tất &amp; Về chủ đề
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="voice-chat-container">
@@ -1185,180 +1480,6 @@ export const VoiceChatPanel: React.FC<VoiceChatPanelProps> = ({
           )}
         </div>
       </div>
-
-      {/* 4. Scorecard Modal */}
-      {scoreReport && (
-        <div className="score-modal-backdrop">
-          <div className="score-modal-content">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <div>
-                <h2 style={{ fontSize: '22px', fontWeight: 900, margin: 0 }}>📊 Kết quả trò chuyện cùng Vi</h2>
-                <div className="sub mt4">Chủ đề: {effectiveTopic} · Trình độ {level}</div>
-              </div>
-              <button
-                onClick={() => setScoreReport(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
-              >
-                <Icon n="x" s={22} />
-              </button>
-            </div>
-
-            {/* Overall Score */}
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '20px',
-                background: 'linear-gradient(135deg, #eff6ff, #dbeafe)',
-                borderRadius: '16px',
-                marginBottom: '24px',
-              }}
-            >
-              <div style={{ fontSize: '42px', fontWeight: 900, color: '#1d4ed8' }}>
-                {scoreReport.overall} <span style={{ fontSize: '20px', color: '#60a5fa' }}>/ 100</span>
-              </div>
-              <div style={{ fontWeight: 700, color: '#1e3a8a', marginTop: '4px' }}>Điểm phản xạ tổng thể</div>
-              <div style={{ fontSize: '14px', color: '#475569', marginTop: '8px', maxWidth: 520, margin: '8px auto 0' }}>
-                {scoreReport.summary}
-              </div>
-            </div>
-
-            {/* 5 Criteria */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px', marginBottom: '24px' }}>
-              <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fafafa' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700 }}>
-                  <span>Ngữ pháp (Grammar)</span>
-                  <span style={{ color: '#2563eb' }}>{scoreReport.grammar?.score}/100</span>
-                </div>
-                <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '4px' }}>{scoreReport.grammar?.comment}</div>
-              </div>
-
-              <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fafafa' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700 }}>
-                  <span>Từ vựng (Vocabulary)</span>
-                  <span style={{ color: '#2563eb' }}>{scoreReport.vocabulary?.score}/100</span>
-                </div>
-                <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '4px' }}>{scoreReport.vocabulary?.comment}</div>
-              </div>
-
-              <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fafafa' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700 }}>
-                  <span>Trôi chảy (Fluency)</span>
-                  <span style={{ color: '#2563eb' }}>{scoreReport.fluency?.score}/100</span>
-                </div>
-                <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '4px' }}>{scoreReport.fluency?.comment}</div>
-              </div>
-
-              <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fafafa' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700 }}>
-                  <span>Nội dung (Content)</span>
-                  <span style={{ color: '#2563eb' }}>{scoreReport.content?.score}/100</span>
-                </div>
-                <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '4px' }}>{scoreReport.content?.comment}</div>
-              </div>
-
-              <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fafafa' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 700 }}>
-                  <span>Phát âm (Pronunciation)</span>
-                  <span style={{ color: '#2563eb' }}>{scoreReport.pronunciation?.score}/100</span>
-                </div>
-                {scoreReport.pronunciation?.estimatedFromTranscript && (
-                  <span className="pill warn" style={{ fontSize: '10px', padding: '1px 6px', marginTop: '2px', display: 'inline-block' }}>
-                    Ước lượng từ văn bản
-                  </span>
-                )}
-                <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '4px' }}>{scoreReport.pronunciation?.comment}</div>
-              </div>
-            </div>
-
-            {/* New Words Extracted */}
-            {scoreReport.newWords && scoreReport.newWords.length > 0 && (
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Icon n="spark" s={18} /> Từ vựng gợi ý thêm từ hội thoại ({scoreReport.newWords.length} từ)
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {scoreReport.newWords.map((w: VoiceChatNewWord, idx: number) => {
-                    const isSaved = w.wordId ? savedWords.has(w.wordId) : false;
-                    return (
-                      <div
-                        key={idx}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '10px 14px',
-                          borderRadius: '10px',
-                          background: '#f8fafc',
-                          border: '1px solid #e2e8f0',
-                        }}
-                      >
-                        <div style={{ flex: 1 }}>
-                          <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '14.5px' }}>{w.word}</span>
-                          <span style={{ margin: '0 8px', color: '#94a3b8' }}>·</span>
-                          <span style={{ color: '#475569', fontSize: '13.5px' }}>{w.meaning}</span>
-                          {w.example && (
-                            <div style={{ fontSize: '12px', color: '#64748b', fontStyle: 'italic', marginTop: '2px' }}>
-                              &quot;{w.example}&quot;
-                            </div>
-                          )}
-                        </div>
-
-                        <div>
-                          {w.inDictionary && w.wordId ? (
-                            <button
-                              onClick={() => handleSaveWord(w)}
-                              disabled={isSaved}
-                              className={`btn ${isSaved ? 'btn-outline' : 'btn-primary'}`}
-                              style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '8px' }}
-                            >
-                              {isSaved ? '✓ Đã lưu' : '+ Lưu từ'}
-                            </button>
-                          ) : (
-                            <span
-                              className="pill"
-                              style={{ fontSize: '11px', color: '#94a3b8', cursor: 'not-allowed' }}
-                              title="Từ này chưa có trong kho từ điển hệ thống"
-                            >
-                              Chưa có trong kho
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-              <button
-                onClick={() => {
-                  setScoreReport(null);
-                  setMessages([]);
-                  setHasStarted(false);
-                }}
-                className="btn btn-outline"
-                style={{ padding: '8px 18px', fontWeight: 700 }}
-              >
-                🔄 Luyện tập lại
-              </button>
-              {onBackToPractice && (
-                <button
-                  onClick={() => {
-                    setScoreReport(null);
-                    onBackToPractice();
-                  }}
-                  className="btn btn-primary"
-                  style={{ padding: '8px 20px', fontWeight: 700 }}
-                >
-                  Hoàn tất
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

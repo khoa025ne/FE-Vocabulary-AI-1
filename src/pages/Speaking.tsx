@@ -120,6 +120,7 @@ export default function Speaking() {
   const initialLvl = TOPICS[0]?.tag || getInitialLevel();
   const [level, setLevel] = useState(initialLvl);
   const [mode, setMode] = useState<'practice' | 'voice'>('practice');
+  const [isVoiceScoringResult, setIsVoiceScoringResult] = useState(false);
   const [session, setSession] = useState<SpeakSession | null>(null);
   const [rec, setRec] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -307,33 +308,40 @@ export default function Speaking() {
 
   return (
     <div className="content" style={{ maxWidth: 1600 }}>
-      <div className="pagehead" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1>Luyện nói phản xạ cùng AI</h1>
-          <div className="sub">Chọn chủ đề, nói 1–2 phút — Vi nghe và chấm 5 tiêu chí ngay</div>
-        </div>
-        <QuotaBadge featureKey={mode === 'voice' ? 'voice' : 'speaking'} labelSuffix={mode === 'voice' ? 'lượt thoại hôm nay' : 'lượt chấm hôm nay'} />
-      </div>
+      {!isVoiceScoringResult && (
+        <>
+          <div className="pagehead" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <h1>Luyện nói phản xạ cùng AI</h1>
+              <div className="sub">Chọn chủ đề, nói 1–2 phút — Vi nghe và chấm 5 tiêu chí ngay</div>
+            </div>
+            <QuotaBadge featureKey={mode === 'voice' ? 'voice' : 'speaking'} labelSuffix={mode === 'voice' ? 'lượt thoại hôm nay' : 'lượt chấm hôm nay'} />
+          </div>
 
-      {/* Mode Switcher Tabs */}
-      <div style={{ display: 'flex', gap: '10px', margin: '20px 0' }}>
-        <button
-          type="button"
-          onClick={() => setMode('practice')}
-          className={'fchip' + (mode === 'practice' ? ' on' : '')}
-          style={{ fontSize: '14px', padding: '9px 20px', fontWeight: 800, cursor: 'pointer' }}
-        >
-          🎙️ Luyện nói & Chấm điểm
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode('voice')}
-          className={'fchip' + (mode === 'voice' ? ' on' : '')}
-          style={{ fontSize: '14px', padding: '9px 20px', fontWeight: 800, cursor: 'pointer' }}
-        >
-          💬 Trò chuyện giọng nói với AI (Voice Chat)
-        </button>
-      </div>
+          {/* Mode Switcher Tabs */}
+          <div style={{ display: 'flex', gap: '10px', margin: '20px 0' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setMode('practice');
+                setIsVoiceScoringResult(false);
+              }}
+              className={'fchip' + (mode === 'practice' ? ' on' : '')}
+              style={{ fontSize: '14px', padding: '9px 20px', fontWeight: 800, cursor: 'pointer' }}
+            >
+              🎙️ Luyện nói & Chấm điểm
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('voice')}
+              className={'fchip' + (mode === 'voice' ? ' on' : '')}
+              style={{ fontSize: '14px', padding: '9px 20px', fontWeight: 800, cursor: 'pointer' }}
+            >
+              💬 Trò chuyện giọng nói với AI (Voice Chat)
+            </button>
+          </div>
+        </>
+      )}
 
       <AnimatePresence mode="wait">
         {mode === 'voice' ? (
@@ -349,7 +357,11 @@ export default function Speaking() {
               level={level}
               onLevelChange={setLevel}
               customTopic={isCustom ? customTopic : undefined}
-              onBackToPractice={() => setMode('practice')}
+              onBackToPractice={() => {
+                setIsVoiceScoringResult(false);
+                setMode('practice');
+              }}
+              onScoreStateChange={setIsVoiceScoringResult}
             />
           </motion.div>
         ) : (
