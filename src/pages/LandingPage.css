@@ -1514,11 +1514,12 @@
 }
 
 .landing .final-in {
-  background: var(--ink);
-  color: #fff;
+  background: #FFFFFF;
+  color: var(--ink);
+  border: 1px solid var(--line-soft, #E3EDF6);
   border-radius: 30px;
   padding: 54px 56px;
-  box-shadow: 0 34px 64px rgba(10,37,64,.28);
+  box-shadow: 0 24px 54px rgba(10, 37, 64, 0.08), 0 4px 12px rgba(10, 37, 64, 0.03);
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 28px;
@@ -1527,13 +1528,14 @@
 
 .landing .final h2 {
   font-size: 32px;
-  color: #fff;
+  color: var(--ink, #0A2540);
+  font-weight: 900;
 }
 
 .landing .final p {
   margin-top: 8px;
-  font-weight: 700;
-  color: #B9C9DE;
+  font-weight: 600;
+  color: var(--muted, #64748B);
   font-size: 16.5px;
 }
 
@@ -1554,9 +1556,9 @@
 
 /* ---------- footer ---------- */
 .landing footer {
-  background: linear-gradient(180deg, #0A2540 0%, #06192E 100%);
-  color: #B9C9DE;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #F8FAFC;
+  color: #64748B;
+  border-top: 1px solid var(--line-soft, #E2E8F0);
   border-radius: 0 0 28px 28px;
 }
 
@@ -1573,14 +1575,14 @@
   grid-template-columns: 310px auto auto 330px;
   justify-content: space-between;
   align-items: start;
-  padding-top: 96px !important;
-  padding-bottom: 64px !important;
+  padding-top: 80px !important;
+  padding-bottom: 56px !important;
   font-size: 14.5px;
   font-weight: 600;
 }
 
 .landing .foot .brand {
-  color: #fff;
+  color: var(--ink, #0A2540);
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -1594,7 +1596,7 @@
   max-width: 310px;
   font-size: 13.5px;
   line-height: 1.68;
-  color: #8EA7C5;
+  color: #64748B;
   font-weight: 500;
 }
 
@@ -1605,9 +1607,9 @@
   margin-top: 20px;
   padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(30, 126, 70, 0.18);
-  border: 1px solid rgba(52, 211, 153, 0.35);
-  color: #6EE7B7;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #059669;
   font-size: 12.5px;
   font-weight: 700;
 }
@@ -1616,8 +1618,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #34D399;
-  box-shadow: 0 0 8px #34D399;
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
   display: inline-block;
 }
 
@@ -1628,7 +1630,7 @@
 }
 
 .landing .foot nav b {
-  color: #fff;
+  color: var(--ink, #0A2540);
   font-size: 12.5px;
   text-transform: uppercase;
   letter-spacing: 0.9px;
@@ -1637,7 +1639,7 @@
 }
 
 .landing .foot nav a {
-  color: #9BB3CE;
+  color: #64748B;
   font-size: 14px;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -1646,26 +1648,26 @@
 }
 
 .landing .foot nav a:hover {
-  color: #fff;
+  color: var(--primary, #1565C0);
   transform: translateX(3px);
 }
 
 .landing .foot-sp-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #FFFFFF;
+  border: 1px solid var(--line-soft, #E2E8F0);
   border-radius: 18px;
   padding: 24px 26px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 10px 24px rgba(10, 37, 64, 0.04);
 }
 
 .landing .foot-sp-head {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  color: var(--ink, #0A2540);
   font-size: 14.5px;
   font-weight: 800;
 }
@@ -1675,7 +1677,7 @@
 }
 
 .landing .foot-sp-card p {
-  color: #9BB3CE;
+  color: #64748B;
   font-size: 13px;
   line-height: 1.6;
   margin: 0;
@@ -1698,14 +1700,14 @@
   transition: all 0.22s ease;
   width: fit-content;
   margin-top: 4px;
-  box-shadow: 0 4px 14px rgba(30, 126, 70, 0.35);
+  box-shadow: 0 4px 14px rgba(30, 126, 70, 0.25);
 }
 
 .landing .foot-sp-btn:hover {
   background: #145C32;
   border-color: #1E7E46;
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(30, 126, 70, 0.5);
+  box-shadow: 0 8px 22px rgba(30, 126, 70, 0.4);
   color: #fff;
 }
 
@@ -1725,12 +1727,12 @@
   align-items: center;
   gap: 16px 30px;
   flex-wrap: wrap;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 30px !important;
-  padding-bottom: 46px !important;
+  border-top: 1px solid var(--line-soft, #E2E8F0);
+  padding-top: 26px !important;
+  padding-bottom: 38px !important;
   font-size: 13px;
   font-weight: 600;
-  color: #7E97B5;
+  color: #94A3B8;
 }
 
 .landing .legal-links {
@@ -1740,13 +1742,13 @@
 }
 
 .landing .legal a {
-  color: #8EA7C5;
+  color: #64748B;
   transition: color 0.2s ease;
   text-decoration: none;
 }
 
 .landing .legal a:hover {
-  color: #fff;
+  color: var(--primary, #1565C0);
   text-decoration: underline;
 }
 

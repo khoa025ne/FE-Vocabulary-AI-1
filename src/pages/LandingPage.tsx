@@ -1210,13 +1210,13 @@ export default function LandingPage() {
               alt="Mascot Vi 3D"
               loading="lazy"
               decoding="async"
-              style={{ width: '96px', height: '96px', objectFit: 'cover', borderRadius: '26px', border: '3px solid rgba(255,255,255,.25)' }}
+              style={{ width: '96px', height: '96px', objectFit: 'cover', borderRadius: '26px', border: '2px solid #E2E8F0', boxShadow: '0 6px 16px rgba(10,37,64,0.06)' }}
             />
             <div>
               <h2>Từ đầu tiên của bạn đang chờ.</h2>
               <p>Miễn phí, 1 phút đăng ký. Học 10 từ hôm nay, 30 ngày nữa tự kiểm chứng.</p>
             </div>
-            <Link className="btn white" to={ctaLink} onClick={handleTransitionNavigate(ctaLink)} style={{ minWidth: '230px' }}>
+            <Link className="btn" to={ctaLink} onClick={handleTransitionNavigate(ctaLink)} style={{ minWidth: '230px' }}>
               Bắt đầu học miễn phí
             </Link>
           </div>
