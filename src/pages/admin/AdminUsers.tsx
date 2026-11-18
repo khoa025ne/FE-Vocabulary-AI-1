@@ -298,7 +298,7 @@ export default function AdminUsers() {
               <th>Mã ID</th>
               <th>Vai trò</th>
               <th>Trạng thái</th>
-              <th>{roleTab === 'STUDENT' ? 'Lượt ôn tập' : 'Phiên hoạt động'}</th>
+              {roleTab === 'STUDENT' && <th>Lượt ôn tập</th>}
               <th>Ngày tham gia</th>
               <th style={{ textAlign: 'right' }}>Thao tác</th>
             </tr>
@@ -306,13 +306,13 @@ export default function AdminUsers() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
+                <td colSpan={roleTab === 'STUDENT' ? 7 : 6} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
                   Đang tải danh sách...
                 </td>
               </tr>
             ) : students.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
+                <td colSpan={roleTab === 'STUDENT' ? 7 : 6} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
                   {roleTab === 'STUDENT'
                     ? 'Không tìm thấy học viên nào phù hợp.'
                     : 'Không tìm thấy Instructor nào phù hợp.'}
@@ -372,13 +372,11 @@ export default function AdminUsers() {
                         {isActive ? 'Đang hoạt động' : isBanned ? 'Đã khóa' : u.status}
                       </span>
                     </td>
-                    <td>
-                      {userRole === 'INSTRUCTOR' ? (
-                        <span style={{ color: 'var(--muted)', fontWeight: 600 }}>—</span>
-                      ) : (
+                    {roleTab === 'STUDENT' && (
+                      <td>
                         <b>{u.totalSessions ?? 0}</b>
-                      )}
-                    </td>
+                      </td>
+                    )}
                     <td style={{ color: 'var(--muted)', fontSize: 13.5 }}>
                       {u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : '—'}
                     </td>
