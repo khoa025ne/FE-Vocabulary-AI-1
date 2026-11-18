@@ -5,6 +5,7 @@ import { adminApi, quizApi } from '../../api';
 import type { AdminQuiz, QuizDetail } from '../../api';
 import { useAuth } from '../../auth/AuthContext';
 import { Icon } from '../../components/icons';
+import { ConfirmModal } from '../../components/ConfirmModal';
 import { MotionCard, AnimatedCounter, staggerContainer, staggerItem } from '../../motion';
 
 const LEVELS = ['ALL', 'A1', 'A2', 'B1', 'B2', 'C1'];
@@ -52,6 +53,12 @@ export default function AdminQuizzes() {
   }, [showCreateModal, editingQuiz, managingQuiz]);
 
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
+
+  // Confirm delete states
+  const [quizToDelete, setQuizToDelete] = useState<AdminQuiz | null>(null);
+  const [deletingQuiz, setDeletingQuiz] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState<{ id: number; content: string; num: number } | null>(null);
+  const [deletingQuestion, setDeletingQuestion] = useState(false);
 
   // Quiz Form
   const [quizForm, setQuizForm] = useState({
@@ -136,15 +143,19 @@ export default function AdminQuizzes() {
     }
   };
 
-  const handleDeleteQuiz = async (q: AdminQuiz) => {
-    if (!confirm(`Bạn có chắc muốn xóa đề thi "${q.title}" và toàn bộ câu hỏi liên quan?`)) return;
+  const handleConfirmDeleteQuiz = async () => {
+    if (!quizToDelete) return;
+    setDeletingQuiz(true);
     try {
-      await adminApi.deleteQuiz(q.id);
-      setMessage({ text: `Đã xóa bài trắc nghiệm "${q.title}"!` });
+      await adminApi.deleteQuiz(quizToDelete.id);
+      setMessage({ text: `Đã xóa bài trắc nghiệm "${quizToDelete.title}"!` });
       await fetchQuizzes();
       setTimeout(() => setMessage(null), 4000);
+      setQuizToDelete(null);
     } catch (e: any) {
       alert('Lỗi khi xóa bài: ' + (e?.message || 'Không thể xóa'));
+    } finally {
+      setDeletingQuiz(false);
     }
   };
 
@@ -200,16 +211,20 @@ export default function AdminQuizzes() {
     }
   };
 
-  const handleDeleteQuestion = async (questionId: number) => {
-    if (!confirm('Bạn có chắc muốn xóa câu hỏi này?')) return;
+  const handleConfirmDeleteQuestion = async () => {
+    if (!questionToDelete) return;
+    setDeletingQuestion(true);
     try {
-      await adminApi.deleteQuestion(questionId);
+      await adminApi.deleteQuestion(questionToDelete.id);
       if (managingQuiz) {
         await openManageQuestions(managingQuiz);
       }
       await fetchQuizzes();
+      setQuestionToDelete(null);
     } catch (e: any) {
       alert('Lỗi khi xóa câu hỏi: ' + (e?.message || 'Lỗi server'));
+    } finally {
+      setDeletingQuestion(false);
     }
   };
 
@@ -346,7 +361,7 @@ export default function AdminQuizzes() {
                           type="button"
                           className="btn ghost"
                           style={{ minHeight: 42, padding: '0 14px', color: 'var(--red-dark)', borderColor: 'rgba(229,72,77,0.3)' }}
-                          onClick={() => handleDeleteQuiz(q)}
+                          onClick={() => setQuizToDelete(q)}
                         >
                           Xóa
                         </button>
@@ -655,9 +670,20 @@ export default function AdminQuizzes() {
                         </div>
                         <button
                           type="button"
-                          className="link"
-                          style={{ color: 'var(--red-dark)', fontSize: 13 }}
-                          onClick={() => handleDeleteQuestion(q.id)}
+                          className="btn ghost sm"
+                          style={{
+                            color: 'var(--red-dark)',
+                            borderColor: 'rgba(229,72,77,0.3)',
+                            background: '#FFF5F5',
+                            fontSize: 12,
+                            padding: '3px 9px',
+                            borderRadius: 7,
+                            cursor: 'pointer',
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setQuestionToDelete({ id: q.id, content: q.content, num: idx + 1 });
+                          }}
                         >
                           Xóa
                         </button>
@@ -791,6 +817,44 @@ export default function AdminQuizzes() {
           </div>,
           document.body
         )}
+
+      {/* Modal xác nhận xóa bài trắc nghiệm */}
+      <ConfirmModal
+        isOpen={!!quizToDelete}
+        onClose={() => !deletingQuiz && setQuizToDelete(null)}
+        onConfirm={handleConfirmDeleteQuiz}
+        title="Xác nhận xóa bài trắc nghiệm"
+        itemName={quizToDelete?.title}
+        description={
+          <p style={{ margin: 0 }}>
+            Bạn có chắc muốn xóa bài thi <b style={{ color: '#0F172A' }}>"{quizToDelete?.title}"</b> và toàn bộ câu hỏi liên quan?
+          </p>
+        }
+        warningText="Hành động này không thể hoàn tác. Toàn bộ câu hỏi và dữ liệu kết quả thi liên quan sẽ bị xóa."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+        loadingText="Đang xóa..."
+        isLoading={deletingQuiz}
+      />
+
+      {/* Modal xác nhận xóa câu hỏi */}
+      <ConfirmModal
+        isOpen={!!questionToDelete}
+        onClose={() => !deletingQuestion && setQuestionToDelete(null)}
+        onConfirm={handleConfirmDeleteQuestion}
+        title="Xác nhận xóa câu hỏi"
+        itemName={questionToDelete ? `Câu ${questionToDelete.num}: ${questionToDelete.content}` : ''}
+        description={
+          <p style={{ margin: 0 }}>
+            Bạn có chắc muốn xóa câu hỏi số <b>{questionToDelete?.num}</b>: <i style={{ color: '#0F172A' }}>"{questionToDelete?.content}"</i> khỏi đề thi này không?
+          </p>
+        }
+        warningText="Hành động này không thể hoàn tác. Câu hỏi sẽ bị xóa vĩnh viễn khỏi đề thi."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+        loadingText="Đang xóa..."
+        isLoading={deletingQuestion}
+      />
     </div>
   );
 }

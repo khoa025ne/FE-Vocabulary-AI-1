@@ -11,6 +11,7 @@ import type {
   LearningStats,
 } from '../api';
 import { Mascot, Icon } from '../components/icons';
+import { ConfirmModal } from '../components/ConfirmModal';
 import { useAuth } from '../auth/AuthContext';
 import { useUsage } from '../context/UsageContext';
 import { QuotaBadge } from '../components/QuotaBadge';
@@ -211,6 +212,7 @@ export default function Roadmap() {
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [analyzingStep, setAnalyzingStep] = useState<number>(0);
   const [analyzedAt, setAnalyzedAt] = useState<string>('');
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string>('');
 
   const [profile, setProfile] = useState<LearningProfile | null>(null);
@@ -373,19 +375,18 @@ export default function Roadmap() {
   };
 
   // 3. Clear saved analysis to re-test the fresh onboarding flow
-  const resetSavedAnalysis = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đặt lại lộ trình AI đã lưu không?')) {
-      localStorage.removeItem(storageKey);
-      window.dispatchEvent(new CustomEvent('vocab_roadmap_analyzed', { detail: null }));
-      setHasSaved(false);
-      setProfile(null);
-      setAnalysis(null);
-      setPlan(null);
-      setDaily(null);
-      setPrediction(null);
-      setCompletedActs(new Set());
-      setAnalyzedAt('');
-    }
+  const handleConfirmResetAnalysis = () => {
+    localStorage.removeItem(storageKey);
+    window.dispatchEvent(new CustomEvent('vocab_roadmap_analyzed', { detail: null }));
+    setHasSaved(false);
+    setProfile(null);
+    setAnalysis(null);
+    setPlan(null);
+    setDaily(null);
+    setPrediction(null);
+    setCompletedActs(new Set());
+    setAnalyzedAt('');
+    setIsResetModalOpen(false);
   };
 
   // 4. Activity checkbox toggle (saves to localStorage immediately)
@@ -420,6 +421,8 @@ export default function Roadmap() {
   const vocabScore = Math.round(profile?.vocabulary?.score != null ? profile.vocabulary.score : 0);
   const grammarScore = Math.round(profile?.grammar?.score != null ? profile.grammar.score : 0);
   const speakingScore = Math.round(profile?.speaking?.score != null ? profile.speaking.score : 0);
+  const listeningScore = Math.round(profile?.listening?.score != null ? profile.listening.score : 0);
+  const quizScore = Math.round(profile?.quiz?.score != null ? profile.quiz.score : 0);
 
   const activities = (daily?.activities && daily.activities.length > 0)
     ? daily.activities
@@ -470,7 +473,7 @@ export default function Roadmap() {
               </button>
               <button
                 className="btn ghost sm"
-                onClick={resetSavedAnalysis}
+                onClick={() => setIsResetModalOpen(true)}
                 style={{ color: '#ef4444' }}
                 title="Xóa kết quả phân tích đã lưu"
               >
@@ -737,26 +740,50 @@ export default function Roadmap() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '14px 22px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div style={{ fontSize: 12.5, color: '#94A3B8', fontWeight: 700 }}>📖 Từ vựng</div>
-                  <div style={{ fontSize: 26, fontWeight: 900, color: '#38BDF8', marginTop: 2 }}>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', minWidth: 100 }}>
+                  <div style={{ fontSize: 12, color: '#94A3B8', fontWeight: 700 }}>📖 Từ vựng</div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: '#38BDF8', marginTop: 2 }}>
                     <AnimatedCounter value={vocabScore} suffix="%" />
                   </div>
                 </div>
-                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '14px 22px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div style={{ fontSize: 12.5, color: '#94A3B8', fontWeight: 700 }}>✍️ Ngữ pháp</div>
-                  <div style={{ fontSize: 26, fontWeight: 900, color: '#4ADE80', marginTop: 2 }}>
-                    <AnimatedCounter value={grammarScore} suffix="%" />
+                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', minWidth: 100 }}>
+                  <div style={{ fontSize: 12, color: '#94A3B8', fontWeight: 700 }}>✍️ Ngữ pháp</div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: '#4ADE80', marginTop: 2 }}>
+                    {(profile?.grammar?.totalActivities && profile.grammar.totalActivities > 0) || grammarScore > 0 ? (
+                      <AnimatedCounter value={grammarScore} suffix="%" />
+                    ) : (
+                      <span style={{ fontSize: 13, color: '#94A3B8', fontWeight: 600 }}>Chưa luyện</span>
+                    )}
                   </div>
                 </div>
-                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '14px 22px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div style={{ fontSize: 12.5, color: '#94A3B8', fontWeight: 700 }}>🎙️ Luyện nói</div>
+                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', minWidth: 100 }}>
+                  <div style={{ fontSize: 12, color: '#94A3B8', fontWeight: 700 }}>🎙️ Luyện nói</div>
                   <div style={{ fontSize: 24, fontWeight: 900, color: '#F59E0B', marginTop: 2 }}>
                     {(profile?.speaking?.totalActivities && profile.speaking.totalActivities > 0) || speakingScore > 0 ? (
                       <AnimatedCounter value={speakingScore} suffix="%" />
                     ) : (
-                      'Chưa luyện'
+                      <span style={{ fontSize: 13, color: '#94A3B8', fontWeight: 600 }}>Chưa luyện</span>
+                    )}
+                  </div>
+                </div>
+                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', minWidth: 100 }}>
+                  <div style={{ fontSize: 12, color: '#94A3B8', fontWeight: 700 }}>🎧 Luyện nghe</div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: '#A78BFA', marginTop: 2 }}>
+                    {(profile?.listening?.totalActivities && profile.listening.totalActivities > 0) || listeningScore > 0 ? (
+                      <AnimatedCounter value={listeningScore} suffix="%" />
+                    ) : (
+                      <span style={{ fontSize: 13, color: '#94A3B8', fontWeight: 600 }}>Chưa luyện</span>
+                    )}
+                  </div>
+                </div>
+                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', minWidth: 100 }}>
+                  <div style={{ fontSize: 12, color: '#94A3B8', fontWeight: 700 }}>📝 Trắc nghiệm</div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: '#F472B6', marginTop: 2 }}>
+                    {(profile?.quiz?.totalActivities && profile.quiz.totalActivities > 0) || quizScore > 0 ? (
+                      <AnimatedCounter value={quizScore} suffix="%" />
+                    ) : (
+                      <span style={{ fontSize: 13, color: '#94A3B8', fontWeight: 600 }}>Chưa luyện</span>
                     )}
                   </div>
                 </div>
@@ -1316,6 +1343,16 @@ export default function Roadmap() {
                               progress: `${grammarScore}%`,
                               sub: `Điểm chính xác: ${grammarScore}/100`,
                             },
+                            {
+                              title: 'Rèn luyện khả năng nghe hiểu',
+                              progress: `${listeningScore}%`,
+                              sub: `Điểm nghe hiểu: ${listeningScore}/100`,
+                            },
+                            {
+                              title: 'Tối ưu độ chính xác kiểm tra trắc nghiệm',
+                              progress: `${quizScore}%`,
+                              sub: `Điểm trắc nghiệm: ${quizScore}/100`,
+                            },
                           ];
 
                           return longTermGoals.map((g, idx) => (
@@ -1342,6 +1379,24 @@ export default function Roadmap() {
           </AnimatePresence>
         </>
       )}
+
+      <ConfirmModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        onConfirm={handleConfirmResetAnalysis}
+        title="Đặt lại lộ trình AI"
+        itemName="lộ trình AI đã lưu"
+        description={
+          <p style={{ margin: 0 }}>
+            Bạn có chắc chắn muốn đặt lại lộ trình học AI đã lưu không? Bạn sẽ có thể thực hiện khảo sát mục tiêu và phân tích lộ trình mới từ đầu.
+          </p>
+        }
+        warningText="Toàn bộ kế hoạch học tập và tiến độ các hoạt động hàng ngày đã lưu sẽ bị xóa."
+        confirmText="Xác nhận đặt lại"
+        cancelText="Hủy bỏ"
+        variant="danger"
+        icon="trash"
+      />
     </div>
   );
 }

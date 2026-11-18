@@ -500,6 +500,69 @@ a {
   max-width: 760px;
 }
 
+/* Review 3-column Layout */
+.review-page-container {
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 24px 48px;
+}
+
+.review-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(460px, 660px) 240px;
+  gap: 28px;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+}
+
+.review-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 84px;
+}
+
+.review-center-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.review-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 84px;
+}
+
+@media (max-width: 1180px) {
+  .review-layout {
+    grid-template-columns: 260px 1fr 220px;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .review-layout {
+    display: flex;
+    flex-direction: column;
+    max-width: 680px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+  .review-left-col,
+  .review-right-col {
+    position: static;
+    width: 100%;
+  }
+}
+
 .tabbar {
   display: none;
 }

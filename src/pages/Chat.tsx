@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { aiApi, errMsg } from '../api';
 import type { Conversation, ChatMsg } from '../api';
 import { Icon } from '../components/icons';
+import { ConfirmModal } from '../components/ConfirmModal';
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 import { messageBubbleVariant } from '../motion';
 import viAvatar from '../assets/vi-3d.webp';
@@ -198,6 +199,8 @@ export default function Chat() {
 
   // Rename inline state
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [convToDelete, setConvToDelete] = useState<{ id: number; title: string } | null>(null);
+  const [deletingConv, setDeletingConv] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const editInputRef = useRef<HTMLInputElement>(null);
 
@@ -288,9 +291,10 @@ export default function Chat() {
     }
   };
 
-  const deleteConv = async (id: number, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    if (!window.confirm('Bạn có chắc muốn xóa đoạn chat này không?')) return;
+  const handleConfirmDeleteConv = async () => {
+    if (!convToDelete) return;
+    const id = convToDelete.id;
+    setDeletingConv(true);
     try {
       await aiApi.deleteConv(id);
     } catch {
@@ -313,6 +317,8 @@ export default function Chat() {
         setMsgs([]);
       }
     }
+    setDeletingConv(false);
+    setConvToDelete(null);
   };
 
   const send = async (explicitText?: string) => {
@@ -510,7 +516,7 @@ export default function Chat() {
                 <button
                   type="button"
                   className="btn ghost sm"
-                  onClick={() => cur && deleteConv(cur)}
+                  onClick={() => cur && setConvToDelete({ id: cur, title: curConv?.title || 'Đoạn hội thoại này' })}
                   title="Xóa"
                   style={{ padding: '6px 10px', color: 'var(--red-dark)', borderColor: 'rgba(229,72,77,0.3)' }}
                 >
@@ -686,6 +692,24 @@ export default function Chat() {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={!!convToDelete}
+        onClose={() => !deletingConv && setConvToDelete(null)}
+        onConfirm={handleConfirmDeleteConv}
+        title="Xác nhận xóa đoạn chat"
+        itemName={convToDelete?.title}
+        description={
+          <p style={{ margin: 0 }}>
+            Bạn có chắc muốn xóa cuộc trò chuyện <b style={{ color: '#0F172A' }}>"{convToDelete?.title}"</b> không?
+          </p>
+        }
+        warningText="Toàn bộ lịch sử tin nhắn trong cuộc trò chuyện này sẽ bị xóa và không thể khôi phục."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+        loadingText="Đang xóa..."
+        isLoading={deletingConv}
+      />
     </div>
   );
 

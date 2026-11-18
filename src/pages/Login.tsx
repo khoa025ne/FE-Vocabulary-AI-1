@@ -369,7 +369,7 @@ export default function Login() {
                         className="input"
                         value={id}
                         onChange={(e) => setId(e.target.value)}
-                        placeholder="minh.nguyen"
+                        placeholder="••••••••••"
                         disabled={busy}
                         autoComplete="username"
                       />
@@ -487,7 +487,7 @@ export default function Login() {
                         className="input"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Nguyễn Văn Minh"
+                        placeholder="••••••••••"
                         disabled={busy}
                       />
                     </div>
@@ -498,7 +498,7 @@ export default function Login() {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="minh@email.com"
+                        placeholder="••••••••••@email.com"
                         disabled={busy}
                       />
                     </div>
@@ -508,7 +508,7 @@ export default function Login() {
                         className="input"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        placeholder="minh.nguyen"
+                        placeholder="••••••••••"
                         disabled={busy}
                       />
                     </div>

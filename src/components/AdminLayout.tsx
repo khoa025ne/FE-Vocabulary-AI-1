@@ -142,6 +142,32 @@ export function AdminLayout() {
 
         <div style={{ flex: 1 }} />
 
+        {/* Lối về trang học viên (cho Admin) */}
+        {!isInstructor && (
+          <NavLink
+            to="/dashboard"
+            className="nav"
+            title="Quay lại giao diện học viên"
+            style={{
+              marginBottom: 6,
+              background: 'rgba(53, 158, 125, 0.08)',
+              color: 'var(--green-dark)',
+              fontWeight: 800,
+            }}
+          >
+            <span
+              className="nic"
+              style={{
+                background: 'var(--green)',
+                color: '#fff',
+              }}
+            >
+              <Icon n="home" s={18} />
+            </span>
+            {!isSidebarCollapsed && <span>Về trang học viên</span>}
+          </NavLink>
+        )}
+
         {/* Đăng xuất */}
         <button
           type="button"
@@ -180,6 +206,23 @@ export function AdminLayout() {
               <Icon n="home" s={17} />
               <span className="topbar-home-text">Landing Page</span>
             </button>
+
+            {!isInstructor && (
+              <button
+                type="button"
+                className="topbar-home-btn"
+                onClick={handleTransitionNavigate('/dashboard')}
+                title="Quay lại giao diện học viên"
+                style={{
+                  background: 'rgba(53, 158, 125, 0.1)',
+                  borderColor: 'rgba(53, 158, 125, 0.3)',
+                  color: 'var(--green-dark)',
+                }}
+              >
+                <Icon n="book" s={16} />
+                <span className="topbar-home-text">Trang học viên</span>
+              </button>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 900, fontSize: '15.5px', marginRight: 'auto', marginLeft: '12px' }}>

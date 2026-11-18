@@ -51,20 +51,8 @@ export type WordTopic =
   | 'SOCIETY'
   | 'ARTS';
 
-export const TOPIC_MAP: Record<string, string> = {
-  WORK: 'Công việc & Văn phòng',
-  TRAVEL: 'Du lịch & Di chuyển',
-  ACADEMIC: 'Học thuật & Giáo dục',
-  TECHNOLOGY: 'Công nghệ',
-  HEALTH: 'Sức khỏe',
-  FOOD: 'Ăn uống',
-  MONEY: 'Mua sắm & Tiền bạc',
-  FAMILY: 'Gia đình & Bạn bè',
-  SPORTS: 'Thể thao & Giải trí',
-  ENVIRONMENT: 'Môi trường',
-  SOCIETY: 'Xã hội & Pháp luật',
-  ARTS: 'Nghệ thuật & Văn hóa',
-};
+export { TOPICS, TOPIC_LABELS, TOPIC_ICONS, TOPIC_MAP, TOPIC_FILTER_OPTIONS } from '../constants/topics';
+export type { TopicItem } from '../constants/topics';
 export interface AiVocabTagBackfillStatus {
   jobId: string;
   scope?: string;
@@ -459,12 +447,15 @@ export const wordApi = {
       return [];
     }
   },
-  randomBatch: async (p: { level?: string; limit?: number }) => {
+  randomBatch: async (p: { level?: string; topic?: string; limit?: number }) => {
     const params: Record<string, any> = {
       limit: p.limit ?? 25,
     };
     if (p.level && p.level !== 'Tất cả' && p.level !== 'ALL') {
       params.level = p.level;
+    }
+    if (p.topic && p.topic !== 'Tất cả' && p.topic !== 'ALL') {
+      params.topic = p.topic;
     }
     const res = await api.get<any>('/cefr-words/random-batch', { params });
     const rawList = Array.isArray(res.data) ? res.data : (Array.isArray(res.data?.content) ? res.data.content : []);
@@ -1567,6 +1558,8 @@ export interface LearningProfile {
   vocabulary?: PerformanceMetric;
   grammar?: PerformanceMetric;
   speaking?: PerformanceMetric;
+  listening?: PerformanceMetric;
+  quiz?: PerformanceMetric;
   currentStreak?: number;
   longestStreak?: number;
   achievements?: string[];

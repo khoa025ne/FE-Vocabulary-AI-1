@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { adminApi } from '../../api';
 import type { AdminVocabularyItem, AdminCefrStats } from '../../api';
 import { Icon } from '../../components/icons';
+import { ConfirmModal } from '../../components/ConfirmModal';
 import { AutocompleteSearch } from '../../components/AutocompleteSearch';
 import { AdminVocabStudio } from './AdminVocabStudio';
 import { AnimatedCounter, MotionCard } from '../../motion';
@@ -30,6 +31,8 @@ export default function AdminWords() {
   const [loading, setLoading] = useState(true);
   const [cefrStats, setCefrStats] = useState<AdminCefrStats | null>(null);
   const [selectedWordIds, setSelectedWordIds] = useState<string[]>([]);
+  const [wordToDelete, setWordToDelete] = useState<AdminVocabularyItem | null>(null);
+  const [deletingWord, setDeletingWord] = useState(false);
 
   // Tab state: 'words' | 'vocab-studio'
   const [adminWordsTab, setAdminWordsTab] = useState<'words' | 'vocab-studio'>(
@@ -166,6 +169,7 @@ export default function AdminWords() {
       definition: w.definition || '',
       example: w.example || '',
     });
+    setShowAddModal(true);
   };
 
   const handleSaveWord = async (e: React.FormEvent) => {
@@ -200,16 +204,20 @@ export default function AdminWords() {
     }
   };
 
-  const handleDeleteWord = async (w: AdminVocabularyItem) => {
-    if (!confirm(`Bạn có chắc muốn xóa từ "${w.word}" khỏi hệ thống?`)) return;
+  const handleConfirmDeleteWord = async () => {
+    if (!wordToDelete) return;
+    setDeletingWord(true);
     try {
-      await adminApi.deleteWord(w.id);
-      setMessage({ text: `Đã xóa từ "${w.word}"!` });
+      await adminApi.deleteWord(wordToDelete.id);
+      setMessage({ text: `Đã xóa từ "${wordToDelete.word}"!` });
       await fetchWords();
       await loadStats();
       setTimeout(() => setMessage(null), 4000);
+      setWordToDelete(null);
     } catch (e: any) {
       alert('Lỗi khi xóa từ: ' + (e?.message || 'Không thể xóa'));
+    } finally {
+      setDeletingWord(false);
     }
   };
 
@@ -453,9 +461,8 @@ export default function AdminWords() {
           </thead>
           <tbody
             style={{
-              opacity: loading && words.length > 0 ? 0.45 : 1,
+              opacity: loading && words.length > 0 ? 0.6 : 1,
               transition: 'opacity 0.22s ease',
-              pointerEvents: loading ? 'none' : 'auto',
             }}
           >
             {loading && words.length === 0 ? (
@@ -529,23 +536,47 @@ export default function AdminWords() {
                       <span className="pill level">{w.cefr || 'A1'}</span>
                     </td>
                     <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <button
-                        type="button"
-                        className="link"
-                        onClick={() => openEdit(w)}
-                        style={{ fontSize: 13.5, marginRight: 8 }}
-                      >
-                        Sửa
-                      </button>
-                      ·
-                      <button
-                        type="button"
-                        className="link"
-                        onClick={() => handleDeleteWord(w)}
-                        style={{ fontSize: 13.5, color: 'var(--red-dark)', marginLeft: 8 }}
-                      >
-                        Xóa
-                      </button>
+                      <div style={{ display: 'inline-flex', gap: 6, alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <button
+                          type="button"
+                          className="btn ghost sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEdit(w);
+                          }}
+                          title={`Chỉnh sửa từ "${w.word}"`}
+                          style={{
+                            padding: '4px 11px',
+                            fontSize: 12.5,
+                            fontWeight: 700,
+                            borderRadius: 8,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Sửa
+                        </button>
+                        <button
+                          type="button"
+                          className="btn ghost sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setWordToDelete(w);
+                          }}
+                          title={`Xóa từ "${w.word}"`}
+                          style={{
+                            padding: '4px 11px',
+                            fontSize: 12.5,
+                            fontWeight: 700,
+                            borderRadius: 8,
+                            color: 'var(--red-dark)',
+                            borderColor: 'rgba(229,72,77,0.3)',
+                            background: '#FFF5F5',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Xóa
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -798,6 +829,24 @@ export default function AdminWords() {
           </div>,
           document.body
         )}
+
+      <ConfirmModal
+        isOpen={!!wordToDelete}
+        onClose={() => !deletingWord && setWordToDelete(null)}
+        onConfirm={handleConfirmDeleteWord}
+        title="Xác nhận xóa từ vựng"
+        itemName={wordToDelete?.word}
+        description={
+          <p style={{ margin: 0 }}>
+            Bạn có chắc muốn xóa từ <b style={{ color: '#0F172A' }}>"{wordToDelete?.word}"</b> khỏi hệ thống từ điển không?
+          </p>
+        }
+        warningText="Hành động này không thể hoàn tác. Từ vựng sẽ bị xóa vĩnh viễn khỏi toàn bộ hệ thống."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+        loadingText="Đang xóa..."
+        isLoading={deletingWord}
+      />
     </div>
   );
 }

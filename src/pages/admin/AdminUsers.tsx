@@ -298,7 +298,6 @@ export default function AdminUsers() {
               <th>Mã ID</th>
               <th>Vai trò</th>
               <th>Trạng thái</th>
-              <th>{roleTab === 'STUDENT' ? 'Từ đã học' : 'Từ vựng'}</th>
               <th>{roleTab === 'STUDENT' ? 'Số buổi học' : 'Phiên hoạt động'}</th>
               <th>Ngày tham gia</th>
               <th style={{ textAlign: 'right' }}>Thao tác</th>
@@ -307,13 +306,13 @@ export default function AdminUsers() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={8} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
+                <td colSpan={7} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
                   Đang tải danh sách...
                 </td>
               </tr>
             ) : students.length === 0 ? (
               <tr>
-                <td colSpan={8} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
+                <td colSpan={7} style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
                   {roleTab === 'STUDENT'
                     ? 'Không tìm thấy học viên nào phù hợp.'
                     : 'Không tìm thấy Instructor nào phù hợp.'}
@@ -372,9 +371,6 @@ export default function AdminUsers() {
                       >
                         {isActive ? 'Đang hoạt động' : isBanned ? 'Đã khóa' : u.status}
                       </span>
-                    </td>
-                    <td>
-                      <b>{u.wordsLearned ?? 0}</b>
                     </td>
                     <td>
                       <b>{u.totalSessions ?? 0}</b>

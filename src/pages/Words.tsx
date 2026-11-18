@@ -11,28 +11,14 @@ import {
   TOPIC_MAP,
 } from '../api';
 import type { Word, CustomWordItem } from '../api';
+import { TOPIC_FILTER_OPTIONS as TOPICS } from '../constants/topics';
 import { Icon } from '../components/icons';
+import { ConfirmModal } from '../components/ConfirmModal';
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 import { useUsage } from '../context/UsageContext';
 import { MotionCard, staggerContainer, staggerItem, AnimatedCounter } from '../motion';
 
 const LEVELS = ['Tất cả', 'A1', 'A2', 'B1', 'B2', 'C1'];
-
-const TOPICS = [
-  { code: 'ALL', label: 'Tất cả chủ đề' },
-  { code: 'WORK', label: 'Công việc & Văn phòng' },
-  { code: 'TRAVEL', label: 'Du lịch & Di chuyển' },
-  { code: 'ACADEMIC', label: 'Học thuật & Giáo dục' },
-  { code: 'TECHNOLOGY', label: 'Công nghệ' },
-  { code: 'HEALTH', label: 'Sức khỏe' },
-  { code: 'FOOD', label: 'Ăn uống' },
-  { code: 'MONEY', label: 'Mua sắm & Tiền bạc' },
-  { code: 'FAMILY', label: 'Gia đình & Bạn bè' },
-  { code: 'SPORTS', label: 'Thể thao & Giải trí' },
-  { code: 'ENVIRONMENT', label: 'Môi trường' },
-  { code: 'SOCIETY', label: 'Xã hội & Pháp luật' },
-  { code: 'ARTS', label: 'Nghệ thuật & Văn hóa' },
-];
 
 const POS_OPTIONS = [
   { value: 'noun', label: 'Danh từ (noun)' },
@@ -81,6 +67,8 @@ export default function Words() {
 
   // Custom Word Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [customWordToDelete, setCustomWordToDelete] = useState<CustomWordItem | null>(null);
+  const [deletingCustomWord, setDeletingCustomWord] = useState(false);
   const [editingWord, setEditingWord] = useState<CustomWordItem | null>(null);
   const [formLemma, setFormLemma] = useState('');
   const [formVietnameseMeaning, setFormVietnameseMeaning] = useState('');
@@ -350,16 +338,17 @@ export default function Words() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteCustomWord = async (item: CustomWordItem, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!window.confirm(`Bạn có chắc chắn muốn xóa từ "${item.lemma}" khỏi danh sách từ riêng của bạn không?`)) {
-      return;
-    }
+  const handleConfirmDeleteCustomWord = async () => {
+    if (!customWordToDelete) return;
+    setDeletingCustomWord(true);
     try {
-      await myWordsApi.delete(item.id);
+      await myWordsApi.delete(customWordToDelete.id);
       loadMyWords();
+      setCustomWordToDelete(null);
     } catch (err) {
       alert(errMsg(err));
+    } finally {
+      setDeletingCustomWord(false);
     }
   };
 
@@ -963,7 +952,7 @@ export default function Words() {
                           <button
                             type="button"
                             className="btn ghost sm"
-                            onClick={(e) => handleDeleteCustomWord(item, e)}
+                            onClick={(e) => { e.stopPropagation(); setCustomWordToDelete(item); }}
                             title="Xóa từ này"
                             style={{ padding: '6px 10px', fontSize: 12.5, color: 'var(--red)' }}
                           >
@@ -1239,6 +1228,24 @@ export default function Words() {
         </div>,
         document.body
       )}
+
+      <ConfirmModal
+        isOpen={!!customWordToDelete}
+        onClose={() => !deletingCustomWord && setCustomWordToDelete(null)}
+        onConfirm={handleConfirmDeleteCustomWord}
+        title="Xác nhận xóa từ vựng"
+        itemName={customWordToDelete?.lemma}
+        description={
+          <p style={{ margin: 0 }}>
+            Bạn có chắc chắn muốn xóa từ <b style={{ color: '#0F172A' }}>"{customWordToDelete?.lemma}"</b> khỏi danh sách từ vựng cá nhân của bạn không?
+          </p>
+        }
+        warningText="Từ này sẽ bị gỡ bỏ khỏi danh sách từ riêng của bạn và các lượt ôn tập liên quan."
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+        loadingText="Đang xóa..."
+        isLoading={deletingCustomWord}
+      />
     </div>
   );
 }
