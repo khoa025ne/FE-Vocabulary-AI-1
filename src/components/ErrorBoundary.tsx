@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import vi3dImg from '../assets/vi-3d.webp';
+import { ViMascotImage } from './ViMascotImage';
 
 interface Props {
   children: ReactNode;
@@ -28,8 +28,10 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-          <div className="errcard">
-            <img src={vi3dImg} alt="Vi Mascot" />
+          <div className="errcard glass">
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
+              <ViMascotImage pose="surprised" size={88} alt="Vi ngạc nhiên khi gặp sự cố" />
+            </div>
             <h1>Đã có lỗi xảy ra</h1>
             <p className="sub" style={{ marginTop: '10px', lineHeight: 1.65 }}>
               Rất tiếc, đã có sự cố ngoài ý muốn khi tải nội dung này. Dữ liệu học của bạn vẫn an toàn — bạn thử lại hoặc quay về trang chính nhé.
@@ -38,35 +40,38 @@ export class ErrorBoundary extends Component<Props, State> {
               <div
                 style={{
                   marginTop: '16px',
-                  padding: '12px 14px',
-                  background: 'var(--red-bg)',
-                  color: 'var(--red-dark)',
+                  padding: '10px 14px',
+                  background: 'var(--danger-bg)',
                   borderRadius: '12px',
-                  fontSize: '13px',
+                  color: 'var(--red-dark)',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
                   textAlign: 'left',
                   overflowX: 'auto',
-                  fontFamily: 'monospace',
                 }}
               >
                 {this.state.error.message}
               </div>
             )}
-            <div className="btn-row" style={{ justifyContent: 'center', marginTop: '24px', gap: '12px' }}>
+            <div className="row" style={{ marginTop: '20px', justifyContent: 'center' }}>
               <button
                 type="button"
                 className="btn ghost"
-                style={{ minHeight: '48px', padding: '0 22px' }}
-                onClick={() => { window.location.href = '/dashboard'; }}
+                onClick={() => {
+                  window.location.href = '/';
+                }}
               >
                 Về trang chính
               </button>
               <button
                 type="button"
                 className="btn"
-                style={{ minHeight: '48px', padding: '0 22px' }}
-                onClick={() => this.setState({ hasError: false, error: null })}
+                onClick={() => {
+                  this.setState({ hasError: false, error: null });
+                  window.location.reload();
+                }}
               >
-                Thử lại
+                Tải lại trang
               </button>
             </div>
           </div>
