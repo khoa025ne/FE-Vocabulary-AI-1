@@ -93,8 +93,8 @@
   --content-gap: var(--s3);
   --content-pad: var(--s4);
 
-  /* Typography */
-  --font-heading: 'Space Grotesk', 'Inter', sans-serif;
+  /* Typography — exact source of truth from index (4).html + Landing preview */
+  --font-heading: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-editorial: 'Newsreader', Georgia, serif;
 

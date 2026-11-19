@@ -83,9 +83,23 @@ h3,
 h4 {
   margin-top: 0;
   font-family: var(--font-heading);
+  font-weight: 700;
+  font-synthesis-weight: none;
   line-height: 1.12;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   color: var(--ink);
+}
+
+h1 {
+  font-size: clamp(30px, 4vw, 52px);
+}
+
+h2 {
+  font-size: 26px;
+}
+
+h3 {
+  font-size: 19px;
 }
 
 p {
@@ -2041,8 +2055,19 @@ pre {
   }
   .cols2,
   .cols2.review-cols {
+    display: flex !important;
+    flex-direction: column;
+    gap: var(--s3);
+    overflow: visible !important;
+    flex: 0 0 auto !important;
     height: auto !important;
     min-height: auto !important;
+  }
+  .cols2 > *,
+  .cols2.review-cols > * {
+    flex-shrink: 0;
+    height: auto;
+    overflow: visible !important;
   }
   .dash-grid {
     display: flex;
