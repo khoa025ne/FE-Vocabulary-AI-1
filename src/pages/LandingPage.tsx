@@ -1,67 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import Lenis from 'lenis';
+import { useReducedMotion } from '@mantine/hooks';
 import { useAuth } from '../auth/AuthContext';
 import { ViMascotImage } from '../components/ViMascotImage';
-import { VI_APP_ICON } from '../constants/mascot';
+import { VI_LOGO_TRANSPARENT } from '../constants/mascot';
+import { BlurUpImage } from '../components/states/BlurUpImage';
+import { HeroStage } from '../components/landing/HeroStage';
+import { SignatureFooter } from '../components/landing/SignatureFooter';
 import { attachSagePointerEffects } from '../utils/interactiveEffects';
 import './LandingPage.css';
 
-interface HeroWord {
-  word: string;
-  ipa: string;
-  pos: string;
-  cefr: string;
-  srsNote: string;
-  meaningVi: string;
-  example: string;
-  exampleVi: string;
-}
-
-const HERO_WORDS: HeroWord[] = [
-  {
-    word: 'serendipity',
-    ipa: '/ˌser.ənˈdɪp.ə.ti/',
-    pos: 'danh từ',
-    cefr: 'Oxford 5000 · C1',
-    srsNote: 'Ôn mốc 7 ngày',
-    meaningVi: 'Cơ duyên tình cờ tìm thấy điều quý giá khi không chủ đích kiếm tìm.',
-    example: 'Meeting my mentor at that small bookshop was pure serendipity.',
-    exampleVi: 'Gặp người cố vấn tại hiệu sách nhỏ đó là một cơ duyên tình cờ.',
-  },
-  {
-    word: 'resilient',
-    ipa: '/rɪˈzɪl.jənt/',
-    pos: 'tính từ',
-    cefr: 'Oxford 3000 · B2',
-    srsNote: 'Ôn mốc 3 ngày',
-    meaningVi: 'Kiên cường, có khả năng phục hồi nhanh sau thử thách.',
-    example: 'She remained resilient throughout the toughest months of building her startup.',
-    exampleVi: 'Cô ấy vẫn kiên cường trong những tháng khó khăn nhất khi khởi nghiệp.',
-  },
-  {
-    word: 'eloquent',
-    ipa: '/ˈel.ə.kwənt/',
-    pos: 'tính từ',
-    cefr: 'Oxford 5000 · C1',
-    srsNote: 'Ôn mốc 14 ngày',
-    meaningVi: 'Hùng biện, diễn đạt trôi chảy và giàu sức thuyết phục.',
-    example: 'Her eloquent presentation convinced the entire committee.',
-    exampleVi: 'Bài thuyết trình đầy sức thuyết phục của cô ấy đã chinh phục cả hội đồng.',
-  },
-  {
-    word: 'articulate',
-    ipa: '/ɑːˈtɪk.jə.leɪt/',
-    pos: 'động từ / tính từ',
-    cefr: 'Oxford 5000 · C1',
-    srsNote: 'Ôn mốc 30 ngày',
-    meaningVi: 'Diễn đạt rõ ràng, mạch lạc từng ý tưởng phức tạp.',
-    example: 'He can articulate complex ideas in simple, natural English.',
-    exampleVi: 'Anh ấy có thể diễn đạt các ý tưởng phức tạp bằng tiếng Anh tự nhiên.',
-  },
-];
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const CEFR_DATA: Record<'A1' | 'B1' | 'B2' | 'C1', { word: string; desc: string }> = {
   A1: { word: 'morning', desc: '/ˈmɔː.nɪŋ/ · Buổi sáng khởi đầu nhẹ nhàng' },
@@ -94,13 +47,11 @@ const FAQ_ITEMS = [
 export default function LandingPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const reducedMotion = useReducedMotion();
   const ctaLink = user ? '/dashboard' : '/login';
 
   const [isNavigating, setIsNavigating] = useState(false);
-  const [wordIdx, setWordIdx] = useState(0);
-  const [manualFlipped, setManualFlipped] = useState(false);
   const [scrollFlipDeg, setScrollFlipDeg] = useState(0);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [loopStep, setLoopStep] = useState(0);
   const [cefrLevel, setCefrLevel] = useState<'A1' | 'B1' | 'B2' | 'C1'>('A1');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -110,30 +61,17 @@ export default function LandingPage() {
   const mistLayerRef = useRef<HTMLDivElement>(null);
   const loopSectionRef = useRef<HTMLElement>(null);
 
-  const activeWord = HERO_WORDS[wordIdx];
-
-  // Cycle hero Oxford word every 4 seconds
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setWordIdx((prev) => (prev + 1) % HERO_WORDS.length);
-    }, 4000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  // Pointer specular glint & <= 5deg tilt on hero flashcard + scene parallax
+  // Pointer specular glint on lower glass cards + scene parallax
   useEffect(() => attachSagePointerEffects(), []);
 
-  // Lenis + GSAP ScrollTrigger on ONE requestAnimationFrame loop (scrub: 0.5)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) return;
+  // Lenis + GSAP ScrollTrigger on ONE requestAnimationFrame loop (scrub: 0.5) via @gsap/react useGSAP
+  useGSAP(
+    () => {
+      if (typeof window === 'undefined' || reducedMotion) return;
 
-    gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
-    lenis.on('scroll', ScrollTrigger.update);
+      const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+      lenis.on('scroll', ScrollTrigger.update);
 
-    const ctx = gsap.context(() => {
       if (heroStageRef.current) {
         ScrollTrigger.create({
           trigger: heroStageRef.current,
@@ -164,21 +102,21 @@ export default function LandingPage() {
           },
         });
       }
-    }, rootRef);
 
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
+      let rafId = 0;
+      const raf = (time: number) => {
+        lenis.raf(time);
+        rafId = window.requestAnimationFrame(raf);
+      };
       rafId = window.requestAnimationFrame(raf);
-    };
-    rafId = window.requestAnimationFrame(raf);
 
-    return () => {
-      window.cancelAnimationFrame(rafId);
-      ctx.revert();
-      lenis.destroy();
-    };
-  }, []);
+      return () => {
+        window.cancelAnimationFrame(rafId);
+        lenis.destroy();
+      };
+    },
+    { scope: rootRef, dependencies: [reducedMotion] }
+  );
 
   // Scroll-reveal Observer for .enter-y
   useEffect(() => {
@@ -202,29 +140,6 @@ export default function LandingPage() {
     return () => io.disconnect();
   }, []);
 
-  const handlePronounce = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-        setIsSpeaking((s) => !s);
-        return;
-      }
-      try {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(activeWord.word);
-        u.lang = 'en-US';
-        u.rate = 0.92;
-        u.onstart = () => setIsSpeaking(true);
-        u.onend = () => setIsSpeaking(false);
-        u.onerror = () => setIsSpeaking(false);
-        window.speechSynthesis.speak(u);
-      } catch {
-        setIsSpeaking((s) => !s);
-      }
-    },
-    [activeWord.word]
-  );
-
   const handlePrimaryNavigate = (e: React.MouseEvent) => {
     e.preventDefault();
     if (isNavigating) return;
@@ -243,21 +158,21 @@ export default function LandingPage() {
     }
   };
 
-  const totalFlipDeg = manualFlipped ? Math.max(180, scrollFlipDeg + 180) : scrollFlipDeg;
-
   return (
     <div ref={rootRef} className={`landing-page ${isNavigating ? 'page-exiting' : ''}`}>
       <div className="landing-paper-grain" aria-hidden="true" />
 
-      {/* 1. Floating Glass Pill Navbar */}
+      {/* 1. Floating Glass Pill Navbar with Transparent Vi Logo */}
       <header className="landing-nav-host">
         <nav aria-label="Điều hướng chính" className="landing-nav glass">
           <a href="#hero" className="landing-brand" onClick={(e) => scrollToSection(e, 'hero')}>
-            <img
-              src={VI_APP_ICON.file}
-              alt={VI_APP_ICON.alt}
-              width={32}
-              height={32}
+            <BlurUpImage
+              src={VI_LOGO_TRANSPARENT.file}
+              alt={VI_LOGO_TRANSPARENT.alt}
+              width={34}
+              height={34}
+              transparent
+              priority
             />
             <span>
               Vocabulary<em>AI</em>
@@ -284,207 +199,13 @@ export default function LandingPage() {
       </header>
 
       {/* 2. HERO — "SÂN KHẤU THƯ VIỆN KÍNH" */}
-      <section id="hero" ref={heroStageRef} className="hero-stage">
-        <div className="hero-scene-bg scene-depth" aria-hidden="true">
-          <div className="hero-arch a" />
-          <div className="hero-arch b" />
-          <div className="hero-arch c" />
-          <div ref={mistLayerRef} className="hero-mist-layer">
-            <div className="hero-mist m1" />
-            <div className="hero-mist m2" />
-            <div className="hero-mist m3" />
-          </div>
-        </div>
-
-        {/* Giant Outlined Ghost Word matching active card word */}
-        <div className="hero-ghost-word" aria-hidden="true">
-          {activeWord.word}
-        </div>
-
-        <div className="landing-wrap hero-grid">
-          {/* Left: Asymmetric Editorial Headline & THE Single Primary CTA */}
-          <div className="hero-copy">
-            <div className="hero-eyebrow">
-              <span className="hero-eyebrow-dot" />
-              <span>Không gian học từ vựng khép kín cho người Việt</span>
-            </div>
-
-            <h1 className="hero-headline">
-              <span className="hero-line-mask">
-                <span className="hero-line-inner" style={{ '--line-i': 0 } as React.CSSProperties}>
-                  Nhớ từ đúng lúc.
-                </span>
-              </span>
-              <span className="hero-line-mask">
-                <span className="hero-line-inner" style={{ '--line-i': 1 } as React.CSSProperties}>
-                  Nói <em className="hero-serif-word">chuẩn</em> tự nhiên.
-                </span>
-              </span>
-            </h1>
-
-            <p className="hero-sub">
-              Học từ trong ngữ cảnh, ôn tập với SRS ngay trước khi quên và luyện nói cùng trợ lý AI{' '}
-              <strong>“Vi”</strong> trong một hàng đợi duy nhất mỗi ngày.
-            </p>
-
-            {/* THE SINGLE PRIMARY CTA ON THE LANDING PAGE */}
-            <div className="hero-cta-row">
-              <Link
-                to={ctaLink}
-                id="primary-cta-main"
-                className="hero-primary-cta"
-                onClick={handlePrimaryNavigate}
-              >
-                <span>Bắt đầu học miễn phí</span>
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <span className="hero-cta-note">
-                Có gói Free 0đ · Premium 99.000đ/tháng
-              </span>
-            </div>
-          </div>
-
-          {/* Right of center: Tilted 6-Layer Glass Flashcard + 2 Satellite Glass Cards + Vi happy-wave */}
-          <div className="hero-card-stage">
-            <div className="hero-satellite hero-satellite-score glass" aria-hidden="true">
-              <div className="hero-sat-eyebrow">SPEAKING · 5 TIÊU CHÍ</div>
-              <div className="hero-sat-value">94 điểm</div>
-              <div className="hero-sat-sub">Whisper + Vi AI đánh giá</div>
-            </div>
-
-            <div className="hero-satellite hero-satellite-quiz glass" aria-hidden="true">
-              <div className="hero-sat-eyebrow">TIMED QUIZ · B2</div>
-              <div className="hero-sat-value">✓ Chính xác</div>
-              <div className="hero-sat-sub">Nhớ sâu trong 12 giây</div>
-            </div>
-
-            <div className="hero-flip-perspective">
-              <div
-                className="hero-glass-flashcard tilt-target"
-                data-tilt-max="5"
-                role="button"
-                tabIndex={0}
-                aria-label={`Thẻ từ ${activeWord.word} — nhấn hoặc cuộn để lật xem nghĩa`}
-                style={{ '--scroll-flip': `${totalFlipDeg}deg` } as React.CSSProperties}
-                onClick={() => setManualFlipped((f) => !f)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setManualFlipped((f) => !f);
-                  }
-                }}
-              >
-                {/* Front Face */}
-                <div className="hero-card-face glass">
-                  <div className="hero-card-top">
-                    <span className="hero-card-cefr">{activeWord.cefr}</span>
-                    <span className="hero-card-srs">{activeWord.srsNote}</span>
-                  </div>
-
-                  <div>
-                    <h2 className="hero-word-title">{activeWord.word}</h2>
-                    <p className="hero-word-ipa">
-                      {activeWord.ipa} · {activeWord.pos}
-                    </p>
-                    <p className="hero-word-meaning">“{activeWord.meaningVi}”</p>
-                  </div>
-
-                  <div>
-                    <div className="hero-card-dots" style={{ marginBottom: 12 }}>
-                      {HERO_WORDS.map((item, idx) => (
-                        <button
-                          key={item.word}
-                          type="button"
-                          aria-label={`Xem từ ${item.word}`}
-                          className={`hero-card-dot ${idx === wordIdx ? 'active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setWordIdx(idx);
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    <div className={`hero-voice-bar ${isSpeaking ? 'is-speaking' : ''}`}>
-                      <button
-                        type="button"
-                        className="hero-mic-btn"
-                        onClick={handlePronounce}
-                      >
-                        <span className="hero-eyebrow-dot" style={{ background: 'var(--sage)' }} />
-                        <span>{isSpeaking ? 'Vi đang đọc...' : 'Thử phát âm cùng Vi'}</span>
-                      </button>
-
-                      <div className="hero-wave-bars" aria-hidden="true">
-                        <span className="hero-wave-bar" style={{ height: 11, animationDelay: '0ms' }} />
-                        <span className="hero-wave-bar" style={{ height: 16, animationDelay: '120ms' }} />
-                        <span className="hero-wave-bar" style={{ height: 9, animationDelay: '240ms' }} />
-                        <span className="hero-wave-bar" style={{ height: 14, animationDelay: '90ms' }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Back Face (scrubbed at 50vh scroll) */}
-                <div className="hero-card-face hero-card-face--back glass">
-                  <div className="hero-card-top">
-                    <span className="hero-card-cefr">NGỮ CẢNH &amp; NGHĨA TIẾNG VIỆT</span>
-                    <span className="hero-card-srs">{activeWord.cefr}</span>
-                  </div>
-
-                  <div>
-                    <h2 className="hero-word-title" style={{ fontSize: 28 }}>
-                      {activeWord.word}
-                    </h2>
-                    <p className="hero-word-meaning" style={{ fontWeight: 700, color: 'var(--sage)' }}>
-                      {activeWord.meaningVi}
-                    </p>
-                    <p className="hero-word-meaning" style={{ fontSize: 13.5, fontStyle: 'italic' }}>
-                      “{activeWord.example}”
-                    </p>
-                    <p className="hero-word-ipa" style={{ marginTop: 6 }}>
-                      {activeWord.exampleVi}
-                    </p>
-                  </div>
-
-                  <div className="hero-voice-bar">
-                    <span className="hero-card-srs">Nhấn hoặc cuộn lên để xem mặt trước ↻</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="hero-vi-mascot">
-                <ViMascotImage
-                  pose="happy-wave"
-                  size={98}
-                  priority
-                  alt="Vi mascot — vẫy tay chào bạn trên sân khấu thư viện kính"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Editorial Stats Row */}
-        <div className="landing-wrap">
-          <div className="hero-editorial-stats">
-            <div className="hero-stat-item">
-              <span className="hero-stat-value">4.900+ từ Oxford 3000/5000</span>
-              <span className="hero-stat-label">Từ vựng chọn lọc kèm IPA &amp; ví dụ thực tế</span>
-            </div>
-            <div className="hero-stat-item">
-              <span className="hero-stat-value">CEFR A1 – C1</span>
-              <span className="hero-stat-label">Xếp lớp thông minh sau bài Placement Test</span>
-            </div>
-            <div className="hero-stat-item">
-              <span className="hero-stat-value">SRS 1–3–7–14–30 ngày</span>
-              <span className="hero-stat-label">Nhắc ôn đúng điểm rơi trước khi quên</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroStage
+        heroStageRef={heroStageRef}
+        mistLayerRef={mistLayerRef}
+        scrollFlipDeg={scrollFlipDeg}
+        ctaLink={ctaLink}
+        onPrimaryNavigate={handlePrimaryNavigate}
+      />
 
       <div className="hero-seam" aria-hidden="true" />
 
@@ -492,7 +213,6 @@ export default function LandingPage() {
       <section id="loop" ref={loopSectionRef} className="landing-section">
         <div className="landing-wrap">
           <div className="landing-section-head enter-y">
-            <p className="landing-eyebrow">Một vòng lặp khép kín</p>
             <h2 className="landing-h2">
               Ba nhịp tự nhiên để một từ vựng thật sự thuộc về bạn.
             </h2>
@@ -887,30 +607,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="landing-footer">
-        <div className="landing-wrap landing-footer-inner">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img
-              src={VI_APP_ICON.file}
-              alt={VI_APP_ICON.alt}
-              width={26}
-              height={26}
-              style={{ borderRadius: 7 }}
-            />
-            <strong style={{ color: 'var(--ink)' }}>VocabularyAI</strong>
-            <span>· Sage Thư Viện</span>
-          </div>
-
-          <div>
-            Oxford 3000/5000 (4.900+ từ) · SRS 1–3–7–14–30 ngày · AI Coach Vi
-          </div>
-
-          <div className="landing-footer-links">
-            <Link to="/dieu-khoan">Điều khoản</Link>
-            <Link to="/chinh-sach-bao-mat">Bảo mật</Link>
-          </div>
-        </div>
-      </footer>
+      <SignatureFooter
+        ctaLink={ctaLink}
+        onScrollToSection={scrollToSection}
+        onPrimaryNavigate={handlePrimaryNavigate}
+      />
     </div>
   );
 }
