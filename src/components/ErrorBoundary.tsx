@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { ViMascotImage } from './ViMascotImage';
+import { ApiErrorState } from './states/SageStates';
 
 interface Props {
   children: ReactNode;
@@ -28,53 +28,12 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-          <div className="errcard glass">
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
-              <ViMascotImage pose="surprised" size={88} alt="Vi ngạc nhiên khi gặp sự cố" />
-            </div>
-            <h1>Đã có lỗi xảy ra</h1>
-            <p className="sub" style={{ marginTop: '10px', lineHeight: 1.65 }}>
-              Rất tiếc, đã có sự cố ngoài ý muốn khi tải nội dung này. Dữ liệu học của bạn vẫn an toàn — bạn thử lại hoặc quay về trang chính nhé.
-            </p>
-            {this.state.error && (
-              <div
-                style={{
-                  marginTop: '16px',
-                  padding: '10px 14px',
-                  background: 'var(--danger-bg)',
-                  borderRadius: '12px',
-                  color: 'var(--red-dark)',
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                  textAlign: 'left',
-                  overflowX: 'auto',
-                }}
-              >
-                {this.state.error.message}
-              </div>
-            )}
-            <div className="row" style={{ marginTop: '20px', justifyContent: 'center' }}>
-              <button
-                type="button"
-                className="btn ghost"
-                onClick={() => {
-                  window.location.href = '/';
-                }}
-              >
-                Về trang chính
-              </button>
-              <button
-                type="button"
-                className="btn"
-                onClick={() => {
-                  this.setState({ hasError: false, error: null });
-                  window.location.reload();
-                }}
-              >
-                Tải lại trang
-              </button>
-            </div>
-          </div>
+          <ApiErrorState
+            title="Đã xảy ra sự cố hiển thị"
+            description="Dữ liệu học tập của bạn vẫn an toàn. Hãy tải lại trang để tiếp tục buổi học cùng Vi."
+            errorDetail={this.state.error?.message}
+            onRetry={() => window.location.reload()}
+          />
         </div>
       );
     }

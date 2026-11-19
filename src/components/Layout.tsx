@@ -9,7 +9,9 @@ import { PageTransition } from '../motion';
 import { ErrorBoundary } from './ErrorBoundary';
 import { SageScene } from './SageEffects';
 import { ViMascotImage } from './ViMascotImage';
-import { VI_APP_ICON } from '../constants/mascot';
+import { VI_APP_ICON, VI_LOGO_TRANSPARENT } from '../constants/mascot';
+import { BlurUpImage } from './states/BlurUpImage';
+import { OfflineBanner } from './states/SageStates';
 import { attachSagePointerEffects } from '../utils/interactiveEffects';
 
 interface TabItem {
@@ -239,12 +241,13 @@ export function Layout() {
               title="VocabularyAI - Về tổng quan"
               style={{ cursor: 'pointer' }}
             >
-              <img
-                src={VI_APP_ICON.file}
-                alt={VI_APP_ICON.alt}
-                width={32}
-                height={32}
-                style={{ borderRadius: 9, flexShrink: 0 }}
+              <BlurUpImage
+                src={VI_LOGO_TRANSPARENT.file}
+                alt={VI_LOGO_TRANSPARENT.alt}
+                width={34}
+                height={34}
+                transparent
+                priority
               />
               {!isSidebarCollapsed && <span className="brand-text">VocabularyAI</span>}
             </div>
@@ -405,6 +408,8 @@ export function Layout() {
               </button>
             </div>
           </header>
+
+          <OfflineBanner />
 
           <div className="app-pages">
             <div

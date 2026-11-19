@@ -18,6 +18,8 @@ import type { Word, ProgressItem } from '../api';
 import { TOPICS, TOPIC_LABELS } from '../constants/topics';
 import { useUsage } from '../context/UsageContext';
 import { Icon } from '../components/icons';
+import { FlashcardSkeleton } from '../components/states/SageSkeletons';
+import { ApiErrorState } from '../components/states/SageStates';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SplitHeading } from '../components/SageEffects';
 import { AiExplanationBox } from '../components/AiExplanationBox';
@@ -1023,14 +1025,9 @@ export default function Review() {
                 </div>
               )}
 
-              {err && <div className="error">{err}</div>}
+              {err && <ApiErrorState title="Không tải được bộ thẻ ôn tập" errorDetail={err} onRetry={() => loadCards(selectedMode, recommendedLevel, selectedTopic)} compact />}
 
-              {loading && (
-                <div className="card center" style={{ flex: 1, padding: 40, gap: 12 }}>
-                  <ViMascotImage pose="thinking" size={76} alt="Vi đang chuẩn bị bộ thẻ flashcard" />
-                  <div className="loading">Đang chuẩn bị bộ thẻ flashcard...</div>
-                </div>
-              )}
+              {loading && <FlashcardSkeleton />}
 
               {!loading && cur && (
                 <div className="colstack" style={{ flex: 1, minHeight: 0, justifyContent: 'space-between', gap: 10 }}>

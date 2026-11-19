@@ -10,6 +10,15 @@ import { AnimatedProgressBar, AnimatedCounter } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SplitHeading } from '../components/SageEffects';
 import { VI_APP_ICON } from '../constants/mascot';
+import { FlashcardSkeleton, WordRowSkeleton, StatCardSkeleton } from '../components/states/SageSkeletons';
+import {
+  OfflineBanner,
+  ApiErrorState,
+  EmptyQueueState,
+  NotFoundState,
+  InlineFieldFeedback,
+  WrongAnswerFeedback,
+} from '../components/states/SageStates';
 
 interface LearningPreferences {
   dailyGoal: number;
@@ -39,7 +48,7 @@ export default function Profile() {
 
   // Switch between Profile view and Design System UI States Lab
   const [activeView, setActiveView] = useState<'profile' | 'states'>('profile');
-  const [labFeedback, setLabFeedback] = useState<'idle' | 'skeleton' | 'empty' | 'error'>('idle');
+  const [labFeedback, setLabFeedback] = useState<'skeleton' | 'offline' | 'error' | 'empty' | '404' | 'wrong'>('skeleton');
   const [labToast, setLabToast] = useState<string | null>(null);
   const [labModalOpen, setLabModalOpen] = useState(false);
   const [labOtp, setLabOtp] = useState(['1', '2', '', '', '', '']);
@@ -591,6 +600,10 @@ export default function Profile() {
                 <input className="field error" defaultValue="Email không hợp lệ" aria-invalid="true" />
                 <input className="field" placeholder="Focus thử tại đây" />
               </div>
+              <div className="stack" style={{ gap: 6, marginTop: 8 }}>
+                <InlineFieldFeedback tone="error" message="Email chưa đúng định dạng (ví dụ: minh@vocab.ai)." />
+                <InlineFieldFeedback tone="valid" message="Mã OTP 6 số hợp lệ — sẵn sàng kích hoạt tài khoản." />
+              </div>
             </div>
 
             <div>
@@ -624,7 +637,7 @@ export default function Profile() {
             </div>
           </section>
 
-          <section className="card stack">
+          <section className="card stack" style={{ overflowY: 'auto' }}>
             <div>
               <h3>Quiz Option States</h3>
               <div className="grid g2">
@@ -650,46 +663,64 @@ export default function Profile() {
             </div>
 
             <div>
-              <h3>Chat Bubbles &amp; Feedback · Toast / Modal / Skeleton / Empty / Error</h3>
-              <div className="stack" style={{ gap: 8, marginBottom: 10 }}>
-                <div className="msg"><strong>Vi:</strong> Đây là bong bóng phản hồi mẫu từ trợ lý AI.</div>
-                <div className="msg me" style={{ alignSelf: 'flex-end' }}>Đây là tin nhắn của người học.</div>
-              </div>
-              <div className="toolbar">
-                <button type="button" className="btn secondary sm" onClick={() => triggerLabToast('Thao tác minh họa thành công!')}>Success Toast</button>
-                <button type="button" className="btn secondary sm" onClick={() => setLabModalOpen(true)}>Open Modal</button>
-                <button type="button" className="btn secondary sm" onClick={() => setLabFeedback('skeleton')}>Skeleton</button>
-                <button type="button" className="btn secondary sm" onClick={() => setLabFeedback('empty')}>Empty State</button>
-                <button type="button" className="btn secondary sm" onClick={() => setLabFeedback('error')}>Error State</button>
+              <h3>Bespoke VocabularyAI State Components</h3>
+              <div className="toolbar" style={{ flexWrap: 'wrap', gap: 6 }}>
+                <button type="button" className={`chip ${labFeedback === 'skeleton' ? 'on' : ''}`} onClick={() => setLabFeedback('skeleton')}>Glass Skeletons</button>
+                <button type="button" className={`chip ${labFeedback === 'offline' ? 'on' : ''}`} onClick={() => setLabFeedback('offline')}>Offline</button>
+                <button type="button" className={`chip ${labFeedback === 'error' ? 'on' : ''}`} onClick={() => setLabFeedback('error')}>API Error</button>
+                <button type="button" className={`chip ${labFeedback === 'empty' ? 'on' : ''}`} onClick={() => setLabFeedback('empty')}>Empty / Done</button>
+                <button type="button" className={`chip ${labFeedback === '404' ? 'on' : ''}`} onClick={() => setLabFeedback('404')}>404</button>
+                <button type="button" className={`chip ${labFeedback === 'wrong' ? 'on' : ''}`} onClick={() => setLabFeedback('wrong')}>Wrong Answer</button>
+                <button type="button" className="btn ghost sm" onClick={() => triggerLabToast('Đã lưu từ vào hàng đợi SRS!')}>Toast</button>
+                <button type="button" className="btn ghost sm" onClick={() => setLabModalOpen(true)}>Modal</button>
               </div>
 
               <div className="state-demo" style={{ marginTop: 10 }}>
-                {labFeedback === 'idle' && <span className="tiny muted">Chọn một trạng thái ở trên để xem mẫu.</span>}
                 {labFeedback === 'skeleton' && (
-                  <div className="stack" style={{ gap: 8 }}>
-                    <div className="skeleton" style={{ width: '55%' }} />
-                    <div className="skeleton" />
-                    <div className="skeleton" style={{ width: '78%' }} />
+                  <div className="stack" style={{ gap: 10 }}>
+                    <FlashcardSkeleton />
+                    <div className="grid g2">
+                      <WordRowSkeleton count={2} />
+                    </div>
+                    <div className="grid g2">
+                      <StatCardSkeleton count={2} />
+                    </div>
                   </div>
+                )}
+                {labFeedback === 'offline' && (
+                  <OfflineBanner forceVisible onRetry={() => triggerLabToast('Đang kiểm tra lại kết nối mạng…')} />
                 )}
                 {labFeedback === 'empty' && (
-                  <div className="row">
-                    <ViMascotImage pose="sleep" size={56} alt="Vi trạng thái trống" />
-                    <div>
-                      <strong>Không có dữ liệu cần làm</strong>
-                      <div className="tiny muted">Bạn đã hoàn thành toàn bộ mục hôm nay.</div>
-                    </div>
-                  </div>
+                  <EmptyQueueState
+                    mode="done"
+                    nextReviewLabel="Mốc ôn tiếp theo: 07:30 sáng mai (SRS 3 ngày)"
+                    actionLabel="Khám phá thêm từ B2"
+                    onAction={() => triggerLabToast('Đang mở kho từ Oxford B2…')}
+                    compact
+                  />
                 )}
                 {labFeedback === 'error' && (
-                  <div className="row">
-                    <ViMascotImage pose="surprised" size={56} alt="Vi trạng thái lỗi" />
-                    <div style={{ flex: 1 }}>
-                      <strong>Không thể tải dữ liệu</strong>
-                      <div className="tiny muted">Đã xảy ra lỗi kết nối minh họa.</div>
-                    </div>
-                    <button type="button" className="btn secondary sm" onClick={() => setLabFeedback('skeleton')}>Thử lại</button>
-                  </div>
+                  <ApiErrorState
+                    errorDetail="HTTP 503 · /api/learning/review-queue timeout"
+                    onRetry={() => setLabFeedback('skeleton')}
+                    compact
+                  />
+                )}
+                {labFeedback === '404' && (
+                  <NotFoundState
+                    onGoHome={() => triggerLabToast('Đang đưa bạn về Tổng quan…')}
+                    onOpenWords={() => triggerLabToast('Đang mở kho 4.900+ từ Oxford…')}
+                  />
+                )}
+                {labFeedback === 'wrong' && (
+                  <WrongAnswerFeedback
+                    word="eloquent"
+                    ipa="/ˈel.ə.kwənt/"
+                    selectedAnswer="Kín đáo, ít nói"
+                    correctAnswer="Hùng biện, lưu loát"
+                    memoryTip="Nhớ cụm “an eloquent speaker” — người diễn thuyết lưu loát, thuyết phục."
+                    onContinue={() => triggerLabToast('Vi đã ghi chú để nhắc lại từ eloquent vào ngày mai!')}
+                  />
                 )}
               </div>
             </div>
