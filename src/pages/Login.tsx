@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { motionTokens } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SageScene } from '../components/SageEffects';
+import { MOCK_TEST_ACCOUNTS, findMockAccount, type MockTestAccount } from '../constants/mockAccounts';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
@@ -83,8 +84,26 @@ export default function Login() {
     }, 220);
   };
 
+  const handleMockLogin = (acc: MockTestAccount) => {
+    setErr('');
+    sessionStorage.setItem('placement_dismissed', '1');
+    login(
+      acc.user,
+      `mock-access-${acc.id}-token`,
+      `mock-refresh-${acc.id}-token`
+    );
+    nav(acc.landingRoute, { replace: true });
+  };
+
   const submit = async () => {
     setErr('');
+    if (mode === 'login') {
+      const mockAcc = findMockAccount(id, pw);
+      if (mockAcc) {
+        handleMockLogin(mockAcc);
+        return;
+      }
+    }
     setBusy(true);
     try {
       if (mode === 'login') {
@@ -480,6 +499,59 @@ export default function Login() {
                       >
                         Quên mật khẩu?
                       </button>
+                    </div>
+
+                    {/* Quick UI Test Accounts — 3 Roles Mock (No Backend required) */}
+                    <div
+                      style={{
+                        marginTop: '6px',
+                        padding: '12px',
+                        borderRadius: '14px',
+                        background: 'rgba(250, 248, 241, 0.72)',
+                        border: '1px solid var(--line)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', fontWeight: 700, color: 'var(--sage-dark)' }}>
+                        <span>Test UI nhanh · 3 Role (Mock · không cần BE)</span>
+                        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--muted)' }}>Pass: 123456</span>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '6px' }}>
+                        {MOCK_TEST_ACCOUNTS.map((acc) => (
+                          <button
+                            key={acc.id}
+                            type="button"
+                            onClick={() => handleMockLogin(acc)}
+                            title={`${acc.user.email} / ${acc.password} — ${acc.description}`}
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'flex-start',
+                              gap: '2px',
+                              padding: '8px 9px',
+                              borderRadius: '10px',
+                              border: '1px solid rgba(71, 96, 63, 0.24)',
+                              background: 'rgba(255, 255, 255, 0.85)',
+                              color: 'var(--ink)',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              transition: 'transform 140ms var(--ease), border-color 140ms var(--ease), background-color 140ms var(--ease)',
+                            }}
+                          >
+                            <span style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.06em', color: acc.id === 'admin' ? 'var(--amber-dark)' : 'var(--sage-dark)' }}>
+                              {acc.roleBadge}
+                            </span>
+                            <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--ink)', lineHeight: 1.2 }}>
+                              {acc.label}
+                            </span>
+                            <span style={{ fontSize: '10.5px', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                              {acc.user.email}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </motion.div>
                 )}
