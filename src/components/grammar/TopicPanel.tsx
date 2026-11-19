@@ -4,6 +4,7 @@ import { wordApi, aiApi, TOPIC_MAP, type Word, type GrammarResp } from '../../ap
 import { MotionCard } from '../../motion';
 import { Icon } from '../icons';
 import ResultPanel, { type OutlineReport } from './ResultPanel';
+import { UiIcon } from '../UiIcon';
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const;
 type Level = typeof LEVELS[number];
@@ -17,18 +18,18 @@ const LEVEL_CONFIG: Record<Level, { label: string; desc: string; color: string; 
 };
 
 const TOPIC_ICONS: Record<string, string> = {
-  WORK: '💼',
-  TRAVEL: '✈️',
-  ACADEMIC: '🎓',
-  TECHNOLOGY: '💻',
-  HEALTH: '🏥',
-  FOOD: '🍜',
-  MONEY: '💰',
-  FAMILY: '👨‍👩‍👧',
-  SPORTS: '⚽',
-  ENVIRONMENT: '🌱',
-  SOCIETY: '🏛️',
-  ARTS: '🎨',
+  WORK: 'briefcase',
+  TRAVEL: 'plane',
+  ACADEMIC: 'graduation',
+  TECHNOLOGY: 'laptop',
+  HEALTH: 'health',
+  FOOD: 'food',
+  MONEY: 'coins',
+  FAMILY: 'users',
+  SPORTS: 'sport',
+  ENVIRONMENT: 'sprout',
+  SOCIETY: 'landmark',
+  ARTS: 'palette',
 };
 
 const STRUCTURES_BY_LEVEL: Record<Level, Array<{ name: string; template: string; note: string }>> = {
@@ -307,7 +308,7 @@ export default function TopicPanel() {
     return TOPIC_MAP[upper] || topicKey;
   };
 
-  const currentTopicIcon = TOPIC_ICONS[selectedTopic?.toUpperCase()] || '📝';
+  const currentTopicIcon = TOPIC_ICONS[selectedTopic?.toUpperCase()] || 'file';
   const sampleIdeaText = TOPIC_SAMPLE_IDEAS[selectedTopic?.toUpperCase()] || '';
 
   return (
@@ -384,7 +385,7 @@ export default function TopicPanel() {
                     title="Bốc ngẫu nhiên 1 chủ đề khác"
                     style={{ padding: '3px 10px', fontSize: 12, fontWeight: 700, borderRadius: 8 }}
                   >
-                    🎲 Ngẫu nhiên
+                    <UiIcon name="dice" size={14} /> Ngẫu nhiên
                   </button>
                 )}
               </div>
@@ -415,14 +416,11 @@ export default function TopicPanel() {
                   ) : topicList.length === 0 ? (
                     <option>Không có chủ đề cho cấp độ này</option>
                   ) : (
-                    topicList.map((t) => {
-                      const icon = TOPIC_ICONS[t.topic.toUpperCase()] || '📝';
-                      return (
-                        <option key={t.topic} value={t.topic}>
-                          {icon} {getTopicLabel(t.topic)} ({t.count} từ vựng)
-                        </option>
-                      );
-                    })
+                    topicList.map((t) => (
+                      <option key={t.topic} value={t.topic}>
+                        {getTopicLabel(t.topic)} ({t.count} từ vựng)
+                      </option>
+                    ))
                   )}
                 </select>
               </div>
@@ -454,7 +452,7 @@ export default function TopicPanel() {
           {/* Header dàn ý */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 20 }}>{currentTopicIcon}</span>
+              <span style={{ fontSize: 20 }}><UiIcon name={currentTopicIcon} size={16} /></span>
               <div>
                 <b style={{ fontSize: 16, color: 'var(--ink)' }}>
                   {selectedTopic ? getTopicLabel(selectedTopic) : 'Chủ đề'}
@@ -471,7 +469,7 @@ export default function TopicPanel() {
               className="btn ghost sm"
               style={{ padding: '4px 10px', fontSize: 12, fontWeight: 700, borderRadius: 8 }}
             >
-              {loadingWords ? '⏳ Đang đổi...' : '🔄 Đổi bộ từ khác'}
+              {loadingWords ? 'Đang đổi...' : <><UiIcon name="refresh" size={13} /> Đổi bộ từ khác</>}
             </button>
           </div>
 
@@ -487,7 +485,7 @@ export default function TopicPanel() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
               <span style={{ fontSize: 12.5, fontWeight: 800, color: progressPercent === 100 ? 'var(--green-dark)' : 'var(--ink)' }}>
-                🎯 Tiến độ áp dụng từ gợi ý:
+                <UiIcon name="target" size={14} /> Tiến độ áp dụng từ gợi ý:
               </span>
               <span
                 style={{
@@ -658,7 +656,7 @@ export default function TopicPanel() {
                   >
                     <div>
                       <div style={{ fontSize: 13, fontWeight: 700, color: '#1E293B' }}>
-                        📌 {st.name}
+                        <UiIcon name="pin" size={13} /> {st.name}
                       </div>
                       <div style={{ fontSize: 12, color: '#64748B', fontStyle: 'italic', marginTop: 2 }}>
                         {st.template}
@@ -710,7 +708,7 @@ export default function TopicPanel() {
                   className="btn ghost sm"
                   style={{ padding: '4px 10px', fontSize: 12, fontWeight: 700, borderRadius: 8 }}
                 >
-                  💡 {showIdea ? 'Ẩn gợi ý ý tưởng' : 'Gợi ý ý tưởng'}
+                  <UiIcon name="lightbulb" size={13} /> {showIdea ? 'Ẩn gợi ý ý tưởng' : 'Gợi ý ý tưởng'}
                 </button>
               )}
             </div>
@@ -732,7 +730,7 @@ export default function TopicPanel() {
                     color: '#92400E',
                   }}
                 >
-                  <b>💡 Câu mẫu gợi mở ý tưởng:</b> "{sampleIdeaText}"
+                  <b><UiIcon name="lightbulb" size={13} /> Câu mẫu gợi mở ý tưởng:</b> "{sampleIdeaText}"
                 </motion.div>
               )}
             </AnimatePresence>

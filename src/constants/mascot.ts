@@ -20,10 +20,10 @@ export interface ViPoseAsset {
 }
 
 export const VI_APP_ICON = {
-  file: '/vi_C.png',
+  file: '/mascot/vi-logo-transparent.webp',
   alt: 'Biểu tượng Vi — Trợ lý AI VocabularyAI',
-  width: 256,
-  height: 256,
+  width: 128,
+  height: 128,
 } as const;
 
 export const VI_LOGO_TRANSPARENT = {
@@ -36,7 +36,7 @@ export const VI_LOGO_TRANSPARENT = {
 export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   'happy-wave': {
     id: 'happy-wave',
-    file: '/mascot/vi-happy-wave.webp',
+    file: '/mascot/vi-happy-wave-transparent.webp',
     transparentFile: '/mascot/vi-happy-wave-transparent.webp',
     alt: 'Vi mascot — vẫy tay chào thân thiện',
     width: 384,
@@ -45,7 +45,7 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   explain: {
     id: 'explain',
-    file: '/mascot/vi-explain.webp',
+    file: '/mascot/vi-explain-transparent.webp',
     transparentFile: '/mascot/vi-explain-transparent.webp',
     alt: 'Vi mascot — giải thích từ vựng và hội thoại',
     width: 384,
@@ -54,9 +54,8 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   listen: {
     id: 'listen',
-    file: '/mascot/vi-listen.webp',
+    file: '/mascot/vi-listen-transparent.webp',
     transparentFile: '/mascot/vi-listen-transparent.webp',
-    animatedFile: '/mascot/vi-listen-pulse.webp',
     alt: 'Vi mascot — đang lắng nghe phát âm',
     width: 384,
     height: 512,
@@ -64,9 +63,8 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   celebrate: {
     id: 'celebrate',
-    file: '/mascot/vi-celebrate.webp',
+    file: '/mascot/vi-celebrate-transparent.webp',
     transparentFile: '/mascot/vi-celebrate-transparent.webp',
-    animatedFile: '/mascot/vi-celebrate-loop.webp',
     alt: 'Vi mascot — ăn mừng thành tích học tập',
     width: 384,
     height: 512,
@@ -74,7 +72,7 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   encourage: {
     id: 'encourage',
-    file: '/mascot/vi-encourage.webp',
+    file: '/mascot/vi-encourage-transparent.webp',
     transparentFile: '/mascot/vi-encourage-transparent.webp',
     alt: 'Vi mascot — giơ tay khích lệ bạn tiếp tục',
     width: 384,
@@ -83,7 +81,7 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   thinking: {
     id: 'thinking',
-    file: '/mascot/vi-thinking.webp',
+    file: '/mascot/vi-thinking-transparent.webp',
     transparentFile: '/mascot/vi-thinking-transparent.webp',
     alt: 'Vi mascot — đang suy nghĩ và phân tích',
     width: 384,
@@ -92,7 +90,7 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   surprised: {
     id: 'surprised',
-    file: '/mascot/vi-surprised.webp',
+    file: '/mascot/vi-surprised-transparent.webp',
     transparentFile: '/mascot/vi-surprised-transparent.webp',
     alt: 'Vi mascot — ngạc nhiên khi gặp lỗi hoặc đáp án chưa đúng',
     width: 384,
@@ -101,7 +99,7 @@ export const VI_MASCOT_POSES: Record<ViPoseId, ViPoseAsset> = {
   },
   sleep: {
     id: 'sleep',
-    file: '/mascot/vi-sleep.webp',
+    file: '/mascot/vi-sleep-transparent.webp',
     transparentFile: '/mascot/vi-sleep-transparent.webp',
     alt: 'Vi mascot — nghỉ ngơi sau khi hoàn thành mục tiêu',
     width: 384,

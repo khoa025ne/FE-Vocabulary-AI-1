@@ -6,6 +6,7 @@ import type { SessionDetail, AttemptDetail } from '../api';
 import { Icon } from '../components/icons';
 import { AnimatedProgressBar, MotionCard } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { UiIcon } from '../components/UiIcon';
 import { ScoreRing, SplitHeading } from '../components/SageEffects';
 
 function parseList(val: any): string[] {
@@ -393,7 +394,7 @@ export default function SpeakingResult() {
               {weaknesses.length > 0 && (
                 <div style={{ padding: '10px 14px', background: 'var(--amber-bg)', borderRadius: 12 }}>
                   <b style={{ color: 'var(--amber-dark)', display: 'block', marginBottom: 4, fontSize: 13.5 }}>
-                    ⚡ Cần cải thiện:
+                    <UiIcon name="zap" size={14} /> Cần cải thiện:
                   </b>
                   <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--ink)', fontSize: 13.5, lineHeight: 1.55 }}>
                     {weaknesses.map((w, i) => (
@@ -430,7 +431,7 @@ export default function SpeakingResult() {
               {suggestions.length > 0 && (
                 <div style={{ padding: '10px 14px', background: 'rgba(71, 96, 63, 0.1)', borderRadius: 12 }}>
                   <b style={{ color: 'var(--sage-dark)', display: 'block', marginBottom: 4, fontSize: 13.5 }}>
-                    💡 Gợi ý cho lần tới:
+                    <UiIcon name="lightbulb" size={14} /> Gợi ý cho lần tới:
                   </b>
                   <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--ink)', fontSize: 13.5, lineHeight: 1.55 }}>
                     {suggestions.map((sug, i) => (

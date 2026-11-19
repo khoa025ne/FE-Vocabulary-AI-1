@@ -19,6 +19,8 @@ import { AiExplanationBox } from '../components/AiExplanationBox';
 import { useUsage } from '../context/UsageContext';
 import { QuotaBadge } from '../components/QuotaBadge';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import { SplitHeading } from '../components/SageEffects';
 
 export default function WordDetail() {
@@ -165,10 +167,7 @@ export default function WordDetail() {
   if (!word && !err) {
     return (
       <div className="content">
-        <div className="card center" style={{ flex: 1 }}>
-          <ViMascotImage pose="thinking" size={76} alt="Vi đang tải chi tiết từ vựng" />
-          <div className="sub mt8">Đang tải chi tiết từ vựng...</div>
-        </div>
+        <ViLoadingScreen subtitle="Đang tải chi tiết từ vựng" />
       </div>
     );
   }
@@ -189,7 +188,7 @@ export default function WordDetail() {
           {word && (
             <>
               <button type="button" className="btn secondary sm" onClick={() => setShowReportModal(true)}>
-                ⚠️ Báo lỗi từ
+                <UiIcon name="warning" size={14} /> Báo lỗi từ
               </button>
               <button
                 type="button"
@@ -329,7 +328,7 @@ export default function WordDetail() {
             <div className="scrim" onClick={() => !submittingReport && setShowReportModal(false)} />
             <div className="modal" onClick={(e) => e.stopPropagation()}>
               <div className="row between" style={{ marginBottom: 14 }}>
-                <h2 style={{ margin: 0 }}>⚠️ Báo lỗi từ vựng: {word?.word}</h2>
+                <h2 style={{ margin: 0 }}><UiIcon name="warning" size={14} /> Báo lỗi từ vựng: {word?.word}</h2>
                 <button
                   type="button"
                   className="btn ghost sm"

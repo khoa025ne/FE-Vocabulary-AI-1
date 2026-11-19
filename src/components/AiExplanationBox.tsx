@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from './icons';
 import { ViMascotImage } from './ViMascotImage';
+import { UiIcon } from './UiIcon';
 
 export interface AiExplanationBoxProps {
   explanation: string;
@@ -23,7 +24,7 @@ const SECTION_MAP: Record<SectionKey, SectionConfig> = {
   examples: {
     key: 'examples',
     title: 'Ví dụ thực tế',
-    icon: '💡',
+    icon: 'lightbulb',
     badgeBg: 'rgba(71, 96, 63, 0.14)',
     badgeColor: '#2f4329',
     borderColor: 'rgba(71, 96, 63, 0.22)',
@@ -32,7 +33,7 @@ const SECTION_MAP: Record<SectionKey, SectionConfig> = {
   synonyms_antonyms: {
     key: 'synonyms_antonyms',
     title: 'Synonyms & Antonyms',
-    icon: '🔗',
+    icon: 'link',
     badgeBg: 'rgba(71, 96, 63, 0.16)',
     badgeColor: '#22301f',
     borderColor: 'rgba(71, 96, 63, 0.24)',
@@ -41,7 +42,7 @@ const SECTION_MAP: Record<SectionKey, SectionConfig> = {
   context: {
     key: 'context',
     title: 'Ngữ cảnh sử dụng',
-    icon: '🎯',
+    icon: 'target',
     badgeBg: 'rgba(201, 134, 47, 0.16)',
     badgeColor: '#8f5c1a',
     borderColor: 'rgba(201, 134, 47, 0.3)',
@@ -50,7 +51,7 @@ const SECTION_MAP: Record<SectionKey, SectionConfig> = {
   mistakes: {
     key: 'mistakes',
     title: 'Lỗi thường gặp',
-    icon: '⚠️',
+    icon: 'warning',
     badgeBg: 'rgba(154, 75, 67, 0.14)',
     badgeColor: '#74322b',
     borderColor: 'rgba(154, 75, 67, 0.28)',
@@ -59,7 +60,7 @@ const SECTION_MAP: Record<SectionKey, SectionConfig> = {
   memory_tips: {
     key: 'memory_tips',
     title: 'Mẹo ghi nhớ',
-    icon: '🧠',
+    icon: 'brain',
     badgeBg: 'rgba(66, 119, 77, 0.14)',
     badgeColor: '#285130',
     borderColor: 'rgba(66, 119, 77, 0.28)',
@@ -366,7 +367,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                   marginBottom: 8,
                 }}
               >
-                <span>{SECTION_MAP.examples.icon}</span>
+                <span><UiIcon name={SECTION_MAP.examples.icon} size={15} /></span>
                 <span>{SECTION_MAP.examples.title}</span>
               </div>
 
@@ -429,7 +430,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                   marginBottom: 8,
                 }}
               >
-                <span>{SECTION_MAP.synonyms_antonyms.icon}</span>
+                <span><UiIcon name={SECTION_MAP.synonyms_antonyms.icon} size={15} /></span>
                 <span>{SECTION_MAP.synonyms_antonyms.title}</span>
               </div>
 
@@ -470,7 +471,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                               fontSize: compact ? 11 : 12,
                             }}
                           >
-                            ⚡ Trái nghĩa (Antonyms)
+                            <UiIcon name="zap" size={13} /> Trái nghĩa (Antonyms)
                           </span>
                         </th>
                         <th
@@ -494,7 +495,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                               fontSize: compact ? 11 : 12,
                             }}
                           >
-                            🔗 Đồng nghĩa (Synonyms)
+                            <UiIcon name="link" size={13} /> Đồng nghĩa (Synonyms)
                           </span>
                         </th>
                       </tr>
@@ -615,7 +616,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                   marginBottom: 8,
                 }}
               >
-                <span>{SECTION_MAP.context.icon}</span>
+                <span><UiIcon name={SECTION_MAP.context.icon} size={15} /></span>
                 <span>{SECTION_MAP.context.title}</span>
               </div>
 
@@ -653,7 +654,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                   marginBottom: 8,
                 }}
               >
-                <span>{SECTION_MAP.mistakes.icon}</span>
+                <span><UiIcon name={SECTION_MAP.mistakes.icon} size={15} /></span>
                 <span>{SECTION_MAP.mistakes.title}</span>
               </div>
 
@@ -691,7 +692,7 @@ export const AiExplanationBox: React.FC<AiExplanationBoxProps> = ({ explanation,
                   marginBottom: 8,
                 }}
               >
-                <span>{SECTION_MAP.memory_tips.icon}</span>
+                <span><UiIcon name={SECTION_MAP.memory_tips.icon} size={15} /></span>
                 <span>{SECTION_MAP.memory_tips.title}</span>
               </div>
 

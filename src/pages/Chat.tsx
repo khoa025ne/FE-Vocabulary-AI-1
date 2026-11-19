@@ -7,6 +7,7 @@ import { ConfirmModal } from '../components/ConfirmModal';
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 import { messageBubbleVariant } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { UiIcon } from '../components/UiIcon';
 import { SplitHeading } from '../components/SageEffects';
 import { QuotaBadge } from '../components/QuotaBadge';
 import { useUsage } from '../context/UsageContext';
@@ -172,10 +173,10 @@ function ChatMarkdownView({ content }: { content: string }) {
 
 // ---------------- Suggested Prompts ----------------
 const STARTER_PROMPTS = [
-  '💡 Phân biệt Affect và Effect',
-  '📝 Sửa ngữ pháp: "She don\'t like apple"',
-  '🎯 5 cách chào hỏi tự nhiên trong công việc',
-  '🗣️ Cách dùng thì Hiện tại hoàn thành (Present Perfect)',
+  'Phân biệt Affect và Effect',
+  'Sửa ngữ pháp: "She don\'t like apple"',
+  '5 cách chào hỏi tự nhiên trong công việc',
+  'Cách dùng thì Hiện tại hoàn thành (Present Perfect)',
 ];
 
 export default function Chat() {
@@ -429,7 +430,7 @@ export default function Chat() {
             {pinnedList.length > 0 && (
               <div style={{ marginBottom: 6 }}>
                 <div style={{ fontSize: 10.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--amber-dark)', padding: '4px 8px' }}>
-                  📌 Đã ghim ({pinnedList.length})
+                  <UiIcon name="pin" size={12} /> Đã ghim ({pinnedList.length})
                 </div>
                 {pinnedList.map((c) => renderConvItem(c, true))}
               </div>
@@ -438,7 +439,7 @@ export default function Chat() {
             <div>
               {pinnedList.length > 0 && (
                 <div style={{ fontSize: 10.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--muted)', padding: '6px 8px 4px' }}>
-                  💬 Gần đây ({otherList.length})
+                  <UiIcon name="message" size={12} /> Gần đây ({otherList.length})
                 </div>
               )}
               {otherList.map((c) => renderConvItem(c, false))}
@@ -477,7 +478,7 @@ export default function Chat() {
                   <b style={{ fontSize: 15, color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {curConv?.title || 'Trò chuyện cùng Vi'}
                   </b>
-                  {isCurPinned && <span title="Đoạn chat đã được ghim">📌</span>}
+                  {isCurPinned && <span title="Đoạn chat đã được ghim"><UiIcon name="pin" size={13} /></span>}
                 </div>
                 <div className="tiny muted">Trợ lý AI tiếng Anh · Phản hồi thông minh</div>
               </div>
@@ -740,7 +741,7 @@ export default function Chat() {
       >
         <span className="wchk" style={{ flexShrink: 0 }}>
           {isPinned ? (
-            <span style={{ fontSize: 12 }}>📌</span>
+            <UiIcon name="pin" size={12} />
           ) : (
             <Icon n="spark" s={14} />
           )}

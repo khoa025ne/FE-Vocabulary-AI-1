@@ -4,6 +4,8 @@ import { quizApi, aiApi } from '../api';
 import type { QuizResult as R, QuizAttemptAnswerDetail, QuizDetail } from '../api';
 import { Icon } from '../components/icons';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import { ScoreRing, SplitHeading } from '../components/SageEffects';
 import { MotionCard, AnimatedCounter } from '../motion';
 
@@ -354,9 +356,8 @@ export default function QuizResult() {
 
   if (loadingDetails && !r) {
     return (
-      <div className="content" style={{ maxWidth: 860, textAlign: 'center', paddingTop: 80 }}>
-        <div className="spinner" style={{ margin: '0 auto 16px' }} />
-        <div className="sub">Đang tải chi tiết bài làm...</div>
+      <div className="content" style={{ maxWidth: 860 }}>
+        <ViLoadingScreen subtitle="Đang tải chi tiết bài làm" />
       </div>
     );
   }
@@ -469,7 +470,7 @@ export default function QuizResult() {
             className="btn sm"
             onClick={() => nav(`/quiz/${id}`)}
           >
-            🔄 Làm lại bài thi này
+            <UiIcon name="refresh" size={14} /> Làm lại bài thi này
           </button>
         </div>
       </div>
@@ -517,7 +518,7 @@ export default function QuizResult() {
                   transition: 'border-color var(--dur-micro) var(--ease), background-color var(--dur-micro) var(--ease)',
                 }}
               >
-                <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--green-dark)' }}>✅ Làm đúng</div>
+                <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--green-dark)', display: 'inline-flex', alignItems: 'center', gap: 5 }}><UiIcon name="check-circle" size={13} /> Làm đúng</div>
                 <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--ink)', marginTop: 2 }}>
                   <AnimatedCounter value={correctCount} /> <small style={{ fontSize: 12 }}>câu</small>
                 </div>
@@ -566,7 +567,7 @@ export default function QuizResult() {
         <section className="card colstack" style={{ gap: 12 }}>
           <div className="row between" style={{ flexWrap: 'wrap', gap: 10, flex: 'none' }}>
             <div>
-              <h2 style={{ fontSize: 17, margin: 0 }}>📋 Đáp án &amp; Phân tích chi tiết</h2>
+              <h2 style={{ fontSize: 17, margin: 0, display: 'inline-flex', alignItems: 'center', gap: 6 }}><UiIcon name="clipboard" size={17} /> Đáp án &amp; Phân tích chi tiết</h2>
               <p className="tiny muted" style={{ margin: '2px 0 0' }}>
                 Lọc theo trạng thái hoặc nhờ Vi AI giải thích câu chưa rõ
               </p>
@@ -598,9 +599,7 @@ export default function QuizResult() {
 
           <div id="questions-review-section" className="long-list colstack" style={{ flex: 1, minHeight: 0, gap: 12, paddingRight: 4 }}>
             {loadingDetails && (
-              <div className="center" style={{ padding: 24 }}>
-                <div className="loading">Đang tải chi tiết đáp án câu hỏi...</div>
-              </div>
+              <ViLoadingScreen compact subtitle="Đang tải chi tiết đáp án câu hỏi" />
             )}
 
             {!loadingDetails && displayedAnswers.length === 0 && (
@@ -692,7 +691,7 @@ export default function QuizResult() {
                         color: 'var(--ink)',
                       }}
                     >
-                      <b>💡 Giải thích gốc:</b> {item.explanation}
+                      <b><UiIcon name="lightbulb" size={13} /> Giải thích gốc:</b> {item.explanation}
                     </div>
                   )}
 

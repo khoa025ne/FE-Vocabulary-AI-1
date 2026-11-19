@@ -98,17 +98,17 @@ export const Icon = ({
 );
 export const Mascot = ({ s = 40 }: { s?: number }) => (
   <img
-    src="/vi_C.png"
+    src="/mascot/vi-logo-transparent.webp"
     alt="Biểu tượng Vi — VocabularyAI"
     width={s}
     height={s}
     style={{
       width: s,
       height: s,
-      borderRadius: Math.round(s * 0.26),
-      objectFit: 'cover',
+      objectFit: 'contain',
       display: 'block',
       flexShrink: 0,
+      filter: 'drop-shadow(0 4px 8px rgba(10, 28, 18, 0.22))',
     }}
   />
 );

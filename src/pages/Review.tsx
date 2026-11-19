@@ -18,8 +18,9 @@ import type { Word, ProgressItem } from '../api';
 import { TOPICS, TOPIC_LABELS } from '../constants/topics';
 import { useUsage } from '../context/UsageContext';
 import { Icon } from '../components/icons';
-import { FlashcardSkeleton } from '../components/states/SageSkeletons';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
 import { ApiErrorState } from '../components/states/SageStates';
+import { UiIcon, type UiIconName } from '../components/UiIcon';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SplitHeading } from '../components/SageEffects';
 import { AiExplanationBox } from '../components/AiExplanationBox';
@@ -49,13 +50,13 @@ interface FlashcardWord {
   overdue?: number;
 }
 
-const STUDY_MODES = [
-  { id: 'RECOMMENDED', label: '✨ AI gợi ý' },
-  { id: 'SRS', label: '⏰ Cần ôn (SRS)' },
-  { id: 'TOPIC', label: '🗂️ Theo chủ đề' },
-  { id: 'FAVORITES', label: '❤️ Yêu thích' },
-  { id: 'MY_WORDS', label: '📝 Từ của tôi' },
-] as const;
+const STUDY_MODES: ReadonlyArray<{ id: string; label: string; icon: UiIconName }> = [
+  { id: 'RECOMMENDED', label: 'AI gợi ý', icon: 'sparkles' },
+  { id: 'SRS', label: 'Cần ôn (SRS)', icon: 'clock' },
+  { id: 'TOPIC', label: 'Theo chủ đề', icon: 'folder' },
+  { id: 'FAVORITES', label: 'Yêu thích', icon: 'heart' },
+  { id: 'MY_WORDS', label: 'Từ của tôi', icon: 'file' },
+];
 
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'ALL'] as const;
 
@@ -810,7 +811,7 @@ export default function Review() {
                   className="btn secondary"
                   onClick={() => loadCards('TOPIC', recommendedLevel, selectedTopic)}
                 >
-                  🎲 Ôn tiếp bộ thẻ này
+                  <UiIcon name="dice" size={14} /> Ôn tiếp bộ thẻ này
                 </button>
                 <button
                   type="button"
@@ -834,13 +835,13 @@ export default function Review() {
   }
 
   const activeLevelDisplay = selectedMode === 'RECOMMENDED'
-    ? `✨ AI gợi ý (${recommendedLevel})`
+    ? `AI gợi ý (${recommendedLevel})`
     : selectedMode === 'SRS'
-      ? '⏰ Từ cần ôn (SRS)'
+      ? 'Từ cần ôn (SRS)'
       : selectedMode === 'TOPIC'
         ? selectedTopic
-          ? `🗂️ ${TOPIC_LABELS[selectedTopic] || selectedTopic} (${topicLevel})`
-          : `🗂️ Theo chủ đề (${topicLevel})`
+          ? `${TOPIC_LABELS[selectedTopic] || selectedTopic} (${topicLevel})`
+          : `Theo chủ đề (${topicLevel})`
         : selectedMode === 'ALL'
           ? 'Tất cả cấp độ'
           : `Cấp độ ${selectedMode}`;
@@ -939,7 +940,7 @@ export default function Review() {
               <div className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4 }}>
                 {topicUpgradeRequired ? (
                   <MotionCard className="center" style={{ padding: '32px 20px', gap: 10 }}>
-                    <span className="pill warn">👑 PREMIUM</span>
+                    <span className="pill warn"><UiIcon name="crown" size={12} /> PREMIUM</span>
                     <div style={{ fontSize: 16.5, fontWeight: 800, color: 'var(--amber-dark)' }}>
                       Từ vựng chủ đề cấp độ {topicLevel} dành riêng cho Premium
                     </div>
@@ -986,7 +987,7 @@ export default function Review() {
                                 flexShrink: 0,
                               }}
                             >
-                              {topic.icon}
+                              <UiIcon name={topic.icon} size={18} />
                             </span>
                             <div style={{ minWidth: 0 }}>
                               <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -1027,7 +1028,7 @@ export default function Review() {
 
               {err && <ApiErrorState title="Không tải được bộ thẻ ôn tập" errorDetail={err} onRetry={() => loadCards(selectedMode, recommendedLevel, selectedTopic)} compact />}
 
-              {loading && <FlashcardSkeleton />}
+              {loading && <ViLoadingScreen subtitle="Đang chuẩn bị bộ thẻ ôn tập SRS" />}
 
               {!loading && cur && (
                 <div className="colstack" style={{ flex: 1, minHeight: 0, justifyContent: 'space-between', gap: 10 }}>
@@ -1058,7 +1059,7 @@ export default function Review() {
                                 const r = analyzeWordRelations(cur.word, cur.partOfSpeech);
                                 return cur.partOfSpeech ? (
                                   <span className="pill">
-                                    {r.posBadge.icon} {r.posBadge.label}
+                                    <UiIcon name={r.posBadge.icon} size={11} /> {r.posBadge.label}
                                   </span>
                                 ) : null;
                               })()}
@@ -1098,7 +1099,7 @@ export default function Review() {
                           </div>
 
                           <div className="tiny muted">
-                            👆 Bấm vào thẻ để lật · [Space] Lật · [←] Chưa nhớ · [→] Đã nhớ
+                            <UiIcon name="hand" size={13} /> Bấm vào thẻ để lật · [Space] Lật · [←] Chưa nhớ · [→] Đã nhớ
                           </div>
                         </div>
 
@@ -1157,7 +1158,7 @@ export default function Review() {
 
                                   {rel.warningNote && (
                                     <div className="pill warn" style={{ whiteSpace: 'normal', textAlign: 'left', fontSize: 12 }}>
-                                      🔍 {rel.warningNote}
+                                      <UiIcon name="search" size={13} /> {rel.warningNote}
                                     </div>
                                   )}
 
@@ -1169,7 +1170,7 @@ export default function Review() {
 
                                   {cur.example && (
                                     <div style={{ fontSize: 12.5, fontStyle: 'italic', color: 'var(--sage-dark)', maxWidth: 500 }}>
-                                      💬 "{cur.example}"
+                                      <UiIcon name="message" size={13} /> "{cur.example}"
                                     </div>
                                   )}
                                 </>
@@ -1321,7 +1322,7 @@ export default function Review() {
               }}
               title="Tải một bộ thẻ từ vựng ngẫu nhiên mới"
             >
-              🎲 Đổi bộ ngẫu nhiên
+              <UiIcon name="dice" size={14} /> Đổi bộ ngẫu nhiên
             </button>
           )}
 
@@ -1330,7 +1331,7 @@ export default function Review() {
             <div className="colstack" style={{ gap: 5 }}>
               {STUDY_MODES.map((m) => {
                 const isSelected = selectedMode === m.id;
-                const label = m.id === 'RECOMMENDED' ? `✨ AI gợi ý (${recommendedLevel})` : m.label;
+                const label = m.id === 'RECOMMENDED' ? `AI gợi ý (${recommendedLevel})` : m.label;
                 return (
                   <button
                     key={m.id}

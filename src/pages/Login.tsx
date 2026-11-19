@@ -9,6 +9,7 @@ import { motionTokens } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SageScene } from '../components/SageEffects';
 import { MOCK_TEST_ACCOUNTS, findMockAccount, type MockTestAccount } from '../constants/mockAccounts';
+import { UiIcon } from '../components/UiIcon';
 
 type AuthMode = 'login' | 'register' | 'forgot';
 
@@ -261,16 +262,16 @@ export default function Login() {
           <div className="auth-left">
             <div className="brand" onClick={handleGoHome} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
               <img
-                src="/vi_C.png"
-                width={36}
-                height={36}
+                src="/mascot/vi-logo-transparent.webp"
+                width={38}
+                height={38}
                 alt="VocabularyAI"
-                style={{ borderRadius: '10px', objectFit: 'cover', display: 'block', border: '1px solid rgba(250, 248, 241, 0.35)' }}
+                style={{ objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 4px 10px rgba(8, 24, 15, 0.35))' }}
               />
               VocabularyAI
             </div>
-            <div style={{ display: 'inline-flex', width: 'fit-content', padding: '6px', borderRadius: '28px', background: 'rgba(250, 248, 241, 0.12)', border: '1px solid rgba(250, 248, 241, 0.25)', backdropFilter: 'blur(10px)' }}>
-              <ViMascotImage pose="happy-wave" size={112} priority />
+            <div style={{ display: 'inline-flex', width: 'fit-content' }}>
+              <ViMascotImage pose="happy-wave" size={118} priority />
             </div>
             <h1>Học vui mỗi ngày cùng Vi</h1>
             <p>Từ vựng, quiz và luyện nói cùng AI — dành cho mọi lứa tuổi, từ 5 đến 70!</p>
@@ -477,7 +478,7 @@ export default function Login() {
                             border: '1px solid var(--line)',
                           }}
                         >
-                          <span style={{ fontSize: '13px' }}>✨</span>
+                          <UiIcon name="sparkles" size={14} />
                           <span>Tự động tạo tài khoản nếu bạn đăng nhập lần đầu</span>
                         </div>
                       </div>
@@ -731,7 +732,7 @@ export default function Login() {
                           />
                         </div>
                         <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.45' }}>
-                          💡 Mật khẩu tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (@$!%*?&).
+                          <UiIcon name="lightbulb" size={13} /> Mật khẩu tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (@$!%*?&).
                         </div>
                         <button
                           type="button"
@@ -763,7 +764,7 @@ export default function Login() {
                   className="pill level"
                   style={{ padding: '10px 14px', borderRadius: '14px', fontSize: '13.5px', display: 'flex', width: '100%', justifyContent: 'center' }}
                 >
-                  Tạo tài khoản xong rồi — đăng nhập để bắt đầu nhé! 🎉
+                  Tạo tài khoản xong rồi — đăng nhập để bắt đầu nhé!
                 </div>
               )}
 

@@ -11,6 +11,8 @@ import { ViMascotImage } from '../components/ViMascotImage';
 import { SplitHeading } from '../components/SageEffects';
 import { VI_APP_ICON } from '../constants/mascot';
 import { FlashcardSkeleton, WordRowSkeleton, StatCardSkeleton } from '../components/states/SageSkeletons';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import {
   OfflineBanner,
   ApiErrorState,
@@ -209,7 +211,7 @@ export default function Profile() {
       if (res.data) {
         setProfile(res.data);
         updateUser(res.data);
-        setAvatarModalMsg({ text: '✨ Tải lên ảnh đại diện thành công!', type: 'ok' });
+        setAvatarModalMsg({ text: 'Tải lên ảnh đại diện thành công!', type: 'ok' });
         setTimeout(() => handleCloseAvatarModal(), 800);
       }
     } catch (err) {
@@ -631,7 +633,7 @@ export default function Profile() {
                   className={`btn sm ${labRecording ? 'danger' : 'secondary'}`}
                   onClick={() => setLabRecording((r) => !r)}
                 >
-                  {labRecording ? '■ Đang thu âm (demo)' : '🎙 Thử Recorder state'}
+                  {labRecording ? '■ Đang thu âm (demo)' : <><UiIcon name="mic" size={13} /> Thử Recorder state</>}
                 </button>
               </div>
             </div>
@@ -678,6 +680,7 @@ export default function Profile() {
               <div className="state-demo" style={{ marginTop: 10 }}>
                 {labFeedback === 'skeleton' && (
                   <div className="stack" style={{ gap: 10 }}>
+                    <ViLoadingScreen compact subtitle="Vi đang đồng bộ tiến độ ôn tập SRS của bạn" />
                     <FlashcardSkeleton />
                     <div className="grid g2">
                       <WordRowSkeleton count={2} />

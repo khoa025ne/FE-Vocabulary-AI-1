@@ -5,6 +5,8 @@ import { quizApi, personalizedApi, errMsg } from '../api';
 import type { Quiz, QuizHistoryItem } from '../api';
 import { Icon } from '../components/icons';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import { ScoreRing, SplitHeading } from '../components/SageEffects';
 import { CreateAiQuizModal } from '../components/quiz/CreateAiQuizModal';
 import { QuizDetailEditModal } from '../components/quiz/QuizDetailEditModal';
@@ -12,7 +14,7 @@ import { QuotaBadge } from '../components/QuotaBadge';
 import { useAuth } from '../auth/AuthContext';
 import { MotionCard, staggerContainer, staggerItem, AnimatedCounter } from '../motion';
 
-const LEVELS = ['Tất cả', '🎯 Đề xuất cho bạn', 'A1', 'A2', 'B1', 'B2', 'C1'];
+const LEVELS = ['Tất cả', 'Đề xuất cho bạn', 'A1', 'A2', 'B1', 'B2', 'C1'];
 const QUIZ_PAGE_SIZE = 10;
 const HISTORY_PAGE_SIZE = 6;
 
@@ -257,7 +259,7 @@ export default function QuizList() {
   };
 
   const filteredQuizzes = useMemo(() => {
-    if (level === '🎯 Đề xuất cho bạn') {
+    if (level === 'Đề xuất cho bạn') {
       return allQuizzes.filter((q) => isQuizRecommended(q));
     }
     if (level !== 'Tất cả') {
@@ -283,7 +285,7 @@ export default function QuizList() {
 
   const getTabCount = (l: string) => {
     if (l === 'Tất cả') return allQuizzes.length;
-    if (l === '🎯 Đề xuất cho bạn') return allQuizzes.filter(isQuizRecommended).length;
+    if (l === 'Đề xuất cho bạn') return allQuizzes.filter(isQuizRecommended).length;
     return allQuizzes.filter((q) => (q.level || '').toUpperCase() === l.toUpperCase()).length;
   };
 
@@ -375,7 +377,7 @@ export default function QuizList() {
               <button
                 type="button"
                 className="btn secondary sm"
-                onClick={() => handleLevelChange('🎯 Đề xuất cho bạn')}
+                onClick={() => handleLevelChange('Đề xuất cho bạn')}
               >
                 Lọc bài AI khuyên làm
               </button>
@@ -458,7 +460,7 @@ export default function QuizList() {
                               </span>
                             ) : null}
                             {recommended ? (
-                              <span className="pill greensoft">✨ AI đề xuất</span>
+                              <span className="pill greensoft"><UiIcon name="sparkles" size={12} /> AI đề xuất</span>
                             ) : (
                               <span className="pill level">Bấm giờ {mins}p</span>
                             )}
@@ -486,7 +488,7 @@ export default function QuizList() {
                   alt="Vi cổ vũ bạn thử trình độ quiz khác"
                 />
                 <strong style={{ fontSize: 15 }}>
-                  {level === '🎯 Đề xuất cho bạn'
+                  {level === 'Đề xuất cho bạn'
                     ? 'Không tìm thấy bài quiz nào trùng với chủ đề đề xuất hiện tại.'
                     : 'Chưa có quiz nào ở trình độ này.'}
                 </strong>
@@ -588,10 +590,7 @@ export default function QuizList() {
 
           <div className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4 }}>
             {myQuizzesLoading ? (
-              <div className="card center" style={{ padding: 48 }}>
-                <div className="spinner" style={{ marginBottom: 12 }} />
-                <div className="sub">Đang tải danh sách bài tập của bạn...</div>
-              </div>
+              <ViLoadingScreen compact subtitle="Đang tải danh sách bài tập của bạn" />
             ) : myQuizzes.length === 0 && !myQuizzesErr ? (
               <div className="card center" style={{ padding: '44px 20px', gap: 12 }}>
                 <ViMascotImage
@@ -643,7 +642,7 @@ export default function QuizList() {
                             </span>
                           )}
                           {isPublic ? (
-                            <span className="pill greensoft">🌐 Công khai</span>
+                            <span className="pill greensoft"><UiIcon name="globe" size={12} /> Công khai</span>
                           ) : isPending ? (
                             <span className="pill warn">⏳ Chờ duyệt</span>
                           ) : isRejected ? (
@@ -651,10 +650,10 @@ export default function QuizList() {
                               className="pill redsoft"
                               title={qz.reviewNote ? 'Lý do từ chối: ' + qz.reviewNote : 'Bị từ chối duyệt'}
                             >
-                              ⚠️ Bị từ chối
+                              <UiIcon name="warning" size={12} /> Bị từ chối
                             </span>
                           ) : (
-                            <span className="pill level">🔒 Riêng tư</span>
+                            <span className="pill level"><UiIcon name="lock" size={12} /> Riêng tư</span>
                           )}
                         </div>
 
@@ -694,7 +693,7 @@ export default function QuizList() {
                                 });
                               }}
                             >
-                              🔒 Ẩn bài
+                              <UiIcon name="lock" size={13} /> Ẩn bài
                             </button>
                           )}
                           {!isPending && !isPublic && (
@@ -710,7 +709,7 @@ export default function QuizList() {
                                 });
                               }}
                             >
-                              🚀 Gửi duyệt
+                              <UiIcon name="rocket" size={13} /> Gửi duyệt
                             </button>
                           )}
                           <button
@@ -802,10 +801,7 @@ export default function QuizList() {
 
           <div className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4 }}>
             {historyLoading ? (
-              <div className="card center" style={{ padding: 48 }}>
-                <div className="spinner" style={{ marginBottom: 12 }} />
-                <div className="sub">Đang tải lịch sử làm bài...</div>
-              </div>
+              <ViLoadingScreen compact subtitle="Đang tải lịch sử làm bài" />
             ) : historyList.length === 0 && !historyErr ? (
               <div className="card center" style={{ padding: '44px 20px', gap: 12 }}>
                 <ViMascotImage
@@ -866,7 +862,7 @@ export default function QuizList() {
                               {item.correctAnswers}/{item.totalQuestions} câu
                             </span>
                             <span className="pill level">⏱️ {formatDuration(item.timeTaken)}</span>
-                            <span className="pill level">🎯 {item.score}đ</span>
+                            <span className="pill level"><UiIcon name="target" size={12} /> {item.score}đ</span>
                           </div>
                           <div className="row" style={{ gap: 8 }}>
                             <button

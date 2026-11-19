@@ -4,6 +4,7 @@ import type { GrammarResp } from '../../api';
 import { useUsage } from '../../context/UsageContext';
 import { MotionCard } from '../../motion';
 import { ViMascotImage } from '../ViMascotImage';
+import { UiIcon } from '../UiIcon';
 import ResultPanel from './ResultPanel';
 
 const SAMPLE_SENTENCES = [
@@ -61,7 +62,7 @@ export default function FreeCheckPanel() {
 
         <div style={{ marginTop: 12 }}>
           <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', display: 'block', marginBottom: 6 }}>
-            💡 Thử nhanh câu mẫu:
+            <UiIcon name="lightbulb" size={14} /> Thử nhanh câu mẫu:
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {SAMPLE_SENTENCES.map((s, idx) => (

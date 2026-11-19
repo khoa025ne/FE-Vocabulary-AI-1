@@ -6,6 +6,8 @@ import type { PlacementStatus, PlacementQuestion, PlacementSubmitResult } from '
 import { PageTransition, AnimatedProgressBar, staggerContainer, staggerItem } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SageScene } from '../components/SageEffects';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import './PlacementTest.css';
 
 export default function PlacementTest() {
@@ -114,9 +116,7 @@ export default function PlacementTest() {
     return (
       <div className="placement-page">
         <SageScene />
-        <div className="placement-card glass" style={{ padding: '60px 20px', textAlign: 'center' }}>
-          <div className="loading">Đang tải thông tin kiểm tra...</div>
-        </div>
+        <ViLoadingScreen fullscreen subtitle="Đang chuẩn bị bài kiểm tra trình độ" />
       </div>
     );
   }
@@ -151,7 +151,7 @@ export default function PlacementTest() {
 
             {isRetest && (
               <div className="placement-retest-banner">
-                <span>💡</span>
+                <span><UiIcon name="lightbulb" size={16} /></span>
                 <span>
                   <strong>Không giới hạn số lần làm lại:</strong> Kết quả mới nhất sẽ được lưu và dùng làm mức chuẩn cho hệ thống học tập của bạn.
                 </span>
@@ -165,7 +165,7 @@ export default function PlacementTest() {
               animate="visible"
             >
               <motion.div className="placement-feature-item" variants={staggerItem}>
-                <div className="placement-feature-icon">📝</div>
+                <div className="placement-feature-icon"><UiIcon name="file" size={18} /></div>
                 <div>
                   <div className="placement-feature-title">20 câu trắc nghiệm</div>
                   <div className="placement-feature-sub">4 câu mỗi cấp A1 → C1 từ ngân hàng từ vựng thật</div>
@@ -179,7 +179,7 @@ export default function PlacementTest() {
                 </div>
               </motion.div>
               <motion.div className="placement-feature-item" variants={staggerItem}>
-                <div className="placement-feature-icon">🎯</div>
+                <div className="placement-feature-icon"><UiIcon name="target" size={18} /></div>
                 <div>
                   <div className="placement-feature-title">Cá nhân hóa ngay</div>
                   <div className="placement-feature-sub">Flashcard & Quiz lập tức đồng bộ theo cấp độ của bạn</div>
@@ -350,7 +350,7 @@ export default function PlacementTest() {
             </h2>
 
             <div className="placement-vi-quote">
-              💬 <strong>Lời khuyên từ Vi:</strong> {submitResult.feedback}
+              <UiIcon name="message" size={14} /> <strong>Lời khuyên từ Vi:</strong> {submitResult.feedback}
             </div>
 
             <div className="placement-breakdown-title">

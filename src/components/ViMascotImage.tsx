@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDocumentVisibility, useReducedMotion } from '@mantine/hooks';
 import { VI_MASCOT_POSES, type ViPoseId } from '../constants/mascot';
 import { BlurUpImage } from './states/BlurUpImage';
 
@@ -26,78 +25,30 @@ export function ViMascotImage({
   width,
   height,
   alt,
-  animated = false,
-  transparent = false,
+  transparent = true,
   priority = false,
-  framed = true,
   className = '',
   style,
 }: ViMascotImageProps) {
   const asset = VI_MASCOT_POSES[pose];
   const w = width ?? size;
   const h = height ?? Math.round((w * asset.height) / asset.width);
-
-  const reducedMotion = useReducedMotion();
-  const visibility = useDocumentVisibility();
-  const canAnimate = Boolean(animated && asset.animatedFile && !reducedMotion && visibility === 'visible');
-
-  const src =
-    transparent && asset.transparentFile
-      ? asset.transparentFile
-      : canAnimate && asset.animatedFile
-      ? asset.animatedFile
-      : asset.file;
-
-  if (transparent || !framed) {
-    return (
-      <BlurUpImage
-        src={src}
-        alt={alt || asset.alt}
-        width={w}
-        height={h}
-        priority={priority}
-        transparent={transparent}
-        borderRadius={transparent ? 0 : 'var(--r-md, 20px)'}
-        className={`vi-mascot-img ${className}`.trim()}
-        style={{
-          filter: transparent ? 'drop-shadow(0 12px 22px rgba(10, 28, 18, 0.34))' : undefined,
-          ...style,
-        }}
-      />
-    );
-  }
-
-  const innerW = Math.max(24, w - 6);
-  const innerH = Math.max(24, h - 6);
+  const src = asset.transparentFile || asset.file;
 
   return (
-    <span
-      className={`vi-mascot-frame ${className}`.trim()}
+    <BlurUpImage
+      src={src}
+      alt={alt || asset.alt}
+      width={w}
+      height={h}
+      priority={priority}
+      transparent={transparent}
+      borderRadius={0}
+      className={`vi-mascot-img ${className}`.trim()}
       style={{
-        width: w,
-        height: h,
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 'var(--r-md, 20px)',
-        padding: 3,
-        background: 'linear-gradient(145deg, rgba(250, 248, 241, 0.92), rgba(212, 224, 204, 0.78))',
-        border: '1px solid rgba(255, 255, 255, 0.92)',
-        boxShadow: '0 10px 24px rgba(14, 38, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
-        overflow: 'hidden',
-        flexShrink: 0,
+        filter: 'drop-shadow(0 8px 18px rgba(10, 28, 18, 0.26))',
         ...style,
       }}
-    >
-      <BlurUpImage
-        src={src}
-        alt={alt || asset.alt}
-        width={innerW}
-        height={innerH}
-        priority={priority}
-        borderRadius="calc(var(--r-md, 20px) - 3px)"
-        imgClassName="vi-mascot-cover"
-      />
-    </span>
+    />
   );
 }

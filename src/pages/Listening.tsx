@@ -13,6 +13,7 @@ import { MotionCard, staggerContainer, staggerItem } from '../motion';
 import { VOICES } from '../components/VoiceChatPanel';
 import { ViMascotImage } from '../components/ViMascotImage';
 import { SplitHeading, ScoreRing } from '../components/SageEffects';
+import { UiIcon, type UiIconName } from '../components/UiIcon';
 import './Listening.css';
 
 interface TopicItem {
@@ -20,17 +21,17 @@ interface TopicItem {
   en: string;
   category: 'daily' | 'hobbies' | 'work' | 'travel' | 'tech';
   tag: string;
-  icon: string;
+  icon: UiIconName;
   desc: string;
 }
 
-const CATEGORIES = [
-  { id: 'all', name: 'Tất cả', icon: '🌟' },
-  { id: 'daily', name: 'Đời sống', icon: '☕' },
-  { id: 'hobbies', name: 'Sở thích', icon: '🎨' },
-  { id: 'work', name: 'Công việc & Học tập', icon: '💼' },
-  { id: 'travel', name: 'Du lịch & Văn hóa', icon: '✈️' },
-  { id: 'tech', name: 'Công nghệ & Xã hội', icon: '💡' },
+const CATEGORIES: Array<{ id: string; name: string; icon: UiIconName }> = [
+  { id: 'all', name: 'Tất cả', icon: 'sparkles' },
+  { id: 'daily', name: 'Đời sống', icon: 'coffee' },
+  { id: 'hobbies', name: 'Sở thích', icon: 'palette' },
+  { id: 'work', name: 'Công việc & Học tập', icon: 'briefcase' },
+  { id: 'travel', name: 'Du lịch & Văn hóa', icon: 'plane' },
+  { id: 'tech', name: 'Công nghệ & Xã hội', icon: 'lightbulb' },
 ];
 
 const TOPICS: TopicItem[] = [
@@ -40,7 +41,7 @@ const TOPICS: TopicItem[] = [
     en: 'Introduce Yourself',
     category: 'daily',
     tag: 'A2',
-    icon: '👤',
+    icon: 'user',
     desc: 'Nghe đoạn giới thiệu tên tuổi, nghề nghiệp, nơi sống và sở thích cá nhân.',
   },
   {
@@ -48,7 +49,7 @@ const TOPICS: TopicItem[] = [
     en: 'My Last Weekend',
     category: 'daily',
     tag: 'A2',
-    icon: '🗓️',
+    icon: 'calendar',
     desc: 'Lắng nghe các hoạt động thư giãn, giải trí và sinh hoạt cuối tuần cùng bạn bè.',
   },
   {
@@ -56,7 +57,7 @@ const TOPICS: TopicItem[] = [
     en: 'My Daily Routine',
     category: 'daily',
     tag: 'A2',
-    icon: '⏰',
+    icon: 'clock',
     desc: 'Lịch trình từ sáng thức dậy, bữa ăn đến giờ làm việc và nghỉ ngơi buổi tối.',
   },
   {
@@ -64,7 +65,7 @@ const TOPICS: TopicItem[] = [
     en: 'Weather & Four Seasons',
     category: 'daily',
     tag: 'A2',
-    icon: '🌤️',
+    icon: 'weather',
     desc: 'Mô tả thời tiết yêu thích, sự thay đổi của khí hậu và các hoạt động theo mùa.',
   },
 
@@ -74,7 +75,7 @@ const TOPICS: TopicItem[] = [
     en: 'My Dream Career',
     category: 'work',
     tag: 'B1',
-    icon: '💼',
+    icon: 'briefcase',
     desc: 'Mô tả nghề nghiệp lý tưởng, môi trường làm việc và các kỹ năng cần thiết.',
   },
   {
@@ -82,7 +83,7 @@ const TOPICS: TopicItem[] = [
     en: 'Remote vs Office Work',
     category: 'work',
     tag: 'B2',
-    icon: '💻',
+    icon: 'laptop',
     desc: 'So sánh ưu nhược điểm giữa làm việc từ xa online và văn phòng truyền thống.',
   },
 
@@ -92,7 +93,7 @@ const TOPICS: TopicItem[] = [
     en: 'A Memorable Journey',
     category: 'travel',
     tag: 'B1',
-    icon: '✈️',
+    icon: 'plane',
     desc: 'Kỷ niệm du lịch, khám phá danh lam thắng cảnh, con người và ẩm thực địa phương.',
   },
   {
@@ -100,7 +101,7 @@ const TOPICS: TopicItem[] = [
     en: 'Coffee Culture & Cafes',
     category: 'travel',
     tag: 'A2',
-    icon: '☕',
+    icon: 'coffee',
     desc: 'Thói quen thưởng thức cà phê, không gian quán xá và phong cách sống hiện đại.',
   },
 
@@ -110,7 +111,7 @@ const TOPICS: TopicItem[] = [
     en: 'Favorite Food & Cooking',
     category: 'hobbies',
     tag: 'A2',
-    icon: '🍜',
+    icon: 'food',
     desc: 'Mô tả hương vị món ăn khoái khẩu, nguyên liệu tươi ngon và cách chế biến.',
   },
   {
@@ -118,7 +119,7 @@ const TOPICS: TopicItem[] = [
     en: 'Reading & Books',
     category: 'hobbies',
     tag: 'B1',
-    icon: '📚',
+    icon: 'books',
     desc: 'Lợi ích của việc đọc sách mỗi ngày, thể loại yêu thích và kỹ năng tự học.',
   },
 
@@ -128,7 +129,7 @@ const TOPICS: TopicItem[] = [
     en: 'AI in Daily Life',
     category: 'tech',
     tag: 'B2',
-    icon: '🤖',
+    icon: 'bot',
     desc: 'Những lợi ích và ứng dụng thực tế của AI trong công việc và đời sống hàng ngày.',
   },
   {
@@ -136,7 +137,7 @@ const TOPICS: TopicItem[] = [
     en: 'Social Media & Modern Life',
     category: 'tech',
     tag: 'B1',
-    icon: '📱',
+    icon: 'phone',
     desc: 'Sự kết nối, chia sẻ thông tin và cách cân bằng thời gian trên mạng xã hội.',
   },
 ];
@@ -149,13 +150,13 @@ const LEVELS = [
   { id: 'C1', name: 'C1 · Nâng cao', desc: '115–140 từ' },
 ];
 
-const VOICE_DETAILS = [
-  { id: 'coral', name: 'Coral', tone: 'Trong trẻo, Dễ nghe', gender: 'Nữ', avatar: '👩', badge: 'Khuyên dùng' },
-  { id: 'nova', name: 'Nova', tone: 'Trẻ trung, Năng động', gender: 'Nữ', avatar: '👩' },
-  { id: 'alloy', name: 'Alloy', tone: 'Tự nhiên, Chuẩn phát âm', gender: 'Chuẩn', avatar: '🎙️' },
-  { id: 'echo', name: 'Echo', tone: 'Ấm áp, Điềm tĩnh', gender: 'Nam', avatar: '👨' },
-  { id: 'onyx', name: 'Onyx', tone: 'Trầm ấm, Chững chạc', gender: 'Nam', avatar: '👨' },
-  { id: 'fable', name: 'Fable', tone: 'Biểu cảm, Kể chuyện', gender: 'Truyền cảm', avatar: '🎭' },
+const VOICE_DETAILS: Array<{ id: string; name: string; tone: string; gender: string; avatar: UiIconName; badge?: string }> = [
+  { id: 'coral', name: 'Coral', tone: 'Trong trẻo, Dễ nghe', gender: 'Nữ', avatar: 'user', badge: 'Khuyên dùng' },
+  { id: 'nova', name: 'Nova', tone: 'Trẻ trung, Năng động', gender: 'Nữ', avatar: 'sparkles' },
+  { id: 'alloy', name: 'Alloy', tone: 'Tự nhiên, Chuẩn phát âm', gender: 'Chuẩn', avatar: 'mic' },
+  { id: 'echo', name: 'Echo', tone: 'Ấm áp, Điềm tĩnh', gender: 'Nam', avatar: 'headphones' },
+  { id: 'onyx', name: 'Onyx', tone: 'Trầm ấm, Chững chạc', gender: 'Nam', avatar: 'volume' },
+  { id: 'fable', name: 'Fable', tone: 'Biểu cảm, Kể chuyện', gender: 'Truyền cảm', avatar: 'theater' },
 ];
 
 
@@ -428,7 +429,7 @@ export default function Listening() {
                   className={'fchip' + (selectedCategory === c.id ? ' on' : '')}
                   onClick={() => setSelectedCategory(c.id)}
                 >
-                  <span>{c.icon}</span>
+                  <UiIcon name={c.icon} size={14} />
                   <span>{c.name}</span>
                 </button>
               ))}
@@ -476,7 +477,7 @@ export default function Listening() {
                           }}
                         >
                           <div className="listening-topic-card-top">
-                            <span className="listening-topic-icon">{t.icon}</span>
+                            <span className="listening-topic-icon"><UiIcon name={t.icon} size={18} /></span>
                             {isSelected && (
                               <span className="pill greensoft" style={{ fontSize: 11 }}>
                                 <Icon n="check" s={12} /> Đã chọn
@@ -498,8 +499,8 @@ export default function Listening() {
               {/* Custom Topic Input pinned at bottom */}
               <div style={{ flex: 'none', paddingTop: 10, borderTop: '1px solid var(--line)' }}>
                 <div className="row between" style={{ marginBottom: 6 }}>
-                  <label className="tiny" style={{ fontWeight: 800, color: 'var(--ink)' }}>
-                    ✏️ Hoặc tự nhập chủ đề theo ý bạn:
+                  <label className="tiny" style={{ fontWeight: 800, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <UiIcon name="pencil" size={13} /> Hoặc tự nhập chủ đề theo ý bạn:
                   </label>
                   {isCustom && <span className="pill greensoft" style={{ fontSize: 11 }}>Đang dùng chủ đề tự nhập</span>}
                 </div>
@@ -569,8 +570,8 @@ export default function Listening() {
                 >
                   <div className="row between" style={{ fontSize: 13 }}>
                     <span className="muted">Chủ đề:</span>
-                    <b style={{ color: 'var(--ink)', maxWidth: '65%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {isCustom ? '✏️ ' : activeTopicObj?.icon || '💡'} {isCustom && customTopic ? customTopic : topic}
+                    <b style={{ color: 'var(--ink)', maxWidth: '65%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      <UiIcon name={isCustom ? 'pencil' : activeTopicObj?.icon || 'lightbulb'} size={14} /> {isCustom && customTopic ? customTopic : topic}
                     </b>
                   </div>
 
@@ -597,7 +598,7 @@ export default function Listening() {
                       onClick={() => setIsVoiceOpen(!isVoiceOpen)}
                     >
                       <div className="row" style={{ gap: 10 }}>
-                        <span className="voice-avatar-badge">{selectedVoiceDetail.avatar}</span>
+                        <span className="voice-avatar-badge"><UiIcon name={selectedVoiceDetail.avatar} size={15} /></span>
                         <div style={{ textAlign: 'left' }}>
                           <div className="row" style={{ gap: 6 }}>
                             <b style={{ fontSize: 13, color: 'var(--ink)' }}>{selectedVoiceDetail.name}</b>
@@ -635,7 +636,7 @@ export default function Listening() {
                                   setIsVoiceOpen(false);
                                 }}
                               >
-                                <span className="voice-avatar-badge">{v.avatar}</span>
+                                <span className="voice-avatar-badge"><UiIcon name={v.avatar} size={15} /></span>
                                 <div style={{ flex: 1, textAlign: 'left' }}>
                                   <div className="row" style={{ gap: 6 }}>
                                     <b style={{ fontSize: 13, color: isCurrent ? 'var(--sage-dark)' : 'var(--ink)' }}>
@@ -679,7 +680,7 @@ export default function Listening() {
               {historyList.length > 0 ? (
                 <div className="listening-history-card" style={{ padding: 16 }}>
                   <div className="row between" style={{ marginBottom: 8 }}>
-                    <h4 style={{ margin: 0, fontSize: 14, color: 'var(--ink)' }}>🕒 Bài đã làm gần đây</h4>
+                    <h4 style={{ margin: 0, fontSize: 14, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 6 }}><UiIcon name="clock" size={15} /> Bài đã làm gần đây</h4>
                     <span className="tiny muted">{historyList.length} bài</span>
                   </div>
                   <div className="colstack" style={{ gap: 6 }}>
@@ -800,7 +801,7 @@ export default function Listening() {
           <div className="listening-player-card">
             <div className="row between" style={{ marginBottom: 10 }}>
               <label style={{ fontSize: 14.5, fontWeight: 800, color: 'var(--ink)' }}>
-                ✍️ Gõ lại những gì bạn nghe được:
+                <UiIcon name="pen" size={14} /> Gõ lại những gì bạn nghe được:
               </label>
               <span className="tiny muted">
                 Đã gõ: <b>{typedText.trim() ? typedText.trim().split(/\s+/).length : 0}</b> từ
@@ -817,7 +818,7 @@ export default function Listening() {
 
             <div className="row between" style={{ marginTop: 14, flexWrap: 'wrap', gap: 10 }}>
               <div className="tiny muted">
-                💡 Mẹo: Bạn có thể nghe lại bao nhiêu lần tùy thích trước khi nộp bài.
+                <UiIcon name="lightbulb" size={14} /> Mẹo: Bạn có thể nghe lại bao nhiêu lần tùy thích trước khi nộp bài.
               </div>
 
               <div className="row" style={{ gap: 10 }}>
@@ -883,14 +884,28 @@ export default function Listening() {
               />
 
               <div style={{ flex: 1, minWidth: 200 }}>
-                <h2 style={{ margin: '0 0 4px', fontSize: 19, color: 'var(--ink)' }}>
-                  {submitResult.score >= 85
-                    ? '🎉 Xuất sắc! Khả năng nghe của bạn rất ấn tượng!'
-                    : submitResult.score >= 70
-                    ? '👍 Rất tốt! Bạn đã nắm bắt hầu hết đoạn văn.'
-                    : submitResult.score >= 50
-                    ? '💪 Khá ổn! Tiếp tục luyện tập để quen tai hơn nhé.'
-                    : '🌱 Cần cố gắng thêm! Hãy nghe lại và đối chiếu từng từ bên dưới.'}
+                <h2 style={{ margin: '0 0 4px', fontSize: 19, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <UiIcon
+                    name={
+                      submitResult.score >= 85
+                        ? 'award'
+                        : submitResult.score >= 70
+                        ? 'thumbs-up'
+                        : submitResult.score >= 50
+                        ? 'dumbbell'
+                        : 'sprout'
+                    }
+                    size={20}
+                  />
+                  <span>
+                    {submitResult.score >= 85
+                      ? 'Xuất sắc! Khả năng nghe của bạn rất ấn tượng!'
+                      : submitResult.score >= 70
+                      ? 'Rất tốt! Bạn đã nắm bắt hầu hết đoạn văn.'
+                      : submitResult.score >= 50
+                      ? 'Khá ổn! Tiếp tục luyện tập để quen tai hơn nhé.'
+                      : 'Cần cố gắng thêm! Hãy nghe lại và đối chiếu từng từ bên dưới.'}
+                  </span>
                 </h2>
                 <p className="sub" style={{ margin: 0, fontSize: 13.5 }}>
                   Chủ đề: <b>{currentExercise?.topic}</b> · Trình độ: <b>Cấp {currentExercise?.level}</b>
@@ -908,7 +923,7 @@ export default function Listening() {
                     }
                   }}
                 >
-                  🔊 Nghe lại
+                  <UiIcon name="volume" size={15} /> Nghe lại
                 </button>
 
                 <button
@@ -948,7 +963,7 @@ export default function Listening() {
             <div style={{ marginTop: 18 }}>
               <div className="row between" style={{ flexWrap: 'wrap', gap: 8 }}>
                 <h3 style={{ margin: 0, fontSize: 15, color: 'var(--ink)' }}>
-                  🔍 Chi tiết đối chiếu từng từ:
+                  <UiIcon name="search" size={14} /> Chi tiết đối chiếu từng từ:
                 </h3>
                 <div className="row tiny" style={{ gap: 10 }}>
                   <span className="pill greensoft">Đúng</span>
@@ -1015,7 +1030,7 @@ export default function Listening() {
             {submitResult.transcript && (
               <div className="transcript-box">
                 <div className="row between" style={{ marginBottom: 6 }}>
-                  <b style={{ fontSize: 13.5 }}>📖 Văn bản đầy đủ đoạn nghe:</b>
+                  <b style={{ fontSize: 13.5, display: 'inline-flex', alignItems: 'center', gap: 6 }}><UiIcon name="book" size={15} /> Văn bản đầy đủ đoạn nghe:</b>
                   <button
                     type="button"
                     className="btn ghost sm"
@@ -1026,7 +1041,7 @@ export default function Listening() {
                       }
                     }}
                   >
-                    🔊 Nghe lại đoạn này
+                    <UiIcon name="volume" size={15} /> Nghe lại đoạn này
                   </button>
                 </div>
                 <p style={{ margin: 0 }}>{submitResult.transcript}</p>

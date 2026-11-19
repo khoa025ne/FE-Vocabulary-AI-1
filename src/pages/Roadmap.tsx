@@ -12,6 +12,7 @@ import type {
 } from '../api';
 import { Icon } from '../components/icons';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { UiIcon, type UiIconName } from '../components/UiIcon';
 import { ScoreRing, SplitHeading } from '../components/SageEffects';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { useAuth } from '../auth/AuthContext';
@@ -360,13 +361,13 @@ export default function Roadmap() {
       localStorage.setItem(storageKey, JSON.stringify(saveData));
       window.dispatchEvent(new CustomEvent('vocab_roadmap_analyzed', { detail: newProfile }));
 
-      setFeedbackMsg('✨ Lộ trình AI đã được phân tích và lưu lại thành công!');
+      setFeedbackMsg('Lộ trình AI đã được phân tích và lưu lại thành công!');
       setTimeout(() => setFeedbackMsg(''), 5000);
       learnApi.stats().then((res) => { if (res?.data) setStats(res.data); }).catch(() => { });
     } catch (e: any) {
       console.error('Lỗi khi phân tích lộ trình:', e);
       if (e?.response?.status === 429) {
-        setFeedbackMsg('⚠️ Bạn đã dùng hết lượt tạo lộ trình miễn phí hôm nay.');
+        setFeedbackMsg('Bạn đã dùng hết lượt tạo lộ trình miễn phí hôm nay.');
       } else {
         setFeedbackMsg('Đã xảy ra lỗi khi tạo lại lộ trình. Vui lòng thử lại sau.');
       }
@@ -463,7 +464,7 @@ export default function Roadmap() {
               disabled={isAnalyzing}
               title="Tạo lại kế hoạch mới qua AI Gemini (tiêu tốn 1 lượt tạo lộ trình)"
             >
-              🔄 {isAnalyzing ? 'Đang phân tích...' : 'Cập nhật / Tạo lại'}
+              <UiIcon name="refresh" size={14} /> {isAnalyzing ? 'Đang phân tích...' : 'Cập nhật / Tạo lại'}
             </button>
             <button
               type="button"
@@ -471,7 +472,7 @@ export default function Roadmap() {
               onClick={() => setIsResetModalOpen(true)}
               title="Xóa kết quả phân tích đã lưu"
             >
-              🗑️ Đặt lại
+              <UiIcon name="trash" size={14} /> Đặt lại
             </button>
           </div>
         )}
@@ -603,7 +604,7 @@ export default function Roadmap() {
                     </button>
                     <QuotaBadge featureKey="roadmap" labelSuffix="lượt tạo hôm nay" />
                     <span className="tiny" style={{ color: 'rgba(250, 248, 241, 0.72)' }}>
-                      ⚡ Lưu trữ tự động trong 7 ngày
+                      <UiIcon name="zap" size={13} /> Lưu trữ tự động trong 7 ngày
                     </span>
                   </div>
                 </div>
@@ -714,13 +715,15 @@ export default function Roadmap() {
                 </div>
 
                 <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
-                  {[
-                    { label: '📖 Từ vựng', val: vocabScore, hasAct: true },
-                    { label: '✍️ Ngữ pháp', val: grammarScore, hasAct: !!(profile?.grammar?.totalActivities && profile.grammar.totalActivities > 0) || grammarScore > 0 },
-                    { label: '🎙️ Luyện nói', val: speakingScore, hasAct: !!(profile?.speaking?.totalActivities && profile.speaking.totalActivities > 0) || speakingScore > 0 },
-                    { label: '🎧 Luyện nghe', val: listeningScore, hasAct: !!(profile?.listening?.totalActivities && profile.listening.totalActivities > 0) || listeningScore > 0 },
-                    { label: '📝 Quiz', val: quizScore, hasAct: !!(profile?.quiz?.totalActivities && profile.quiz.totalActivities > 0) || quizScore > 0 },
-                  ].map((s, idx) => (
+                  {(
+                    [
+                      { icon: 'book' as UiIconName, label: 'Từ vựng', val: vocabScore, hasAct: true },
+                      { icon: 'pen' as UiIconName, label: 'Ngữ pháp', val: grammarScore, hasAct: !!(profile?.grammar?.totalActivities && profile.grammar.totalActivities > 0) || grammarScore > 0 },
+                      { icon: 'mic' as UiIconName, label: 'Luyện nói', val: speakingScore, hasAct: !!(profile?.speaking?.totalActivities && profile.speaking.totalActivities > 0) || speakingScore > 0 },
+                      { icon: 'headphones' as UiIconName, label: 'Luyện nghe', val: listeningScore, hasAct: !!(profile?.listening?.totalActivities && profile.listening.totalActivities > 0) || listeningScore > 0 },
+                      { icon: 'file' as UiIconName, label: 'Quiz', val: quizScore, hasAct: !!(profile?.quiz?.totalActivities && profile.quiz.totalActivities > 0) || quizScore > 0 },
+                    ]
+                  ).map((s, idx) => (
                     <div
                       key={idx}
                       style={{
@@ -732,7 +735,9 @@ export default function Roadmap() {
                         minWidth: 82,
                       }}
                     >
-                      <div style={{ fontSize: 11, color: 'rgba(250, 248, 241, 0.78)', fontWeight: 700 }}>{s.label}</div>
+                      <div style={{ fontSize: 11, color: 'rgba(250, 248, 241, 0.78)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                        <UiIcon name={s.icon} size={12} /> {s.label}
+                      </div>
                       <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--cream)', marginTop: 2 }}>
                         {s.hasAct ? <AnimatedCounter value={s.val} suffix="%" /> : <span style={{ fontSize: 11.5, opacity: 0.65 }}>Chưa luyện</span>}
                       </div>
@@ -946,8 +951,8 @@ export default function Roadmap() {
 
                       <div className="cols2" style={{ alignItems: 'start' }}>
                         <div className="card colstack" style={{ gap: 10 }}>
-                          <h2 style={{ fontSize: 15.5, margin: 0, color: 'var(--green-dark)' }}>
-                            🟢 Điểm mạnh vượt trội ({analysis.outstandingStrengths?.length ?? 0})
+                          <h2 style={{ fontSize: 15.5, margin: 0, color: 'var(--green-dark)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                            <UiIcon name="check-circle" size={16} /> Điểm mạnh vượt trội ({analysis.outstandingStrengths?.length ?? 0})
                           </h2>
                           {!analysis.outstandingStrengths || analysis.outstandingStrengths.length === 0 ? (
                             <div className="tiny muted" style={{ fontStyle: 'italic' }}>Tiếp tục luyện tập để AI nhận diện các thế mạnh của bạn!</div>
@@ -965,12 +970,12 @@ export default function Roadmap() {
                         </div>
 
                         <div className="card colstack" style={{ gap: 10 }}>
-                          <h2 style={{ fontSize: 15.5, margin: 0, color: 'var(--red-dark)' }}>
-                            🔴 Lỗ hổng cần cải thiện ({analysis.criticalWeaknesses?.length ?? 0})
+                          <h2 style={{ fontSize: 15.5, margin: 0, color: 'var(--red-dark)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                            <UiIcon name="warning" size={16} /> Lỗ hổng cần cải thiện ({analysis.criticalWeaknesses?.length ?? 0})
                           </h2>
                           {!analysis.criticalWeaknesses || analysis.criticalWeaknesses.length === 0 ? (
-                            <div style={{ padding: 12, background: 'var(--success-bg)', borderRadius: 10, color: 'var(--green-dark)', fontWeight: 700, fontSize: 13.5 }}>
-                              ✅ Không còn lỗ hổng nghiêm trọng
+                            <div style={{ padding: 12, background: 'var(--success-bg)', borderRadius: 10, color: 'var(--green-dark)', fontWeight: 700, fontSize: 13.5, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                              <UiIcon name="check-circle" size={15} /> Không còn lỗ hổng nghiêm trọng
                             </div>
                           ) : (
                             analysis.criticalWeaknesses.map((w: any, idx: number) => {
@@ -984,7 +989,7 @@ export default function Roadmap() {
                                   <div className="tiny mt4" style={{ color: 'var(--ink)' }}>{toVietnameseRoadmapText(w.description)}</div>
                                   {rawRec && (
                                     <div className="tiny mt4" style={{ fontStyle: 'italic', color: 'var(--red-dark)' }}>
-                                      💡 <b>Vi gợi ý:</b> {toVietnameseRoadmapText(rawRec)}
+                                      <UiIcon name="lightbulb" size={13} /> <b>Vi gợi ý:</b> {toVietnameseRoadmapText(rawRec)}
                                     </div>
                                   )}
                                 </div>
@@ -1088,7 +1093,7 @@ export default function Roadmap() {
                           </div>
                           <div className="tiny" style={{ color: 'rgba(250, 248, 241, 0.78)' }}>Xác suất đạt đúng hạn</div>
                           <span className="pill greensoft mt4">
-                            {prediction.status === 'AHEAD' ? '🚀 Đang vượt tiến độ' : 'Đang bám sát lộ trình'}
+                            {prediction.status === 'AHEAD' ? <><UiIcon name="rocket" size={13} /> Đang vượt tiến độ</> : 'Đang bám sát lộ trình'}
                           </span>
                         </div>
                       </div>
@@ -1097,7 +1102,7 @@ export default function Roadmap() {
 
                   <div className="cols2" style={{ alignItems: 'start' }}>
                     <div className="card colstack" style={{ gap: 10 }}>
-                      <h2 style={{ fontSize: 15.5, margin: 0 }}>⚡ Nhiệm vụ ăn điểm nhanh (Quick Wins)</h2>
+                      <h2 style={{ fontSize: 15.5, margin: 0, display: 'inline-flex', alignItems: 'center', gap: 6 }}><UiIcon name="zap" size={16} /> Nhiệm vụ ăn điểm nhanh (Quick Wins)</h2>
                       <div className="colstack" style={{ gap: 8 }}>
                         {[
                           ...(stats && stats.wordsNeedingReview === 0
@@ -1122,7 +1127,7 @@ export default function Roadmap() {
                     </div>
 
                     <div className="card colstack" style={{ gap: 10 }}>
-                      <h2 style={{ fontSize: 15.5, margin: 0 }}>🎯 Mục tiêu dài hạn</h2>
+                      <h2 style={{ fontSize: 15.5, margin: 0, display: 'inline-flex', alignItems: 'center', gap: 6 }}><UiIcon name="target" size={16} /> Mục tiêu dài hạn</h2>
                       {(() => {
                         const totalVocab = stats ? (stats.masteredWords || 0) + (stats.learningWords || 0) : 0;
                         const vocabPct = stats ? Math.min(100, Math.round((totalVocab / 500) * 100)) : 0;

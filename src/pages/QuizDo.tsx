@@ -5,6 +5,8 @@ import { quizApi, aiApi, errMsg } from '../api';
 import type { QuizDetail, Attempt } from '../api';
 import { Icon } from '../components/icons';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import { SplitHeading } from '../components/SageEffects';
 import { AnimatedProgressBar, AnimatedCounter, MotionCard, staggerContainer, staggerItem } from '../motion';
 
@@ -68,7 +70,7 @@ export default function QuizDo() {
   };
 
   if (err && !quiz) return <div className="content narrow"><div className="error">{err}</div></div>;
-  if (!quiz) return <div className="content"><div className="loading">Đang tải đề...</div></div>;
+  if (!quiz) return <div className="content"><ViLoadingScreen subtitle="Đang tải đề trắc nghiệm" /></div>;
 
   return (
     <div className="content narrow">
@@ -175,7 +177,7 @@ export default function QuizDo() {
                       alt="Vi suy nghĩ và gợi ý đáp án cho câu hỏi"
                     />
                     <div className="bubble" style={{ fontSize: 13.5 }}>
-                      <b>💡 Gợi ý từ Vi:</b> {hint[q.id]}
+                      <b><UiIcon name="lightbulb" size={14} /> Gợi ý từ Vi:</b> {hint[q.id]}
                     </div>
                   </div>
                 ) : (

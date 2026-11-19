@@ -9,6 +9,7 @@ import { useUsage } from '../context/UsageContext';
 import { QuotaBadge } from '../components/QuotaBadge';
 import { MotionCard, AnimatedCounter, staggerContainer, staggerItem } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { UiIcon } from '../components/UiIcon';
 import { SplitHeading } from '../components/SageEffects';
 import { VoiceChatPanel } from '../components/VoiceChatPanel';
 
@@ -317,14 +318,14 @@ export default function Speaking() {
                 }}
                 className={'fchip' + (mode === 'practice' ? ' on' : '')}
               >
-                🎙️ Luyện nói &amp; Chấm điểm
+                <UiIcon name="mic" size={14} /> Luyện nói &amp; Chấm điểm
               </button>
               <button
                 type="button"
                 onClick={() => setMode('voice')}
                 className={'fchip' + (mode === 'voice' ? ' on' : '')}
               >
-                💬 Voice Chat cùng Vi
+                <UiIcon name="message" size={14} /> Voice Chat cùng Vi
               </button>
             </div>
             <QuotaBadge featureKey={mode === 'voice' ? 'voice' : 'speaking'} labelSuffix={mode === 'voice' ? 'lượt thoại hôm nay' : 'lượt chấm hôm nay'} />

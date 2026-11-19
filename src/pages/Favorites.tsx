@@ -7,6 +7,7 @@ import { Icon } from '../components/icons';
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 import { AnimatedCounter, staggerContainer, staggerItem } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
 import { SplitHeading } from '../components/SageEffects';
 
 const CEFR_LEVELS = ['ALL', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
@@ -171,10 +172,7 @@ export default function Favorites() {
 
       <div id="saved-results" className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4 }}>
         {loading ? (
-          <div className="card center" style={{ minHeight: 220 }}>
-            <ViMascotImage pose="thinking" size={68} alt="Vi đang tải từ đã lưu" />
-            <div className="sub mt8">Đang tải danh sách từ yêu thích của bạn...</div>
-          </div>
+          <ViLoadingScreen subtitle="Đang tải danh sách từ đã lưu" />
         ) : words.length === 0 ? (
           <div className="card center" style={{ minHeight: 240, gap: 10 }}>
             <ViMascotImage pose="happy-wave" size={82} alt="Vi chào bạn — lưu từ yêu thích đầu tiên" />

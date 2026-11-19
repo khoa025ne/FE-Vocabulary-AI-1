@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { wordApi, adminApi, getPartOfSpeechBadgeStyle } from '../api';
 import type { Word } from '../api';
 import { Icon } from './icons';
+import { UiIcon } from './UiIcon';
 
 export interface AutocompleteSearchProps {
   value: string;
@@ -560,7 +561,7 @@ export const AutocompleteSearch: React.FC<AutocompleteSearchProps> = ({
                       ⭐
                     </span>
                   ) : (
-                    <span style={{ color: '#94A3B8', fontSize: 13, flexShrink: 0 }}>🔍</span>
+                    <span style={{ color: 'var(--muted)', display: 'inline-flex', flexShrink: 0 }}><UiIcon name="search" size={14} /></span>
                   )}
 
                   <div style={{ minWidth: 0, flex: 1 }}>

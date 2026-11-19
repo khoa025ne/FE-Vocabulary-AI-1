@@ -18,7 +18,8 @@ import { AutocompleteSearch } from '../components/AutocompleteSearch';
 import { useUsage } from '../context/UsageContext';
 import { AnimatedCounter, staggerContainer, staggerItem } from '../motion';
 import { ViMascotImage } from '../components/ViMascotImage';
-import { WordRowSkeleton } from '../components/states/SageSkeletons';
+import { ViLoadingScreen } from '../components/states/ViLoadingScreen';
+import { UiIcon } from '../components/UiIcon';
 import { SplitHeading } from '../components/SageEffects';
 
 const LEVELS = ['Tất cả', 'A1', 'A2', 'B1', 'B2', 'C1'];
@@ -481,7 +482,7 @@ export default function Words() {
                       }}
                     >
                       {l === 'Tất cả' ? 'Tất cả' : l}
-                      {isLocked && ' 🔒'}
+                      {isLocked && <> <UiIcon name="lock" size={12} /></>}
                     </button>
                   );
                 })}
@@ -525,9 +526,7 @@ export default function Words() {
           {/* Scrollable 2-Column Word Results */}
           <div id="word-results" className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4 }}>
             {loading && words.length === 0 ? (
-              <div className="grid g2">
-                <WordRowSkeleton count={6} />
-              </div>
+              <ViLoadingScreen subtitle="Đang tải kho từ vựng Oxford" />
             ) : words.length === 0 ? (
               <div className="card center" style={{ minHeight: 220, gap: 8 }}>
                 <ViMascotImage pose="happy-wave" size={76} alt="Vi gợi ý tìm từ khác" />
@@ -562,7 +561,7 @@ export default function Words() {
                       <div className="row between">
                         <div className="row" style={{ gap: 6 }}>
                           <span className={isLockedLevel ? 'pill warn' : 'tag'}>
-                            {isLockedLevel ? `🔒 ${wLevel}` : wLevel}
+                            {isLockedLevel ? <><UiIcon name="lock" size={11} /> {wLevel}</> : wLevel}
                           </span>
                           {badge && <span className="pill level">{badge.shortLabel}</span>}
                           {w.topic && TOPIC_MAP[w.topic] && (
@@ -709,10 +708,7 @@ export default function Words() {
 
           <div className="long-list" style={{ flex: 1, minHeight: 0, paddingRight: 4 }}>
             {myLoading && myWords.length === 0 ? (
-              <div className="card center" style={{ minHeight: 220 }}>
-                <ViMascotImage pose="thinking" size={68} alt="Vi đang tải từ riêng" />
-                <div className="sub mt8">Đang tải danh sách từ riêng...</div>
-              </div>
+              <ViLoadingScreen compact subtitle="Đang tải danh sách từ riêng" />
             ) : myWords.length === 0 ? (
               <div className="card center" style={{ minHeight: 220, gap: 10 }}>
                 <ViMascotImage pose="happy-wave" size={78} alt="Vi chào bạn — thêm từ riêng đầu tiên" />

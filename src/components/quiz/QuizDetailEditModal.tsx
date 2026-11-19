@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { quizApi, errMsg } from '../../api';
 import type { QuizDetail, Question } from '../../api';
 import { Icon } from '../icons';
+import { UiIcon } from '../UiIcon';
 
 interface QuizDetailEditModalProps {
   quizId: number | null;
@@ -363,7 +364,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
             {/* Visibility Badge */}
             {isPublic ? (
               <span className="pill" style={{ background: '#DCFCE7', color: '#15803D', border: '1px solid #86EFAC' }}>
-                🌐 Công khai
+                <UiIcon name="globe" size={12} /> Công khai
               </span>
             ) : isPending ? (
               <span className="pill" style={{ background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }}>
@@ -371,11 +372,11 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
               </span>
             ) : isRejected ? (
               <span className="pill" style={{ background: '#FEE2E2', color: '#B91C1C', border: '1px solid #FCA5A5' }}>
-                ⚠️ Bị từ chối
+                <UiIcon name="warning" size={12} /> Bị từ chối
               </span>
             ) : (
               <span className="pill" style={{ background: '#F1F5F9', color: '#475569', border: '1px solid #CBD5E1' }}>
-                🔒 Riêng tư
+                <UiIcon name="lock" size={12} /> Riêng tư
               </span>
             )}
 
@@ -430,7 +431,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
               gap: 8,
             }}
           >
-            <span>🌐</span>
+            <span><UiIcon name="globe" size={14} /></span>
             <span>
               Bài tập đã được duyệt công khai trên hệ thống cho tất cả học viên. Để chỉnh sửa câu hỏi, vui lòng ẩn bài về riêng tư trước.
             </span>
@@ -941,7 +942,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                         fontWeight: 700,
                       }}
                     >
-                      {actionLoading ? 'Đang xử lý...' : '🔒 Chuyển về riêng tư'}
+                      {actionLoading ? 'Đang xử lý...' : <><UiIcon name="lock" size={13} /> Chuyển về riêng tư</>}
                     </button>
                   )}
                   {!isPending && !isPublic && (
@@ -957,7 +958,7 @@ export const QuizDetailEditModal: React.FC<QuizDetailEditModalProps> = ({
                         fontWeight: 700,
                       }}
                     >
-                      {actionLoading ? 'Đang xử lý...' : '🚀 Gửi duyệt công khai'}
+                      {actionLoading ? 'Đang xử lý...' : <><UiIcon name="rocket" size={13} /> Gửi duyệt công khai</>}
                     </button>
                   )}
                 </div>

@@ -5,6 +5,7 @@ import { documentApi, errMsg } from '../../api';
 import type { DocumentItem, DocumentAnalysis, DocumentChatMessage, Quiz, DraftQuestion } from '../../api';
 import { Icon } from '../icons';
 import { ViMascotImage } from '../ViMascotImage';
+import { UiIcon } from '../UiIcon';
 import { useUsage } from '../../context/UsageContext';
 import { QuotaBadge } from '../QuotaBadge';
 
@@ -1230,7 +1231,7 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                           color: 'var(--sage-dark)',
                         }}
                       >
-                        💬 Chat tinh chỉnh (Tùy chọn)
+                        <UiIcon name="message" size={14} /> Chat tinh chỉnh (Tùy chọn)
                       </button>
                       <button
                         type="button"
@@ -1263,7 +1264,7 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                 }}
               >
                 <div style={{ fontSize: 13, color: '#475569' }}>
-                  💬 <b>Bước tùy chọn:</b> Bạn có thể trò chuyện với AI để nhấn mạnh dạng bài tập muốn tạo, hoặc bỏ qua để sang bước cấu hình.
+                  <UiIcon name="message" size={14} /> <b>Bước tùy chọn:</b> Bạn có thể trò chuyện với AI để nhấn mạnh dạng bài tập muốn tạo, hoặc bỏ qua để sang bước cấu hình.
                 </div>
                 <button
                   type="button"
@@ -1395,14 +1396,14 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
               {draftQuestions.length > 0 && (
                 <div style={{ marginTop: 14, padding: 14, background: '#F8FAFC', borderRadius: 12, border: '1px solid #E2E8F0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
-                    <b style={{ fontSize: 13.5, color: '#1E293B' }}>📝 Bản nháp câu hỏi gợi ý từ AI ({draftQuestions.length} câu):</b>
+                    <b style={{ fontSize: 13.5, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 6 }}><UiIcon name="file" size={14} /> Bản nháp câu hỏi gợi ý từ AI ({draftQuestions.length} câu):</b>
                     <button
                       type="button"
                       className="btn primary sm"
                       onClick={handleUseDraft}
                       style={{ fontSize: 12.5, fontWeight: 700 }}
                     >
-                      ✨ Dùng bản nháp này ({draftQuestions.length} câu)
+                      <UiIcon name="sparkles" size={14} /> Dùng bản nháp này ({draftQuestions.length} câu)
                     </button>
                   </div>
                   <div style={{ maxHeight: 180, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1696,12 +1697,12 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                   >
                     <div style={{ fontSize: 13, color: isOutOfQuota ? '#B91C1C' : '#166534' }}>
                       {isVip ? (
-                        <span>✨ <b>Tài khoản PRO:</b> Bạn có thể tạo bài tập AI không giới hạn lượt.</span>
+                        <span><UiIcon name="sparkles" size={13} /> <b>Tài khoản PRO:</b> Bạn có thể tạo bài tập AI không giới hạn lượt.</span>
                       ) : isOutOfQuota ? (
-                        <span>⚠️ Bạn đã hết 3 lượt tạo bài tập AI miễn phí hôm nay.</span>
+                        <span><UiIcon name="warning" size={13} /> Bạn đã hết 3 lượt tạo bài tập AI miễn phí hôm nay.</span>
                       ) : (
                         <span>
-                          ⚡ Thao tác tạo bài tập sẽ trừ <b>1 lượt</b> tạo AI (còn <b>{quotaRemaining}/3</b> lượt hôm nay).
+                          <UiIcon name="zap" size={13} /> Thao tác tạo bài tập sẽ trừ <b>1 lượt</b> tạo AI (còn <b>{quotaRemaining}/3</b> lượt hôm nay).
                         </span>
                       )}
                     </div>
@@ -1798,8 +1799,8 @@ export const CreateAiQuizModal: React.FC<CreateAiQuizModalProps> = ({
                   gap: 6,
                 }}
               >
-                <div>🔒 <b>Trạng thái:</b> Riêng tư (chỉ mình bạn thấy)</div>
-                <div>✨ <b>Nguồn gốc:</b> Do AI tạo từ tài liệu</div>
+                <div><UiIcon name="lock" size={13} /> <b>Trạng thái:</b> Riêng tư (chỉ mình bạn thấy)</div>
+                <div><UiIcon name="sparkles" size={13} /> <b>Nguồn gốc:</b> Do AI tạo từ tài liệu</div>
                 <div>⏱️ <b>Thời gian làm bài:</b> {createdQuiz.timeLimit > 60 ? Math.round(createdQuiz.timeLimit / 60) : (createdQuiz.timeLimit || 10)} phút</div>
               </div>
 
